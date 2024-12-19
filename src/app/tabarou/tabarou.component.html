@@ -1,0 +1,273 @@
+<!-- 
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #sidenav mode="side" opened >
+    <mat-nav-list>
+      <div class="daily-document">
+        
+        <div class="document-container">
+          <div class="document-icon">
+            <img src="assets/aub_logo_text_to_the_side.svg" class="mat-iconleft" width="100%" height="100%" alt=""> 
+          </div>
+          
+        </div>
+       
+      </div>
+      <div class="navigation-menu">
+            <a mat-list-item [ngClass]="{'primary-list-item': !showDocuments}" (click)="toggleDocuments()" >
+            
+            <img src="assets/icons/archive.png" class="mat-iconleft" width="30px" height="30px" alt=""> Dossiers 
+            </a>
+            <div *ngIf="showDocuments" class="document-tree">
+            <ul>
+                <li><a [routerLink]="['/virement-multiple']"><img src="assets/images/cheque-archive.png" alt="Chéque Archive Icon" class="icon"> Virement Miltuple </a></li>
+            </ul>
+      </div>
+      
+      </div>
+      
+    </mat-nav-list>
+    
+  </mat-sidenav>
+
+  <mat-sidenav-content >
+      <mat-toolbar style="height: 80px; color: white; background-color:#1c8244;" >
+          <button mat-icon-button (click)="sidenav.toggle()" class="example-icon" aria-label="Example icon-button with menu icon">
+          <img src="assets/icons/main-menu.png" class="mat-icontop" width="30px" height="30px" alt=""> 
+          </button>
+
+          <span style="padding-bottom:15px;">Virement-Miltuple-AUB</span>
+          <span class="example-spacer"></span>
+        
+        <div class="search-input-container">
+          <input type="text" placeholder="Rechercher..." class="search-input">
+        </div>
+        
+        <button  class="example-icon-sarche" >
+              <img src="assets/icons/search.png" class="mat-icontop-searche" width="30px" height="30px" alt=""> 
+        </button>
+        
+        <button mat-icon-button (click)="logout()" class="example-icon-share favorite-icon"  >
+          <img src="assets/icons/logout-white.png" class="mat-icontop" width="30px" height="30px" alt=""> 
+          </button>
+
+          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+            <img src="assets/icons/notification.png" class="mat-icontop" width="30px" height="30px" alt=""> 
+            
+        </button>
+        
+        </mat-toolbar>
+
+        <router-outlet ></router-outlet> 
+
+  
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-logo">
+        <img src="assets/aub_logo_text_to_the_side.svg" class="rounded-image" alt="Logo de votre site" />
+      </div>
+
+      <div class="footer-contact">
+        <h4>Contactez-nous</h4>
+        <input class="sed-mail" type="email" placeholder="Envoyez-nous un e-mail ..." />
+      </div>
+
+      <div class="footer-links">
+        <h4>Liens utiles</h4>
+        <ul>
+          <li><a href="#">Accueil</a></li>
+          <li><a href="#">À propos</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-location">
+        <h4>Notre emplacement</h4>
+        <p>Votre adresse ici</p>
+        <p>Votre ville, code postal</p>
+      </div>
+
+      <div class="footer-social">
+        <h4>Restons connectés</h4>
+        <ul>
+          <li><a href="#">
+          <img src="assets/icons/facebook-logo.png" class="mat-icontop" width="30px" height="30px" alt=""> 
+            
+            Facebook</a></li>
+          <li><a href="#">
+          <img src="assets/icons/twitter.png" class="mat-icontop" width="30px" height="30px" alt=""> 
+            Twitter</a></li>
+          <li><a href="#">
+          <img src="assets/icons/linkedin.png" class="mat-icontop" width="30px" height="30px" alt=""> 
+            LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+ -->
+
+
+
+<!-- Sidebar avec directive *ngIf -->
+<header class="main-header">
+  <div class="header-left">
+    <!-- Bouton pour ouvrir/fermer le menu -->
+    <button class="menu-btn" (click)="toggleSidebar()">☰</button>
+    <div class="logo">
+      <img src="assets/aub_logo_text_to_the_side.svg" class="mat-iconleft" width="100px" height="100px" alt="Logo"> 
+    </div>
+  </div>
+  <div class="search-bar">
+    <input type="text" placeholder="Rechercher..." />
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn">
+      <span class="icon"><img src="assets/icons/bell-ring.png" class="mat-iconleft" width="30px" height="30px" alt=""></span>
+    </button>
+    <div class="user-profile">
+      <img src="https://www.le7.info/media/cache/article/uploads/photos/64101bd1e383a.jpeg" width="50px" height="30px" alt="User" class="user-img"/>
+      <span class="user-name">M'bare</span>
+    </div>
+  </div>
+</header>
+
+<!-- Sidebar -->
+<aside class="sidebar" [ngClass]="{'open': isSidebarOpen, 'collapsed': !isSidebarOpen && isSmallScreen}" id="sidebar">
+  <nav>
+    <ul>
+      <li class="active"><span class="icon"><img src="assets/icons/home.png" width="20px" height="20px" alt=""></span> Dashboard</li>
+      <li><span class="icon"><img src="assets/icons/user.png" width="20px" height="20px" alt=""></span> Clients</li>
+      <li><span class="icon"><img src="assets/icons/cheque.png" width="25px" height="25px" alt=""></span> Comptes</li>
+      <li><span class="icon"><img src="assets/icons/wire-transfer.png" width="25px" height="25px" alt=""></span> Virement</li>
+      <li><span class="icon"><img src="assets/icons/ticket-office.png" width="25px" height="25px" alt=""></span> Guichet</li>
+    </ul>
+  </nav>
+</aside>
+
+
+ 
+     <main class="content">
+         <div class="page-header">
+             <h1>Aperçu Général</h1>
+             <p>Mise à jour du 17 Décembre 2024</p>
+         </div>
+ 
+         <router-outlet ></router-outlet> 
+
+         <div class="cards-row">
+             <div class="stat-card">
+                 <h2>Nombre de Comptes</h2>
+                 <div class="value">12 345</div>
+                 <div class="trend">+5% ce mois</div>
+             </div>
+             <div class="stat-card">
+                 <h2>Clients Actifs</h2>
+                 <div class="value">8 910</div>
+             </div>
+             <div class="stat-card">
+                 <h2>Virements Internes</h2>
+                 <div class="value">1 234</div>
+             </div>
+             <div class="stat-card">
+                 <h2>Virements Ext. & Int.</h2>
+                 <div class="value">567 / 89</div>
+             </div>
+         </div>
+ 
+         <div class="charts-row">
+          <!-- Graphique en barres -->
+          <div class="chart-card">
+            <h3>Évolution des Opérations Guichet</h3>
+            <canvas baseChart
+                    [data]="barChartData"
+                    [options]="barChartOptions"
+                    chartType="bar">
+            </canvas>
+          </div>
+        
+          <!-- Graphique en camembert -->
+          <div class="chart-card">
+            <h3>Virement par Type</h3>
+            <canvas baseChart
+                    [data]="pieChartData"
+                    [options]="pieChartOptions"
+                    chartType="pie">
+            </canvas>
+          </div>
+        </div>
+        
+ 
+         <div class="table-section">
+             <div class="table-header">
+                 <h3>Détails des Transactions</h3>
+                 <div class="table-actions">
+                     <input type="text" placeholder="Rechercher..." />
+                     <select>
+                         <option>Filtrer par type</option>
+                         <option>Interne</option>
+                         <option>Externe</option>
+                         <option>International</option>
+                     </select>
+                     <button class="primary-btn" onclick="exportData()">Exporter CSV</button>
+                 </div>
+             </div>
+             <table class="data-table">
+                 <thead>
+                     <tr>
+                         <th>Date</th>
+                         <th>Type</th>
+                         <th>Montant</th>
+                         <th>Compte Debitaire</th>
+                         <th>Compte Crediteur.</th>
+                         <th>cleint</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr>
+                         <td>17/12/2024</td>
+                         <td>Interne</td>
+                         <td>500 MRU</td>
+                         <td>0000001234 5678</td>
+                         <td>0000007654 3210</td>
+                         <td>0123565</td>
+                     </tr>
+                     <tr>
+                         <td>17/12/2024</td>
+                         <td>Externe</td>
+                         <td>12120200 MRU</td>
+                         <td>000012563111541</td>
+                         <td>000022212652333</td>
+                         <td>0123565</td>
+                     </tr>
+                     <!-- Répétez pour plus de lignes -->
+                 </tbody>
+             </table>
+         </div>
+ 
+         <div class="extra-stats">
+             <div class="extra-card">
+                 <h4>Montant Total (Mois)</h4>
+                 <p>150 000 MRU</p>
+             </div>
+             <div class="extra-card">
+                 <h4>Taux de Réussite</h4>
+                 <p>95%</p>
+             </div>
+             <div class="extra-card">
+                 <h4>Nouveaux Clients</h4>
+                 <p>45 ce mois</p>
+             </div>
+         </div>
+     </main>
+ 
+     <footer class="footer">
+         <p>© 2024 AUB - Tous droits réservés</p>
+     </footer>
+ 
+
+ 

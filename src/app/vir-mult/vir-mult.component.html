@@ -1,0 +1,50 @@
+<div class="flex-container">
+    <input type="file" #fileInput (change)="onFileSelected($event)" style="display: none;"/>
+        <div class="search-bar">
+            <input type="text" placeholder="Rechercher" class="search-input" [(ngModel)]="searchTerm" (input)="applyFilter()"/>
+        </div>
+
+        <button style="color: white; border-radius: solid 20px; width: 200px; height: 50px;" mat-raised-button class="example-icon" (click)="fileInput.click()">
+        <img src="assets/icons/xls.png" class="mat-iconleft" width="30px" height="30px" alt="">
+        </button>
+
+        <button *ngIf="!isUpLoaded" style="color:white; border-radius: solid 20px; width: 200px; height: 50px;" mat-raised-button class="example-icon">
+            <!-- <img src="assets/icons/xls.png" class="mat-iconleft" width="30px" height="30px" alt=""> -->
+             Executer
+        </button>
+</div>
+
+<table *ngIf="fileData.length > 0">
+    <thead>
+        <tr>
+            <th>DOC_TYPE</th>
+            <th>DOC_ID</th>
+            <th>DOC_DATE</th>
+            <th>DEBTOR_ACCOUNT</th>  
+            <th>C_BRANCH</th>
+            <th>CREDITOR_ACCOUNT</th>
+            <th>C_NAME</th>
+            <th>TYPE_DC</th>
+            <th>SUMMA</th>
+            <th>KOD</th>
+            <th>Beneficiary Bic</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of fileData">
+            <td>{{row.DOC_TYPE}}</td>
+            <td>{{row.DOC_ID}}</td>
+            <td>{{row.DOC_DATE}}</td>
+            <td>{{row.DEBTOR_ACCOUNT}}</td>
+            <td>{{row.C_BRANCH}}</td>
+            <td>{{row.CREDITOR_ACCOUNT}}</td>
+            <td>{{row.C_NAME}}</td>
+            <td>{{row.TYPE_DC}}</td>
+            <td>{{row.SUMMA}}</td>
+            <td>{{row.KOD}}</td>
+            <td>{{row.Beneficiary_Bic}}</td>
+            <td>{{row.Description}}</td>
+        </tr>
+    </tbody>
+</table>

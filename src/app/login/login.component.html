@@ -1,0 +1,38 @@
+<!-- <img src="assets/icons/AUB.png" width="200px" height="100px" alt="Icône de la banque"> -->
+
+<div class="login-container">
+  <mat-card class="login-card">
+    <div class="bank-icon">
+      <img src="assets/icons/AUB.png" alt="Icône de la banque" />
+    </div>
+    <mat-card-header>
+      <mat-card-subtitle>Veuillez vous connecter à votre compte</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form (ngSubmit)="onLogin()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Username</mat-label>
+          <input matInput type="text" [(ngModel)]="username" name="username" required placeholder="Enter your username" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput type="password" [(ngModel)]="password" name="password" required placeholder="Enter your password" />
+        </mat-form-field>
+
+        <div class="forgot-password">
+          <a [routerLink]="['/forget-password']" class="txt1">Oublier Mot de Passe?</a>
+        </div>
+
+          <button mat-raised-button type="submit" class="full-width login-button custom-color" [disabled]="loginInProgress">
+                          <span *ngIf="!loginInProgress">Connexion</span>
+                          <mat-progress-spinner *ngIf="loginInProgress" color="warn" mode="indeterminate" style="width: 20px; height: 20px; margin: auto;"></mat-progress-spinner>
+          </button>
+
+      </form>
+    </mat-card-content>
+    <mat-card-footer>
+      <p>Vous n'avez pas un compte? <a href="#">S'inscrire</a></p>
+    </mat-card-footer>
+  </mat-card>
+</div>
