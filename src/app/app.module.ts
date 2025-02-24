@@ -34,6 +34,8 @@ import { MatOptionModule } from '@angular/material/core';
 import { ForgetpasswordComponent } from './forgetpassword/forgetpassword.component';
 import { ResetpassowrdComponent } from './resetpassowrd/resetpassowrd.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CanvasJSAngularStockChartsModule } from '@canvasjs/angular-stockcharts';
+
 
 @NgModule({ declarations: [
         AppComponent,
@@ -65,7 +67,8 @@ import { ReactiveFormsModule } from '@angular/forms';
         MatIconModule,
         MatSelectModule,
         MatOptionModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        CanvasJSAngularStockChartsModule
 
     ], 
         providers: [provideHttpClient(withInterceptorsFromDi())] })

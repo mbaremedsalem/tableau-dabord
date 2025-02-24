@@ -19,7 +19,6 @@ const routes: Routes = [
     component: TabarouComponent,
     children: [
       { path: 'virement-multiple', component: VirMultComponent },
-
     ],
   }
   // 

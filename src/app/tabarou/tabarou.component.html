@@ -154,114 +154,260 @@
      <main class="content">
          <div class="page-header">
              <h1>Aperçu Général</h1>
-             <p>Mise à jour du 17 Décembre 2024</p>
+             <p>Mise à jour du {{ today }}</p>
          </div>
  
          <router-outlet ></router-outlet> 
 
          <div class="cards-row">
-             <div class="stat-card">
-                 <h2>Nombre de Comptes</h2>
-                 <div class="value">12 345</div>
-                 <div class="trend">+5% ce mois</div>
+
+          <!-- Stat Cards -->
+          <div class="stat-card" (click)="fetchDataDepot1()">
+            <h2>Parc Comptes</h2>
+            <div class="value">{{ count }} Comptes</div>
+            <div class="trend">Total Depot: {{ totalAmount | number }}</div>
+          </div>
+
+             <div class="stat-card" (click)="fetchDataClient1()">
+                 <h2>Parc Clients</h2>
+                 <div class="value">{{ countcli }} Clients</div>
              </div>
-             <div class="stat-card">
-                 <h2>Clients Actifs</h2>
-                 <div class="value">8 910</div>
-             </div>
+
              <div class="stat-card">
                  <h2>Virements Internes</h2>
-                 <div class="value">1 234</div>
+                 <div class="value">{{ countVI }}</div>
              </div>
-             <div class="stat-card">
+
+             <div class="stat-card" (click)="fetchDataVirementIntern1()">
                  <h2>Virements Ext. & Int.</h2>
-                 <div class="value">567 / 89</div>
+                 <div class="value">{{ countVI }}</div>
              </div>
+
          </div>
  
          <div class="charts-row">
           <!-- Graphique en barres -->
           <div class="chart-card">
-            <h3>Évolution des Opérations Guichet</h3>
-            <canvas baseChart
-                    [data]="barChartData"
-                    [options]="barChartOptions"
-                    chartType="bar">
-            </canvas>
+            <h3>Évolution Par Type Comptes</h3>
+            <div *ngIf="chartOptions">
+              <canvasjs-chart
+                [options]="chartOptions"
+                [styles]="{ width: '100%', height: '360px' }"
+              ></canvasjs-chart>
+            </div>
+            <div *ngIf="!chartOptions">Loading...</div>
           </div>
+          
         
           <!-- Graphique en camembert -->
           <div class="chart-card">
-            <h3>Virement par Type</h3>
-            <canvas baseChart
-                    [data]="pieChartData"
-                    [options]="pieChartOptions"
-                    chartType="pie">
-            </canvas>
+            <h3>Évolution Par Depot</h3>
+            <div *ngIf="chartOptions1">
+              <canvasjs-chart
+                [options]="chartOptions1"
+                [styles]="{ width: '100%', height: '360px' }"
+              ></canvasjs-chart>
+            </div>
+            <div *ngIf="!chartOptions1">Loading...</div>
+          </div>          
+        </div>
+        
+        <div class="charts-row">
+          <!-- Graphique en barres -->
+          <div class="chart-card">
+            <h3>Évolution Par Type Clients</h3>
+            <div *ngIf="chartOptions2">
+              <canvasjs-chart
+                [options]="chartOptions2"
+                [styles]="{ width: '100%', height: '360px' }"
+              ></canvasjs-chart>
+            </div>
+            <div *ngIf="!chartOptions2">Loading...</div>
+          </div>
+          
+       
+          <!-- Graphique en camembert -->
+          <div class="chart-card">
+            <h3>Operation par Type</h3>
+            <div *ngIf="chartOptions3">
+              <canvasjs-chart
+                [options]="chartOptions3"
+                [styles]="{ width: '100%', height: '360px' }"
+              ></canvasjs-chart>
+            </div>
+            <div *ngIf="!chartOptions3">Loading...</div>
+          </div>
+          
+          
+        </div>
+ 
+        <div class="table-section">
+          <div class="table-header">
+            <h3>Détails</h3>
+            <div class="table-actions">
+              <input type="text" placeholder="Rechercher..." />
+              <select (change)="onFilterChange($event)">
+                <option value="Tous">Filtrer par Agence</option>
+                <option value="00001">00001</option>
+                <option value="00002">00002</option>
+              </select>
+              <button class="primary-btn" (click)="exportData()">Exporter CSV</button>
+            </div>
+          </div>
+        
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Oper</th>
+                <th>Type Operation</th>
+                <th>Date Transaction</th>
+                <th>Compte Don</th>
+                <th>Compte Benef</th>
+                <th>Devise Debit</th>
+                <th>Devise Credit</th>
+                <th>Nomlib</th>
+                <th>Montant Debit</th>
+                <th>Montant Credit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of tableData">
+                <td>{{ row.oper }}</td>
+                <td>{{ row.type_operation }}</td>
+                <td>{{ row.date_transaction }}</td>
+                <td>{{ row.Compte_Don }}</td>
+                <td>{{ row.Compte_benef }}</td>
+                <td>{{ row.devise_debit }}</td>
+                <td>{{ row.devise_credit }}</td>
+                <td>{{ row.nomlib }}</td>
+                <td>{{ row.montant_debeit | number: '1.2-2' }} MRU</td>
+                <td>{{ row.montant_credit | number: '1.2-2' }} MRU</td>
+              </tr>
+            </tbody>
+          </table>
+        
+          <!-- Pagination Controls -->
+          <div class="pagination-controls">
+            <button [disabled]="!previousPage" (click)="goToPreviousPage()">Previous</button>
+            <span>Total Records: {{ totalCount }}</span>
+            <button [disabled]="!nextPage" (click)="goToNextPage()">Next</button>
           </div>
         </div>
         
+        
+        <div class="table-section" *ngIf="currentView === 'comptes'">
+          <div class="table-header">
+            <h3>Détails</h3>
+            <div class="table-actions">
+              <input type="text" placeholder="Rechercher..." />
+              <select (change)="onFilterChange($event)">
+                <option value="Tous">Filtrer par Agence</option>
+                <option value="00001">00001</option>
+                <option value="00002">00002</option>
+              </select>
+              <button class="primary-btn" (click)="exportData()">Exporter CSV</button>
+            </div>
+          </div>
+        
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>COMPTE</th>
+                <th>CLIENT</th>
+                <th>NOM</th>
+                <th>NCG</th>
+                <th>TYP</th>
+                <th>DATOUV</th>
+                <th>DATFRM</th>
+                <th>EXPL</th>
+                <th>AGENCE</th>
+                <th>DATVAL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of tableDataDepot">
+                <td>{{ row.COMPTE }}</td>
+                <td>{{ row.CLIENT }}</td>
+                <td>{{ row.NOM }}</td>
+                <td>{{ row.NCG }}</td>
+                <td>{{ row.TYP }}</td>
+                <td>{{ row.DATOUV }}</td>
+                <td>{{ row.DATFRM }}</td>
+                <td>{{ row.EXPL }}</td>
+                <td>{{ row.AGENCE  }} </td>
+                <td>{{ row.DATVAL  }} </td>
+              </tr>
+            </tbody>
+          </table>
+        
+          <!-- Pagination Controls -->
+          <div class="pagination-controls">
+            <button [disabled]="!previousPage" (click)="goToPreviousPage()">Previous</button>
+            <span>Total Records: {{ totalCount }}</span>
+            <button [disabled]="!nextPage" (click)="goToNextPage()">Next</button>
+          </div>
+        </div>
  
-         <div class="table-section">
-             <div class="table-header">
-                 <h3>Détails des Transactions</h3>
-                 <div class="table-actions">
-                     <input type="text" placeholder="Rechercher..." />
-                     <select>
-                         <option>Filtrer par type</option>
-                         <option>Interne</option>
-                         <option>Externe</option>
-                         <option>International</option>
-                     </select>
-                     <button class="primary-btn" onclick="exportData()">Exporter CSV</button>
-                 </div>
-             </div>
-             <table class="data-table">
-                 <thead>
-                     <tr>
-                         <th>Date</th>
-                         <th>Type</th>
-                         <th>Montant</th>
-                         <th>Compte Debitaire</th>
-                         <th>Compte Crediteur.</th>
-                         <th>cleint</th>
-                     </tr>
-                 </thead>
-                 <tbody>
-                     <tr>
-                         <td>17/12/2024</td>
-                         <td>Interne</td>
-                         <td>500 MRU</td>
-                         <td>0000001234 5678</td>
-                         <td>0000007654 3210</td>
-                         <td>0123565</td>
-                     </tr>
-                     <tr>
-                         <td>17/12/2024</td>
-                         <td>Externe</td>
-                         <td>12120200 MRU</td>
-                         <td>000012563111541</td>
-                         <td>000022212652333</td>
-                         <td>0123565</td>
-                     </tr>
-                     <!-- Répétez pour plus de lignes -->
-                 </tbody>
-             </table>
-         </div>
- 
+        <div class="table-section" *ngIf="currentView === 'clients'">
+          <div class="table-header">
+            <h3>Détails</h3>
+            <div class="table-actions">
+              <input type="text" placeholder="Rechercher..." />
+              <select (change)="onFilterChange($event)">
+                <option value="Tous">Filtrer par Agence</option>
+                <option value="00001">00001</option>
+                <option value="00002">00002</option>
+              </select>
+              <button class="primary-btn" (click)="exportData()">Exporter CSV</button>
+            </div>
+          </div>
+        
+          <table class="data-table">
+            <thead>
+              <tr>  
+                <th>CLIENT</th>
+                <th>DATOUV</th>
+                <th>DATFRM</th>
+                <th>EXPL</th>
+                <th>AGENCE</th>
+                <th>TYP</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of tableDataDepot">
+                <td>{{ row.CLIENT }}</td>
+                <td>{{ row.DATOUV }}</td>
+                <td>{{ row.DATFRM }}</td>
+                <td>{{ row.EXPL }}</td>
+                <td>{{ row.AGENCE }}</td>
+                <td>{{ row.TYP }}</td>
+              </tr>
+            </tbody>
+          </table>
+        
+          <!-- Pagination Controls -->
+          <div class="pagination-controls">
+            <button [disabled]="!previousPage" (click)="goToPreviousPage()">Previous</button>
+            <span>Total Records: {{ totalCount }}</span>
+            <button [disabled]="!nextPage" (click)="goToNextPage()">Next</button>
+          </div>
+        </div>
          <div class="extra-stats">
              <div class="extra-card">
                  <h4>Montant Total (Mois)</h4>
                  <p>150 000 MRU</p>
              </div>
+
              <div class="extra-card">
                  <h4>Taux de Réussite</h4>
                  <p>95%</p>
              </div>
+
              <div class="extra-card">
                  <h4>Nouveaux Clients</h4>
                  <p>45 ce mois</p>
              </div>
+
          </div>
      </main>
  
