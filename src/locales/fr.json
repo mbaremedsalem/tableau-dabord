@@ -1,0 +1,8 @@
+{
+    "login" : {
+        "password" : "Mot de passe",
+        "email" : "Email",
+        "username" : "nom d'utilisateur",
+        "msg_reset_password" : "Veuillez entrer votre nouveau mot de passe et le confirmer."
+    }
+}

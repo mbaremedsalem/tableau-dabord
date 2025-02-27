@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  /* background-color: #dcdcdc; */
+  background-color: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  /* background: #ebeaec;
+  border-radius: 8px; */
+  background-color: #d6dee1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  /* background: #e1e0e2; */
+  background-color: #a8bbbf;
+}
+body {
+  background-color: #efeeea ;
+  color: black;
+  transition: background-color 0.3s, color 0.3s;
+}
+body.dark {
+  background-color: #1f2937;
+  color: white;
+  transition: background-color 0.3s, color 0.3s;
+
+}
+
+.dark.ant-modal-content {
+  background-color: #1f2937 !important;
+  color: white !important;
+}
+
+
+.ant-modal-content {
+  background-color: white !important; 
+  color:black
+}
+.ant-modal-content { 
+  background-color: white;
+  color: black;
+}
+
+.dark .ant-modal-content {
+  background-color: #1f2937 !important;
+  color: white !important;
+}
+
+.dark .testM {
+  /* background-color: gray !important; */
+  background-color: theme('colors.gray.700') !important;
+  color : white;
+}
+.testM {
+  background-color: white;
+  color: black;
+}
+
+.dark-modal .ant-modal-content {
+  background-color: #1f2937 !important; /* Dark background */
+  color: white !important; /* Text color */
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.light-modal .ant-modal-content {
+  background-color: white !important; /* Light background */
+  color: black !important;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.ant-switch-checked {
+  background-color: #1C8244 !important; /* Couleur verte */
+}
+
+
+.primary-button {
+  background-color: #1C8244;
+  font-weight: bold;
+  border-radius: 23px;
+  color: white;
+  border: none;
+}
+
+.react-aria-Checkbox {
+  --selected-color: #1C8244;
+  --selected-color-pressed: #1C8244;
+  --checkmark-color: white;
+
+  @apply flex items-center gap-[0.571rem];
+  forced-color-adjust: none;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0px;
+}
+
+
+@layer components {
+  .primary-button {
+    @apply bg-main-color  hover:!bg-main-color hover:!text-white text-white;
+  }
+}
