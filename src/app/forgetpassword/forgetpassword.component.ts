@@ -23,7 +23,7 @@ export class ForgetpasswordComponent {
       const email = this.forgotPasswordForm.value.email;
 
       this.http
-        .post('http://127.0.0.1:8000/auth/forget_password/', { email })
+        .post('http://127.0.0.1:8000/api/forget_password/', { email })
         .subscribe(
           (response: any) => {
             this.successMessage = response.message;

@@ -41,7 +41,7 @@ export class ResetpassowrdComponent {
       }
 
       this.http
-        .post(`http://127.0.0.1:8000/auth/reset_password/${this.token}`, { password, confirmPassword })
+        .post(`http://127.0.0.1:8000/api/reset_password/${this.token}`, { password, confirmPassword })
         .subscribe(
           (response: any) => {
             this.successMessage = 'Password reset successfully!';
