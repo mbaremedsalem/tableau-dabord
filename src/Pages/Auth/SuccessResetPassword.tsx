@@ -1,11 +1,11 @@
-import {  Button, message } from "antd"
+import {  Button } from "antd"
 // import { InputField } from "../../ui/InputFiled"
 import { useForm } from "react-hook-form";
 // import logo from '../../assets/images/AUB.png'
 import Grandlogo from '../../assets/images/logo.svg'
 import check from '../../assets/new_images/check.png'
 import { useTranslation } from "react-i18next";
-import { LoginParams, useLogin } from "../../Services/Auth/useLogin";
+import { LoginParams } from "../../Services/Auth/useLogin";
 
 
 
@@ -18,21 +18,21 @@ const SuccessResetPassword = () => {
     });
     const { handleSubmit  } = form;
     const {i18n} = useTranslation()
-    const {mutate : login} = useLogin()
+    // const {mutate : login} = useLogin()
 
-    const onSubmit = (data:LoginParams) => {
+    const onSubmit = () => {
       console.log("login")
-      const params : LoginParams = {
-        email : data.email,
-        password : data.password,
-      }
-      console.log("params : ", params)
-      login(params, {
-        onSuccess:()=>{
-          message.success("Login Success")
-          console.log("success")
-        }
-      })
+      // const params : LoginParams = {
+      //   email : data.email,
+      //   password : data.password,
+      // }
+      // console.log("params : ", params)
+      // login(params, {
+      //   onSuccess:()=>{
+      //     message.success("Login Success")
+      //     console.log("success")
+      //   }
+      // })
     }
     return (
         <form onSubmit={handleSubmit(onSubmit)} dir={i18n.language === "ar" ? "rtl" : "ltr"}>

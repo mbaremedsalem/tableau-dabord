@@ -3,35 +3,58 @@ import { Controller, useForm } from "react-hook-form";
 import logo from '../../assets/images/AUB.png'
 import Grandlogo from '../../assets/images/logo.svg'
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { ResetPasswordParams, useResetPassword } from "../../Services/Auth/useResetPassword";
 
 
 
-export type RsetPassword = {
-    password_confirmation : string,
-    password : string
-}
+
 const ResetPassword = () => {
-    const form = useForm<RsetPassword>({
+    const form = useForm<ResetPasswordParams>({
         defaultValues: {
             
         }
        
 
     });
+   
+    const {mutate : resetPass, isPending} = useResetPassword()
+    
+    
+    const { token } = useParams(); 
+    const [currentToken, setCurrentToken] = useState('');
+  
+    useEffect(() => {
+      if (token) {
+        setCurrentToken(token);  
+      }
+    }, [token]);
+
+    console.log("code : ", currentToken)
     const { handleSubmit,  control, formState,   } = form;
     const { errors } = formState;
     const {i18n, t} = useTranslation()
     const navigate = useNavigate()
-    const onSubmit = (data:RsetPassword) => {
+    const onSubmit = (data:ResetPasswordParams) => {
       console.log("reset password : ", data)
-      if(data.password !== data.password_confirmation){
+      if(data.password !== data.confrimPassword){
         message.error("Le mot de passe et la confirmation du mot de passe doivent être identiques.")
       }
       else 
       {
-        message.success("Password reset successful")
-        navigate("/success-reset-password")
+        const params : ResetPasswordParams =  {
+          password:data.password,
+          confrimPassword:data.confrimPassword,
+          code:currentToken!
+        }
+      resetPass(params, {
+        onSuccess:()=>{
+          navigate("/success-reset-password")
+
+        }
+
+      })
       }
      
     }
@@ -76,14 +99,14 @@ const ResetPassword = () => {
           </label>
           <Controller
           // rules={{ required: required && "This field is required", ...rules }}
-            name={`password_confirmation`}
+            name={`confrimPassword`}
             control={control}
             rules={{ required: true && "This field is required" }}
             render={({ field }) => (
               <Input.Password
               
                 
-                status={`${errors?.password_confirmation ? "error" : ""}`}
+                status={`${errors?.confrimPassword ? "error" : ""}`}
                 className="!w-full h-[50px]"
                 {...field}
                 placeholder={t(
@@ -100,7 +123,7 @@ const ResetPassword = () => {
           </div>
                 <Button
           htmlType="submit"
-          // loading={isPending}
+          loading={isPending}
             className="!w-full h-[50px]  primary-button mt-7"
           >
            Valider

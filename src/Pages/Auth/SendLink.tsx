@@ -1,38 +1,27 @@
-import {  message } from "antd"
+// import {  message } from "antd"
 // import { InputField } from "../../ui/InputFiled"
 import { useForm } from "react-hook-form";
 // import logo from '../../assets/images/AUB.png'
 import Grandlogo from '../../assets/images/logo.svg'
 import check from '../../assets/new_images/check.png'
 import { useTranslation } from "react-i18next";
-import { LoginParams, useLogin } from "../../Services/Auth/useLogin";
+// import { LoginParams, useLogin } from "../../Services/Auth/useLogin";
+import { forgetPassword } from "../../Services/Auth/useForgetPassword";
 
 
 
  
 const SendLink = () => {
-    const form = useForm<LoginParams>({
+    const form = useForm<forgetPassword>({
         defaultValues: {
             
         }
     });
     const { handleSubmit  } = form;
     const {i18n} = useTranslation()
-    const {mutate : login} = useLogin()
 
-    const onSubmit = (data:LoginParams) => {
+    const onSubmit = () => {
       console.log("login")
-      const params : LoginParams = {
-        email : data.email,
-        password : data.password,
-      }
-      console.log("params : ", params)
-      login(params, {
-        onSuccess:()=>{
-          message.success("Login Success")
-          console.log("success")
-        }
-      })
     }
     return (
         <form onSubmit={handleSubmit(onSubmit)} dir={i18n.language === "ar" ? "rtl" : "ltr"}>

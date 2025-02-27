@@ -40,7 +40,7 @@ var PrincipalRouter = [
         role:"admin"
     },
     {
-        path:'/reset-password',
+        path:'/reset-password/:token',
         element: (
             <Suspense fallback={<Spinner center={true} />}>
               < ResetPassword/>
