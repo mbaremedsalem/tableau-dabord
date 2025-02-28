@@ -6,7 +6,7 @@ import Grandlogo from '../../assets/images/logo.svg'
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { validateEmail } from "../../Services/types/validateEmail";
-import { forgetPassword } from "../../Services/Auth/useForgetPassword";
+import { forgetPassword, useForgetPassword } from "../../Services/Auth/useForgetPassword";
 
 
 
@@ -21,11 +21,29 @@ const ForgotPassword = () => {
     const {i18n, t} = useTranslation()
    
     const navigate = useNavigate()
+        const {mutate : forget, isPending} = useForgetPassword()
+    
     const onSubmit = (data:forgetPassword) => {
-      
-        if (!validateEmail(data.email!)) return message.error(t("Enter a valid email !"));
+      console.log("email est : ", data.email)
+        if (!validateEmail(data.email)){
+            return message.error(t("Enter a valid email !"))
+        }
+        
+        else {
+            const params : forgetPassword = {
+                email:data.email
+            }
+            forget(params,{
+                onSuccess:()=>{
+         navigate("/success-send-email")
 
-        navigate("/success-send-email")
+                    message.success("success ! send link !")
+                }
+            })
+
+
+        }
+
     }
     return (
         <form onSubmit={handleSubmit(onSubmit)} dir={i18n.language === "ar" ? "rtl" : "ltr"}>
@@ -39,6 +57,7 @@ const ForgotPassword = () => {
                 <p className="text-main-color font-bold">Forget Password </p>
                 <p className="text-main-color">Veuillez Entrez votre email  </p>
                 <InputField 
+                type="text"
                 control={control}
                 label=""
                 placeholder="email"
@@ -53,7 +72,7 @@ const ForgotPassword = () => {
           </div>
                 <Button
           htmlType="submit"
-        //   loading={isPending}
+          loading={isPending}
             className="!w-full h-[50px]  primary-button mt-7"
           >
            Valider

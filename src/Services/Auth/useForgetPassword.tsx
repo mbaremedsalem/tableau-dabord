@@ -11,7 +11,7 @@ export type forgetPassword = {
 
 
  async function reset(params : forgetPassword){
-    const res = await axios.post(`${BaseUrl}otp/reset_password`, {
+    const res = await axios.post(`${BaseUrl}api/forget_password/`, {
         email:params.email
        
     },
@@ -31,8 +31,12 @@ export const useForgetPassword = () => {
         message.success("The email is reset Successfuly! you can login now ");
         
       },
-      onError: () => {
-        message.error("Incorrect !!");
+      onError: (error:any) => {
+        const errorM = error?.response?.data?.detail
+        console.log("errorM : ",errorM)
+        if(errorM){
+          message.error(errorM)
+        }
         
       },
     });

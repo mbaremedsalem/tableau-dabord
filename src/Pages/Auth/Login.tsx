@@ -25,7 +25,7 @@ const Login = () => {
     const onSubmit = (data:LoginParams) => {
       console.log("login")
       const params : LoginParams = {
-        email : data.email,
+        username : data.username,
         password : data.password,
       }
       console.log("params : ", params)
@@ -51,7 +51,7 @@ const Login = () => {
                 control={control}
                 label=""
                 placeholder="username"
-                name="email"
+                name="username"
                 className="!h-[50px]  !rounded-lg " 
                 required
                 />

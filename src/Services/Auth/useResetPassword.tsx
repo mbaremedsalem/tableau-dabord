@@ -5,16 +5,17 @@ import { message } from "antd";
 
 
 export type ResetPasswordParams = {
-    password:string,
-    confrimPassword:string
+    password?:string,
+    confrimPassword:string,
+    code:string
 }
 
 
 
  async function reset(params : ResetPasswordParams){
-    const res = await axios.post(`${BaseUrl}otp/reset_password`, {
+    const res = await axios.post(`${BaseUrl}api/reset_password/${params.code}`, {
         password:params.password,
-        confrimPassword:params.confrimPassword
+        confirmPassword:params.confrimPassword
        
     },
         {
@@ -30,7 +31,7 @@ export const useResetPassword = () => {
     return useMutation({
       mutationFn:  reset,
       onSuccess: () => {
-        message.success("The Password is reset Successfuly! you can login now ");
+        message.success(" Password reset successful You can log in ");
         
       },
       onError: () => {
