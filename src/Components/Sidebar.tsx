@@ -55,8 +55,8 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
             logo: virement,
             isDropdown: true, 
             subItems: [
-                { id: 31, name: "Virement Interne", link: "/virement-interne" },
-                { id: 32, name: "Virement Externe", link: "/virement-externe" }
+                { id: 31, name: "Virement Interne", link: "/virement/interne" },
+                { id: 32, name: "Virement Externe", link: "/virement/externe" }
             ]
         },
         {
@@ -105,11 +105,12 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
 
       const handleNavClick = (index: number) => {
         if (navsItems[index].isDropdown) {
-            setOpenDropdown((prev) => (prev === index ? null : index)); // Basculer l'ouverture du dropdown
+            setOpenDropdown((prev) => (prev === index ? null : index)); 
         } else {
             setActive(index);
+            
             localStorage.setItem("activeMenuIndex", index.toString());
-            // setOpenDropdown(null); // Fermer le dropdown si un élément normal est cliqué
+            
         }
     };
 
@@ -136,6 +137,7 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
       {navsItems.map((item, index) => (
   <li key={index}>
     <div onClick={() => handleNavClick(index)}>
+      <Link to={item.link!}>
       <div
         className={`${
           active === index
@@ -145,9 +147,11 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
             : ""
         } flex items-center gap-x-[16.5px] w-[200px] px-[19px] py-[8px] rounded-[11px] text-[13px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black cursor-pointer`}
       >
+        
         <img className="w-7 h-7" src={item.logo} alt={`${item.name} icon`} />
         <span className="text-lg">{item.name}</span>
       </div>
+      </Link>
     </div>
     {item.isDropdown && openDropdown === index &&  (
       <ul className="ml-8 mt-2 space-y-2">

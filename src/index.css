@@ -64,6 +64,22 @@ body.dark {
   color: white !important;
 }
 
+.ant-table-thead > tr > th {
+  background-color: #1C8244 !important; 
+  color: white !important; 
+}
+.dark .ant-table-thead > tr > th {
+  background-color: #1C8244 !important; 
+  color: white !important; 
+}
+.dark .ant-table-tbody > tr > td {
+  background-color: #1f2937 !important; 
+  color: white;
+}
+.dark .ant-table {
+  background-color: white;
+  color: black;
+}
 .dark .testM {
   /* background-color: gray !important; */
   background-color: theme('colors.gray.700') !important;
@@ -75,8 +91,8 @@ body.dark {
 }
 
 .dark-modal .ant-modal-content {
-  background-color: #1f2937 !important; /* Dark background */
-  color: white !important; /* Text color */
+  background-color: #1f2937 !important; 
+  color: white !important; 
   transition: background-color 0.3s, color 0.3s;
 }
 
@@ -90,6 +106,36 @@ body.dark {
   background-color: #1C8244 !important; /* Couleur verte */
 }
 
+/* Force background color for Input */
+/* .custom-input {
+  background-color: #f0f2f5 !important;
+  color: #000 !important;
+  border: 1px solid #d9d9d9 !important;
+} */
+.dark .custom-input {
+  background-color: #1f2937 !important;
+  color: white !important;
+  
+  border: 1px solid #d9d9d9 !important;
+}
+
+/* Ensure hover and focus states */
+.custom-input:hover,
+.custom-input:focus {
+  /* background-color: #e6f7ff !important; */
+  border-color: #1C8244 !important;
+}
+
+
+
+/* If prefix icon needs styling */
+.custom-input .ant-input-prefix {
+  color: #1C8244 !important;
+}
+
+.dark .custom-input::placeholder {
+  color: white !important;
+}
 
 .primary-button {
   background-color: #1C8244;
