@@ -40,7 +40,8 @@ var PrincipalRouter = [
         role:"admin"
     },
     {
-        path:'/reset-password',
+        path:'/reset-password/:code',
+        // /office/:id
         element: (
             <Suspense fallback={<Spinner center={true} />}>
               < ResetPassword/>

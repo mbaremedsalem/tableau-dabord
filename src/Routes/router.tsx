@@ -9,8 +9,9 @@ import AuthService from "../Auth-services/AuthService";
 
 const Router = () => {
     const routes = PrincipalRouter.map((route)=>{
-        if (!AuthService.isAuthenticated() && !["/login", "/forget-password", "/reset-password", "/reset-success", "/otp", "/success-send-email", "/success-reset-password"].includes(route.path)) {
-        // if ( !["/login", "/forget-password", "/reset-password", "/reset-success", "/otp"].includes(route.path)) {
+        const isResetPasswordRoute = route.path?.startsWith("/reset-password");
+        if (!AuthService.isAuthenticated() && !["/login", "/forget-password",  "/reset-success", "/otp", "/success-send-email", "/success-reset-password"].includes(route.path)
+         &&   !isResetPasswordRoute) {
             return {
               ...route,
               element: <Navigate replace to="/login" />,

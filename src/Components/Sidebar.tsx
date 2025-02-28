@@ -48,12 +48,17 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
             logo:compte,
             link:"/comptes"
         },
+       
         {
-            id:3,
-            name:"Virement",
-            logo:virement,
-            link:"/virement"
-        }, 
+            id: 3,
+            name: "Virement",
+            logo: virement,
+            isDropdown: true, 
+            subItems: [
+                { id: 31, name: "Virement Interne", link: "/virement-interne" },
+                { id: 32, name: "Virement Externe", link: "/virement-externe" }
+            ]
+        },
         {
             id:4,
             name:"Guichet",
@@ -91,11 +96,23 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
         setIsNuitFromSide(isNuit);
       }, [isNuit, setIsNuitFromSide]);
     
-      const handleNavClick = (index: number) => {
-        setActive(index);
-        localStorage.setItem("activeMenuIndex", index.toString());
-      };
+    //   const handleNavClick = (index: number) => {
+    //     setActive(index);
+    //     localStorage.setItem("activeMenuIndex", index.toString());
+    //   };
     
+      const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+
+      const handleNavClick = (index: number) => {
+        if (navsItems[index].isDropdown) {
+            setOpenDropdown((prev) => (prev === index ? null : index)); // Basculer l'ouverture du dropdown
+        } else {
+            setActive(index);
+            localStorage.setItem("activeMenuIndex", index.toString());
+            // setOpenDropdown(null); // Fermer le dropdown si un élément normal est cliqué
+        }
+    };
+
       const handleLogout = () => {
         logoutFunction();
         localStorage.removeItem("activeMenuIndex");
@@ -116,23 +133,39 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
      
         className={`custom-scrollbar  fixed top-[112px] bottom-4 w-[215px]  overflow-y-auto  `}>
       <ul className="flex flex-col items-center gap-y-4">
-        {navsItems.map((item, index) => (
-          <li key={index}>
-           <Link to={item.link} onClick={() => handleNavClick(index)}>
-              <div
-                className={`${
-                    active === index
-                      ? isNuit? "bg-gray-700 border-r-4 border-main-color" : 
-                      "bg-white border-r-4 border-main-color"
-                      : " "
-                  } flex  items-center gap-x-[16.5px] w-[200px] px-[19px] py-[8px] rounded-[11px] text-[13px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black`}
-              >
-                <img className="w-7 h-7" src={item.logo} alt={`${item.name} icon`} />
-                <span className='text-lg'>{item.name}</span>
+      {navsItems.map((item, index) => (
+  <li key={index}>
+    <div onClick={() => handleNavClick(index)}>
+      <div
+        className={`${
+          active === index
+            ? isNuit
+              ? "bg-gray-700 border-r-4 border-main-color"
+              : "bg-white border-r-4 border-main-color"
+            : ""
+        } flex items-center gap-x-[16.5px] w-[200px] px-[19px] py-[8px] rounded-[11px] text-[13px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black cursor-pointer`}
+      >
+        <img className="w-7 h-7" src={item.logo} alt={`${item.name} icon`} />
+        <span className="text-lg">{item.name}</span>
+      </div>
+    </div>
+    {item.isDropdown && openDropdown === index &&  (
+      <ul className="ml-8 mt-2 space-y-2">
+        {item.subItems?.map((subItem) => (
+          <li key={subItem.id}>
+            <Link to={subItem.link? subItem.link : subItem.link}>
+              <div className="flex items-center gap-x-4 px-4 py-2 text-sm rounded-md hover:bg-gray-200 transition-all">
+                <span>{subItem.name}</span>
               </div>
             </Link>
           </li>
         ))}
+      </ul>
+    )}
+  </li>
+))}
+
+        
         <div className='space-x-3 curs flex items-center gap-x-[15px]  py-[8px] w-[200px] justify-center'>
             <img src={jour} className='h-7'/>
 
