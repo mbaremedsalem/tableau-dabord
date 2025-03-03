@@ -2,13 +2,22 @@
 
 
 export type Compte = {
-    client:string,
-    nom:string,
-    agec:string,
-    ageclib:string,
-    libelle:string,
-    compte:string,
-    devise:string
+    COMPTE:string,
+    CLIENT:string,
+    NOM:string,
+    NCG:string,
+    TYP:string,
+    DATOUV:string,
+    DATFRM:string
+    CODFRM:string,
+    EXPL:string,
+
+    AGENCE:string,
+    POSDEV:string,
+    DATVAL:string,
+
+
+
 }
 
 

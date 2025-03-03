@@ -2,169 +2,183 @@ import { Input, Table, TableProps } from "antd";
 import { Compte } from "../../Services/types/Compte";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
+import { useGetComptes } from "../../Services/comptes/useGetComptes";
 // import { getRowClassName } from "../../Services/types/Herpers";
 
 
-const Nouakchott =() => {
+const NouadhibouGuichet =() => {
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(9);
   const handleTableChange = (pagination: any) => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
   };
-  const data = [{
-    client:"me",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"devise 1"
-  },
-  {
-    client:"sidine",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"string"
-  },
-  {
-    client:"brahim",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"string"
-  },
-  {
-    client:"ahmed",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"string"
-  },
-  {
-    client:"string",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"string"
-  },
-  {
-    client:"string",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"string"
-  },
-  {
-    client:"string",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"string"
-  }]
+
+    // const [currentPage, setCurrentPage] = useState(1);
+    // const [pageSize, setPageSize] = useState(8);
+    // const handleTableChange = (pagination: any) => {
+    //   setCurrentPage(pagination.current);
+    //   setPageSize(pagination.pageSize);
+    // };
+      const {data, isPending} = useGetComptes(currentPage,"00001")
+
+  
   console.log("searchValue : ", searchValue)
     const columns: TableProps<Compte>["columns"] = [
         {
-          title: ("Client"),
-          dataIndex: "client",
-          key: "client",
+          title: ("COMPTE"),
+          dataIndex: "COMPTE",
+          key: "COMPTE",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.client}</span>
+              <span>{record.COMPTE}</span>
             </div>
           ),
           onFilter: (_, record) => {
-            return record?.client?.toLowerCase().includes(searchValue.toLowerCase());
+            return record?.COMPTE?.toLowerCase().includes(searchValue.toLowerCase());
           },
           
         },
         {
-          title: ("Nom"),
-          dataIndex: "nom",
-          key: "nom",
-        //   onFilter: (_, record) => {
-        //     return record?.nom?.toLowerCase().includes(searchValue.toLowerCase());
-        //   },
-          render: (_, record) => (
-            <div className="flex items-center gap-x-2">
-              <span>{record.nom}</span>
-            </div>
-          ),
-        },
-        {
-          title: ("agec"),
-          dataIndex: "agec",
-          key: "agec",
-        //   onFilter: (_, record) => {
-        //     return record?.agec?.toLowerCase().includes(searchValue.toLowerCase());
-        //   },
-          render: (_, record) => (
-            <div className="flex items-center gap-x-2">
-              <span>{record.agec}</span>
-            </div>
-          ),
-        },
-        {
-            title: ("ageclib"),
-            dataIndex: "ageclib",
-            key: "ageclib",
-            // onFilter: (_, record) => {
-            //   return record?.ageclib?.toLowerCase().includes(searchValue.toLowerCase());
-            // },
-            render: (_, record) => (
-              <div className="flex items-center gap-x-2">
-                <span>{record.ageclib}</span>
-              </div>
-            ),
-          },
-        {
-          title: ("Libelle"),
-          dataIndex: "libelle",
-          key: "libelle",
-        //   onFilter: (_, record) => {
-        //     return record?.libelle?.toLowerCase().includes(searchValue.toLowerCase());
-        //   },
-          render: (_, record) => (
-            <div className="flex items-center gap-x-2">
-              <span>{record.libelle}</span>
-            </div>
-          ),
-        },
-        {
-          title: ("compte"),
-          dataIndex: "compte",
-          key: "compte",
+          title: ("AGENCE"),
+          dataIndex: "AGENCE",
+          key: "AGENCE",
+    
           render: (_, record) => {
             return (
               <div className="flex flex-col gap-y-1">
-                <span>{record?.compte}</span>
+                <span>{record?.AGENCE}</span>
               </div>
             );
           },
         },
         {
-          title: ("devise"),
-          dataIndex: "devise",
-          key: "devise",
+          title: ("CLIENT"),
+          dataIndex: "CLIENT",
+          key: "CLIENT",
+        //   onFilter: (_, record) => {
+        //     return record?.nom?.toLowerCase().includes(searchValue.toLowerCase());
+        //   },
+          render: (_, record) => (
+            <div className="flex items-center gap-x-2">
+              <span>{record.CLIENT}</span>
+            </div>
+          ),
+        },
+        {
+          title: ("NOM"),
+          dataIndex: "NOM",
+          key: "NOM",
+        //   onFilter: (_, record) => {
+        //     return record?.agec?.toLowerCase().includes(searchValue.toLowerCase());
+        //   },
+          render: (_, record) => (
+            <div className="flex items-center gap-x-2">
+              <span>{record.NOM}</span>
+            </div>
+          ),
+        },
+        {
+            title: ("CHAPITRE"),
+            dataIndex: "NCG",
+            key: "NCG",
+            // onFilter: (_, record) => {
+            //   return record?.ageclib?.toLowerCase().includes(searchValue.toLowerCase());
+            // },
+            render: (_, record) => (
+              <div className="flex items-center gap-x-2">
+                <span>{record.NCG}</span>
+              </div>
+            ),
+          },
+        {
+          title: ("TYPE"),
+          dataIndex: "TYP",
+          key: "TYP",
+        //   onFilter: (_, record) => {
+        //     return record?.libelle?.toLowerCase().includes(searchValue.toLowerCase());
+        //   },
+          render: (_, record) => (
+            <div className="flex items-center gap-x-2">
+              <span>{record.TYP}</span>
+            </div>
+          ),
+        },
+        {
+          title: ("DATE OUVERTURE"),
+          dataIndex: "DATOUV",
+          key: "DATOUV",
+          render: (_, record) => {
+            return (
+              <div className="flex flex-col gap-y-1">
+                <span>{record?.DATOUV}</span>
+              </div>
+            );
+          },
+        },
+        {
+          title: ("DATE FERMETURE"),
+          dataIndex: "DATFRM",
+          key: "DATFRM",
     
           render: (_, record) => {
             return (
               <div className="flex flex-col gap-y-1">
-                <span>{record?.devise}</span>
+                <span>{record?.DATFRM}</span>
+              </div>
+            );
+          },
+        },
+        // {
+        //   title: ("CODFRM"),
+        //   dataIndex: "CODFRM",
+        //   key: "CODFRM",
+    
+        //   render: (_, record) => {
+        //     return (
+        //       <div className="flex flex-col gap-y-1">
+        //         <span>{record?.CODFRM}</span>
+        //       </div>
+        //     );
+        //   },
+        // },
+        {
+          title: ("EXPLOITANT"),
+          dataIndex: "EXPL",
+          key: "EXPL",
+    
+          render: (_, record) => {
+            return (
+              <div className="flex flex-col gap-y-1">
+                <span>{record?.EXPL}</span>
+              </div>
+            );
+          },
+        },
+        
+        {
+          title: ("SOLDE"),
+          dataIndex: "POSDEV",
+          key: "POSDEV",
+    
+          render: (_, record) => {
+            return (
+              <div className="flex flex-col gap-y-1">
+                <span>{record?.POSDEV}</span>
+              </div>
+            );
+          },
+        },
+        {
+          title: ("DATE VALEUR"),
+          dataIndex: "DATVAL",
+          key: "DATVAL",
+    
+          render: (_, record) => {
+            return (
+              <div className="flex flex-col gap-y-1">
+                <span>{record?.DATVAL}</span>
               </div>
             );
           },
@@ -176,8 +190,8 @@ const Nouakchott =() => {
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
     <div className="flex flex-col">
-        <span>Registred Comptes</span>
-        <span> {data.length} </span>
+        <span>Registred Guichet</span>
+        <span> {data?.count} </span>
     </div>
               <Input
                 value={searchValue ?? ""}
@@ -199,20 +213,20 @@ const Nouakchott =() => {
             </div>
             <div className="!max-w-full mt-4 md:!max-w-full overflow-x-auto">
             <Table
-            //   loading={isPending}
+              loading={isPending}
               columns={columns}
             //   rowClassName={getRowClassName}
               pagination={{
                 current: currentPage,
                 pageSize,
-                total: data?.length,
+                total: data?.count
               }}
               onChange={handleTableChange}
-              dataSource={data}
+              dataSource={data?.results}
             />
           </div>
         </div>
     )
 }
 
-export default Nouakchott
+export default NouadhibouGuichet

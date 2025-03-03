@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Toggle from "../../ui/Toggle"
-import Nouakchott from "./Nouakchott";
-import Nouadhibou from "./Nouadhibout";
+import NouadhibouComptes from "./NouadhibouComptes";
+import NouakchottComptes from "./NouakchottComptes";
 
 
 const Compte =() => {
   const [active, setActive] = useState<number>(0);
+
 
     const handleToggleChange = (index: number) => {
         setActive(index);
@@ -27,12 +28,12 @@ const Compte =() => {
         {active === 0? (
             <>
             <hr className="mt-4"/>
-            <Nouakchott/></>
+            <NouakchottComptes/></>
 
         ) :
         <>
             <hr className="mt-4"/>
-            <Nouadhibou/></> }
+            <NouadhibouComptes/></> }
       </div>
          </div>
         
