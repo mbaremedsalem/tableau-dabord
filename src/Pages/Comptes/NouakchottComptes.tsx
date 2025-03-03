@@ -5,7 +5,7 @@ import { CiSearch } from "react-icons/ci";
 // import { getRowClassName } from "../../Services/types/Herpers";
 
 
-const Nouakchott =() => {
+const NouakchottComptes =() => {
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
@@ -215,4 +215,4 @@ const Nouakchott =() => {
     )
 }
 
-export default Nouakchott
+export default NouakchottComptes

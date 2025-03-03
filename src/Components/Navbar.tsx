@@ -33,8 +33,8 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
       }
 
     return(
-        <header className={`flex items-center border-b-2 border-main-color 
-          fixed z-20 h-[97px]  justify-between w-full px-[27px] pt-[29px] shadow-md ${isNuit? 'bg-gray-800' : 'bg-[#efeeea]'}`}>
+        <header className={` b flex items-center border-b-2 border-main-color 
+          fixed z-20 h-[65px]  justify-between w-full px-[27px] shadow-md ${isNuit? 'bg-gray-800' : 'bg-[#efeeea]'}`}>
             {/* // <header className="flex items-center border-b-2 border-main-color
             //  fixed top-0 left-0 z-20 h-[97px] w-full px-[27px] pt-[29px] bg-white shadow-md"> */}
 
@@ -53,7 +53,7 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
          >
         
         </motion.div>
-      <div className="flex items-center">
+      <div className="flex items-center ">
         <div className="pe-[28px] border-e border-[#707070] me-[28px]">
           {/* <img src={notification} alt="notification" /> */}
         </div>

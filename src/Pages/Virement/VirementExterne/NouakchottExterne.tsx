@@ -4,7 +4,7 @@ import { CiSearch } from "react-icons/ci";
 import { Virement } from "../../../Services/types/Virement";
 
 
-const Nouakchott =() => {
+const NouakchottExterne =() => {
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(5);
@@ -104,8 +104,8 @@ const Nouakchott =() => {
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
     <div className="flex flex-col">
-        <span>Registred Comptes</span>
-        <span> 24 virement interne </span>
+        <span>Registred Virement</span>
+        <span> 24 virement Externe </span>
     </div>
               <Input
                 value={searchValue ?? ""}
@@ -143,4 +143,4 @@ const Nouakchott =() => {
     )
 }
 
-export default Nouakchott
+export default NouakchottExterne

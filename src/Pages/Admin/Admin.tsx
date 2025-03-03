@@ -2,10 +2,11 @@
 
 
 const Admin =() => {
+    
     return (
         
         <div>
-            Admin
+            page admin
         </div>
         
     )

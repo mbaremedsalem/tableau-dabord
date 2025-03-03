@@ -15,9 +15,11 @@ const Toggle: React.FC<ToggleProps> = ({ options, activeIndex, onToggle }) => {
           onPress={() => onToggle(index)}
           className={`${
             activeIndex === index
-              ? "bg-[#1C8244] text-white" // Active button style
-              : " bg-transparent hover:bg-[#e7e7e7]" // Non-active button hover effect
-          } w-[100px] text-[15px] rounded-[14px] h-7 text-center transition-all duration-300 ease-in-out focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-[#1f4432]`}
+              ? "bg-[#1C8244] text-white" 
+              : " bg-transparent hover:bg-gray-400" 
+          } w-[100px] text-[15px] rounded-[14px] h-7 text-center 
+           transition-all duration-300 ease-in-out
+            focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-[#1f4432]`}
         >
           {option}
         </Button>
