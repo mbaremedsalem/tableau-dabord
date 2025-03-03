@@ -2,17 +2,18 @@ import { Input, Table, TableProps } from "antd";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { Virement } from "../../../Services/types/Virement";
+import { useGetVirementInterne } from "../../../Services/Virements/VirementInterne/useGetVirementInterne";
 
 
 const NouakchottInterne =() => {
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(9);
   const handleTableChange = (pagination: any) => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
   };
-  
+    const {data, isPending} = useGetVirementInterne(currentPage)
   console.log("searchValue : ", searchValue)
     const columns: TableProps<Virement>["columns"] = [
         {
@@ -105,7 +106,7 @@ const NouakchottInterne =() => {
   <div className="flex items-center gap-x-[13px] justify-between">
     <div className="flex flex-col">
         <span>Registred Virement</span>
-        <span> 24 virement interne </span>
+        <span> {data?.count} virement interne </span>
     </div>
               <Input
                 value={searchValue ?? ""}
@@ -127,16 +128,16 @@ const NouakchottInterne =() => {
             </div>
             <div className="!max-w-full mt-4 md:!max-w-full overflow-x-auto">
             <Table
-            //   loading={isPending}
+              loading={isPending}
               columns={columns}
-            //   rowClassName={getRowClassName}
+              // rowClassName={getRowClassName}
               pagination={{
                 current: currentPage,
-                pageSize,
-                // total: data?.length,
+                pageSize : pageSize,
+                total: data?.count,
               }}
               onChange={handleTableChange}
-            //   dataSource={data}
+              dataSource={data?.results}
             />
           </div>
         </div>

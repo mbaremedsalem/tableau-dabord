@@ -1,22 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
-import { CompteResponse } from "../types/Compte";
 // import api from "../../Auth-services/axios";
 import axios from "axios";
+import { GuichetResponse } from "../types/Guiche";
 
 
-export const COMPTES_KEY = ["comptes"];
+export const GUICHET_KEY = ["guichet"];
 
-async function getComptes(
+async function getGuichet(
   page: number,
-  agence : string
   // size: number,
   // search: string,
   // type: string,
   // status: string,
-): Promise<CompteResponse> {
+): Promise<GuichetResponse> {
   const response = await axios.get(
     // `/api/compte_details/`,
-    `http://127.0.0.1:8000/api/compte_filter/?page=${page}&AGENCE=${agence}`,
+    `http://127.0.0.1:8000/api/guichet/?page=${page}`,
 
     // `/api/compte_details//?type=${type}&status=${status}&search=${search}&page=${page}&size=${size}`,
     {
@@ -25,18 +24,17 @@ async function getComptes(
   );
   return response.data;
 }
-export const useGetComptes = (
+export const useGetGuichet = (
   page: number,
   // size: number,
-  agence: string,
   // type: string,
   // status: string,
   // target_audience: string
 ) => {
   return useQuery({
-    queryKey: ["comptes", page,agence],
+    queryKey: ["comptes", page],
     queryFn: () =>
-      getComptes(page, agence),
+        getGuichet(page),
     // getEntities(page, size, search, type, status),
   });
 };

@@ -7,6 +7,7 @@ import NouadhiboutComptes from "./NouadhiboutComptes";
 const Compte =() => {
   const [active, setActive] = useState<number>(0);
 
+
     const handleToggleChange = (index: number) => {
         setActive(index);
       };
@@ -28,11 +29,12 @@ const Compte =() => {
             <>
             <hr className="mt-4"/>
             <NouakchottComptes/></>
+            <NouakchottComptes/></>
 
         ) :
         <>
             <hr className="mt-4"/>
-            <NouadhiboutComptes/></> }
+            <Nouadhibou/></> }
       </div>
          </div>
         
