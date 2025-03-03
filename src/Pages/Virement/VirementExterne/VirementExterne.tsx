@@ -2,10 +2,7 @@ import { useState } from "react";
 import Toggle from "../../../ui/Toggle";
 import NouakchottExterne from "./NouakchottExterne";
 import NouadhibouExterne from "./NouadhibouExterne";
-import { useState } from "react";
-import Toggle from "../../../ui/Toggle";
-import NouakchottExterne from "./NouakchottExterne";
-import NouadhibouExterne from "./NouadhibouExterne";
+
 
 
 

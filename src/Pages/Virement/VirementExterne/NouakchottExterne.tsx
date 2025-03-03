@@ -5,7 +5,7 @@ import {  VirementExterne } from "../../../Services/types/Virement";
 import { useGetVirementExterne } from "../../../Services/Virements/viremementExterne/useGetVirementExterne";
 
 
-const NouakchottExterne =() => {
+
 const NouakchottExterne =() => {
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -281,5 +281,4 @@ const NouakchottExterne =() => {
     )
 }
 
-export default NouakchottExterne
 export default NouakchottExterne
