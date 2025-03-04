@@ -13,16 +13,16 @@ const NouakchottInterne =() => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
   };
-    const {data, isPending} = useGetVirementInterne(currentPage)
+    const {data, isPending} = useGetVirementInterne(currentPage, "00001")
   console.log("searchValue : ", searchValue)
     const columns: TableProps<Virement>["columns"] = [
         {
-          title: ("Date"),
+          title: ("Date Operation"),
           dataIndex: "date_operation",
           key: "date_operation",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.date_operation}</span>
+              <span>{record?.date_operation?.slice(0,10)}</span>
             </div>
           ),
           onFilter: (_, record) => {
@@ -30,6 +30,19 @@ const NouakchottInterne =() => {
           },
           
         },
+        // {
+        //   title: ("Heure Operation"),
+        
+        //   render: (_, record) => (
+        //     <div className="flex items-center gap-x-2">
+        //       <span>{record.date_operation.slice(11,19)}</span>
+        //     </div>
+        //   ),
+        //   onFilter: (_, record) => {
+        //     return record?.date_operation?.toLowerCase().includes(searchValue.toLowerCase());
+        //   },
+          
+        // },
         {
           title: ("Montant Debit"),
           dataIndex: "montant_debit",

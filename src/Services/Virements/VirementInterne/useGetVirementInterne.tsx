@@ -8,13 +8,13 @@ export const COMPTES_KEY = ["comptes"];
 
 async function getVirement(
   page: number,
-//   size: number,
+  agence: string,
   // search: string,
   // type: string,
   // status: string,
 ): Promise<VirmentResponse> {
   const response = await axios.get(
-    `http://127.0.0.1:8000/api/virement_intern/?&page=${page}`,
+    `http://127.0.0.1:8000/api/virement_intern/?&page=${page}&agence=${agence}`,
     // `/api/compte_details//?type=${type}&status=${status}&search=${search}&page=${page}&size=${size}`,
     {
     
@@ -24,6 +24,8 @@ async function getVirement(
 }
 export const useGetVirementInterne = (
   page: number,
+  agence: string,
+
 //   size: number,
   // search: string,
   // type: string,
@@ -31,9 +33,9 @@ export const useGetVirementInterne = (
   // target_audience: string
 ) => {
   return useQuery({
-    queryKey: ["comptes", page],
+    queryKey: ["comptes", page, agence],
     queryFn: () =>
-        getVirement(page),
+        getVirement(page, agence),
     // getEntities(page, size, search, type, status),
   });
 };

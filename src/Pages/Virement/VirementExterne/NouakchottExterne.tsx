@@ -17,22 +17,22 @@ const NouakchottExterne =() => {
     const {data, isPending} = useGetVirementExterne(currentPage)
   console.log("searchValue : ", searchValue)
     const columns: TableProps<VirementExterne>["columns"] = [
-        {
-          title: ("Oper"),
-          dataIndex: "oper",
-          key: "oper",
-          render: (_, record) => (
-            <div className="flex items-center gap-x-2">
-              <span>{record.oper}</span>
-            </div>
-          ),
-          onFilter: (_, record) => {
-            return record?.oper?.toLowerCase().includes(searchValue.toLowerCase());
-          },
+        // {
+        //   title: ("Oper"),
+        //   dataIndex: "oper",
+        //   key: "oper",
+        //   render: (_, record) => (
+        //     <div className="flex items-center gap-x-2">
+        //       <span>{record.oper}</span>
+        //     </div>
+        //   ),
+        //   onFilter: (_, record) => {
+        //     return record?.oper?.toLowerCase().includes(searchValue.toLowerCase());
+        //   },
           
-        },
+        // },
         {
-          title: ("Montant Debit"),
+          title: ("Compte"),
           dataIndex: "compte_benef",
           key: "compte_benef",
           render: (_, record) => (
@@ -42,7 +42,7 @@ const NouakchottExterne =() => {
           ),
         },
         {
-            title: ("beneficiaire"),
+            title: ("Beneficiaire"),
             dataIndex: "beneficiaire",
             key: "beneficiaire",
             render: (_, record) => (
@@ -52,7 +52,7 @@ const NouakchottExterne =() => {
             ),
           },
         {
-          title: ("date_transaction"),
+          title: ("DATE Transaction"),
           dataIndex: "date_transaction",
           key: "date_transaction",
         //   onFilter: (_, record) => {
@@ -65,7 +65,7 @@ const NouakchottExterne =() => {
           ),
         },
         {
-            title: ("devise"),
+            title: ("Devise"),
             dataIndex: "devise",
             key: "devise",
            
@@ -76,18 +76,7 @@ const NouakchottExterne =() => {
             ),
           },
         {
-          title: ("mode_reglement"),
-          dataIndex: "mode_reglement",
-          key: "mode_reglement",
-        
-          render: (_, record) => (
-            <div className="flex items-center gap-x-2">
-              <span>{record.mode_reglement}</span>
-            </div>
-          ),
-        },
-        {
-          title: ("montant_transaction"),
+          title: ("Montant Transaction"),
           dataIndex: "montant_transaction",
           key: "montant_transaction",
           render: (_, record) => {
@@ -99,7 +88,7 @@ const NouakchottExterne =() => {
           },
         },
         {
-          title: ("nif_nni"),
+          title: ("NIF"),
           dataIndex: "nif_nni",
           key: "nif_nni",
           render: (_, record) => {
@@ -112,7 +101,7 @@ const NouakchottExterne =() => {
         },
         
         {
-          title: ("compte_don"),
+          title: ("Compte Donneur d'ordre"),
           dataIndex: "compte_don",
           key: "compte_don",
           render: (_, record) => {
@@ -125,7 +114,7 @@ const NouakchottExterne =() => {
         },
 
         {
-          title: ("nom_donneur_ordre"),
+          title: ("Nom Donneur D'ordre"),
           dataIndex: "nom_donneur_ordre",
           key: "nom_donneur_ordre",
           render: (_, record) => {
@@ -138,7 +127,7 @@ const NouakchottExterne =() => {
         },
         
         {
-          title: ("pays"),
+          title: ("Pays"),
           dataIndex: "pays",
           key: "pays",
           render: (_, record) => {
@@ -150,20 +139,20 @@ const NouakchottExterne =() => {
           },
         },
 
+        // {
+        //   title: ("produit"),
+        //   dataIndex: "produit",
+        //   key: "produit",
+        //   render: (_, record) => {
+        //     return (
+        //       <div className="flex flex-col gap-y-1">
+        //         <span>{record?.produit}</span>
+        //       </div>
+        //     );
+        //   },
+        // },
         {
-          title: ("produit"),
-          dataIndex: "produit",
-          key: "produit",
-          render: (_, record) => {
-            return (
-              <div className="flex flex-col gap-y-1">
-                <span>{record?.produit}</span>
-              </div>
-            );
-          },
-        },
-        {
-          title: ("reference_transaction"),
+          title: ("Reference Transaction"),
           dataIndex: "reference_transaction",
           key: "reference_transaction",
           render: (_, record) => {
@@ -175,7 +164,7 @@ const NouakchottExterne =() => {
           },
         },
         {
-          title: ("taux_change"),
+          title: ("Taux Change"),
           dataIndex: "taux_change",
           key: "taux_change",
           render: (_, record) => {
@@ -187,7 +176,7 @@ const NouakchottExterne =() => {
           },
         },
         {
-          title: ("devisd_debit"),
+          title: ("Devise Debit"),
           dataIndex: "devisd_debit",
           key: "devisd_debit",
           render: (_, record) => {
@@ -199,7 +188,7 @@ const NouakchottExterne =() => {
           },
         },
         {
-          title: ("devise_credit"),
+          title: ("Devise Credit"),
           dataIndex: "devise_credit",
           key: "devise_credit",
           render: (_, record) => {
@@ -211,7 +200,7 @@ const NouakchottExterne =() => {
           },
         },
         {
-          title: ("montant_debit"),
+          title: ("Montant Debit"),
           dataIndex: "montant_debit",
           key: "montant_debit",
           render: (_, record) => {
@@ -223,7 +212,7 @@ const NouakchottExterne =() => {
           },
         },
         {
-          title: ("montant_credit"),
+          title: ("Montant Credit"),
           dataIndex: "montant_credit",
           key: "montant_credit",
           render: (_, record) => {
@@ -243,7 +232,7 @@ const NouakchottExterne =() => {
   <div className="flex items-center gap-x-[13px] justify-between">
     <div className="flex flex-col">
         <span>Registred Virement</span>
-        <span> 24 virement Externe </span>
+        <span> {data?.count } virement Externe </span>
     </div>
               <Input
                 value={searchValue ?? ""}

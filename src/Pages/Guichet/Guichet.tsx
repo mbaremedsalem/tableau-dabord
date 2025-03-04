@@ -9,6 +9,7 @@ const Guichet =() => {
   const [active, setActive] = useState<number>(0);
 
 
+
     const handleToggleChange = (index: number) => {
         setActive(index);
       };

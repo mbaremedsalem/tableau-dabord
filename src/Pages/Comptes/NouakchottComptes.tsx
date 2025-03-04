@@ -18,7 +18,7 @@ const NouakchottComptes =() => {
   console.log("searchValue : ", searchValue)
     const columns: TableProps<Compte>["columns"] = [
         {
-          title: ("Client"),
+          title: ("CLIENT"),
           dataIndex: "client",
           key: "client",
           render: (_, record) => (
@@ -58,7 +58,7 @@ const NouakchottComptes =() => {
           ),
         },
         {
-            title: ("NCG"),
+            title: ("CHAPITRE"),
             dataIndex: "NCG",
             key: "NCG",
             // onFilter: (_, record) => {
@@ -71,7 +71,7 @@ const NouakchottComptes =() => {
             ),
           },
         {
-          title: ("TYP"),
+          title: ("TYPE"),
           dataIndex: "TYP",
           key: "TYP",
         //   onFilter: (_, record) => {
@@ -84,7 +84,7 @@ const NouakchottComptes =() => {
           ),
         },
         {
-          title: ("DATOUV"),
+          title: ("DATE OUVERTURE"),
           dataIndex: "DATOUV",
           key: "DATOUV",
           render: (_, record) => {
@@ -96,7 +96,7 @@ const NouakchottComptes =() => {
           },
         },
         {
-          title: ("DATFRM"),
+          title: ("DATE FERMETURE"),
           dataIndex: "DATFRM",
           key: "DATFRM",
     
@@ -108,6 +108,34 @@ const NouakchottComptes =() => {
             );
           },
         },
+        
+        {
+          title: ("SOLDE"),
+          dataIndex: "POSDEV",
+          key: "POSDEV",
+    
+          render: (_, record) => {
+            return (
+              <div className="flex flex-col gap-y-1">
+                <span>{record?.POSDEV}</span>
+              </div>
+            );
+          },
+        },
+        {
+          title: ("DATE VALEUR"),
+          dataIndex: "DATVAL",
+          key: "DATVAL",
+    
+          render: (_, record) => {
+            return (
+              <div className="flex flex-col gap-y-1">
+                <span>{record?.DATVAL}</span>
+              </div>
+            );
+          },
+        },
+        
         
       ];
       const {data, isPending} = useGetComptes(pageSize, "00001")

@@ -16,7 +16,6 @@ const VirementInterne =() => {
         
         <div >
             <div className="flex items-center justify-between">
-        <h1 className="font-semibold">Virement Interne </h1>
         <h1 className="font-semibold">Virement Interne</h1>
 
         <Toggle
