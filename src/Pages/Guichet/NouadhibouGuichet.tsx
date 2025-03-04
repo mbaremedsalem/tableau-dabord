@@ -1,15 +1,17 @@
 import { Input, Table, TableProps } from "antd";
-import { Compte } from "../../Services/types/Compte";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import { useGetComptes } from "../../Services/comptes/useGetComptes";
+import { useGetGuichet } from "../../Services/Guichet/useGetGuichet";
+import { Guichet } from "../../Services/types/Guiche";
 // import { getRowClassName } from "../../Services/types/Herpers";
 
 
+
 const NouadhibouGuichet =() => {
+
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(9);
+  const [pageSize, setPageSize] = useState(14);
   const handleTableChange = (pagination: any) => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
@@ -21,111 +23,110 @@ const NouadhibouGuichet =() => {
     //   setCurrentPage(pagination.current);
     //   setPageSize(pagination.pageSize);
     // };
-      const {data, isPending} = useGetComptes(currentPage,"00001")
-
+      const {data, isPending} = useGetGuichet(currentPage)
   
   console.log("searchValue : ", searchValue)
-    const columns: TableProps<Compte>["columns"] = [
-        {
-          title: ("COMPTE"),
-          dataIndex: "COMPTE",
-          key: "COMPTE",
-          render: (_, record) => (
-            <div className="flex items-center gap-x-2">
-              <span>{record.COMPTE}</span>
-            </div>
-          ),
-          onFilter: (_, record) => {
-            return record?.COMPTE?.toLowerCase().includes(searchValue.toLowerCase());
-          },
+    const columns: TableProps<Guichet>["columns"] = [
+        // {
+        //   title: ("oper"),
+        //   dataIndex: "oper",
+        //   key: "oper",
+        //   render: (_, record) => (
+        //     <div className="flex items-center gap-x-2">
+        //       <span>{record.oper}</span>
+        //     </div>
+        //   ),
+        //   onFilter: (_, record) => {
+        //     return record?.oper?.toLowerCase().includes(searchValue.toLowerCase());
+        //   },
           
-        },
+        // },
         {
-          title: ("AGENCE"),
-          dataIndex: "AGENCE",
-          key: "AGENCE",
+          title: ("Type Operation"),
+          dataIndex: "type_operation",
+          key: "type_operation",
     
           render: (_, record) => {
             return (
               <div className="flex flex-col gap-y-1">
-                <span>{record?.AGENCE}</span>
+                <span>{record?.type_operation}</span>
               </div>
             );
           },
         },
         {
-          title: ("CLIENT"),
-          dataIndex: "CLIENT",
-          key: "CLIENT",
+          title: ("Date Transaction"),
+          dataIndex: "Date Transacation",
+          key: "date_transaction",
         //   onFilter: (_, record) => {
         //     return record?.nom?.toLowerCase().includes(searchValue.toLowerCase());
         //   },
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.CLIENT}</span>
+              <span>{record.date_transaction}</span>
             </div>
           ),
         },
         {
-          title: ("NOM"),
-          dataIndex: "NOM",
-          key: "NOM",
+          title: ("Compte Donneur d'ordre"),
+          dataIndex: "Compte_Don",
+          key: "Compte_Don",
         //   onFilter: (_, record) => {
         //     return record?.agec?.toLowerCase().includes(searchValue.toLowerCase());
         //   },
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.NOM}</span>
+              <span>{record.Compte_Don}</span>
             </div>
           ),
         },
         {
-            title: ("CHAPITRE"),
-            dataIndex: "NCG",
-            key: "NCG",
+            title: ("Compte Beneficiaire"),
+            dataIndex: "Compte_benef",
+            key: "Compte_benef",
             // onFilter: (_, record) => {
             //   return record?.ageclib?.toLowerCase().includes(searchValue.toLowerCase());
             // },
             render: (_, record) => (
               <div className="flex items-center gap-x-2">
-                <span>{record.NCG}</span>
+                <span>{record.Compte_benef}</span>
               </div>
             ),
           },
         {
-          title: ("TYPE"),
-          dataIndex: "TYP",
-          key: "TYP",
+          title: ("Devise Debit"),
+          dataIndex: "devise_debit",
+          key: "devise_debit",
         //   onFilter: (_, record) => {
         //     return record?.libelle?.toLowerCase().includes(searchValue.toLowerCase());
         //   },
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.TYP}</span>
+              <span>{record.devise_debit}</span>
             </div>
           ),
         },
         {
-          title: ("DATE OUVERTURE"),
-          dataIndex: "DATOUV",
-          key: "DATOUV",
+          title: ("Devise Credit "),
+          dataIndex: "devise_credit",
+          key: "devise_credit",
           render: (_, record) => {
             return (
               <div className="flex flex-col gap-y-1">
-                <span>{record?.DATOUV}</span>
+                <span>{record?.devise_credit}</span>
               </div>
             );
           },
         },
         {
-          title: ("DATE FERMETURE"),
-          dataIndex: "DATFRM",
-          key: "DATFRM",
+          title: ("Montant Debit"),
+          dataIndex: "montant_debeit",
+          key: "montant_debeit",
     
           render: (_, record) => {
             return (
               <div className="flex flex-col gap-y-1">
-                <span>{record?.DATFRM}</span>
+                <span>{record?.montant_debeit}</span>
               </div>
             );
           },
@@ -144,46 +145,20 @@ const NouadhibouGuichet =() => {
         //   },
         // },
         {
-          title: ("EXPLOITANT"),
-          dataIndex: "EXPL",
-          key: "EXPL",
+          title: ("Montant Credit"),
+          dataIndex: "montant_credit",
+          key: "montant_credit",
     
           render: (_, record) => {
             return (
               <div className="flex flex-col gap-y-1">
-                <span>{record?.EXPL}</span>
+                <span>{record?.montant_credit}</span>
               </div>
             );
           },
         },
         
-        {
-          title: ("SOLDE"),
-          dataIndex: "POSDEV",
-          key: "POSDEV",
-    
-          render: (_, record) => {
-            return (
-              <div className="flex flex-col gap-y-1">
-                <span>{record?.POSDEV}</span>
-              </div>
-            );
-          },
-        },
-        {
-          title: ("DATE VALEUR"),
-          dataIndex: "DATVAL",
-          key: "DATVAL",
-    
-          render: (_, record) => {
-            return (
-              <div className="flex flex-col gap-y-1">
-                <span>{record?.DATVAL}</span>
-              </div>
-            );
-          },
-        },
-        
+       
       ];
       console.log("data : ", data)
     return(
@@ -229,4 +204,6 @@ const NouadhibouGuichet =() => {
     )
 }
 
+
 export default NouadhibouGuichet
+
