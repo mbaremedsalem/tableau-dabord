@@ -31,22 +31,22 @@ const NouakchottGuichet =() => {
   
   console.log("searchValue : ", searchValue)
     const columns: TableProps<Guichet>["columns"] = [
-        {
-          title: ("oper"),
-          dataIndex: "oper",
-          key: "oper",
-          render: (_, record) => (
-            <div className="flex items-center gap-x-2">
-              <span>{record.oper}</span>
-            </div>
-          ),
-          onFilter: (_, record) => {
-            return record?.oper?.toLowerCase().includes(searchValue.toLowerCase());
-          },
+        // {
+        //   title: ("oper"),
+        //   dataIndex: "oper",
+        //   key: "oper",
+        //   render: (_, record) => (
+        //     <div className="flex items-center gap-x-2">
+        //       <span>{record.oper}</span>
+        //     </div>
+        //   ),
+        //   onFilter: (_, record) => {
+        //     return record?.oper?.toLowerCase().includes(searchValue.toLowerCase());
+        //   },
           
-        },
+        // },
         {
-          title: ("type_operation"),
+          title: ("Type Operation"),
           dataIndex: "type_operation",
           key: "type_operation",
     
@@ -59,8 +59,8 @@ const NouakchottGuichet =() => {
           },
         },
         {
-          title: ("date_transaction"),
-          dataIndex: "date_transaction",
+          title: ("Date Transaction"),
+          dataIndex: "Date Transacation",
           key: "date_transaction",
         //   onFilter: (_, record) => {
         //     return record?.nom?.toLowerCase().includes(searchValue.toLowerCase());
@@ -72,7 +72,7 @@ const NouakchottGuichet =() => {
           ),
         },
         {
-          title: ("Compte_Don"),
+          title: ("Compte Donneur d'ordre"),
           dataIndex: "Compte_Don",
           key: "Compte_Don",
         //   onFilter: (_, record) => {
@@ -85,7 +85,7 @@ const NouakchottGuichet =() => {
           ),
         },
         {
-            title: ("Compte_benef"),
+            title: ("Compte Beneficiaire"),
             dataIndex: "Compte_benef",
             key: "Compte_benef",
             // onFilter: (_, record) => {
@@ -98,7 +98,7 @@ const NouakchottGuichet =() => {
             ),
           },
         {
-          title: ("devise_debit"),
+          title: ("Devise Debit"),
           dataIndex: "devise_debit",
           key: "devise_debit",
         //   onFilter: (_, record) => {
@@ -111,9 +111,9 @@ const NouakchottGuichet =() => {
           ),
         },
         {
-          title: ("devise_credit "),
-          dataIndex: "DATOUV",
-          key: "DATOUV",
+          title: ("Devise Credit "),
+          dataIndex: "devise_credit",
+          key: "devise_credit",
           render: (_, record) => {
             return (
               <div className="flex flex-col gap-y-1">
@@ -123,7 +123,7 @@ const NouakchottGuichet =() => {
           },
         },
         {
-          title: ("montant_debeit"),
+          title: ("Montant Debit"),
           dataIndex: "montant_debeit",
           key: "montant_debeit",
     
@@ -149,7 +149,7 @@ const NouakchottGuichet =() => {
         //   },
         // },
         {
-          title: ("montant_credit"),
+          title: ("Montant Credit"),
           dataIndex: "montant_credit",
           key: "montant_credit",
     
