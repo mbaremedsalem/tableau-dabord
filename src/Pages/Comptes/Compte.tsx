@@ -28,13 +28,13 @@ const Compte =() => {
         {active === 0? (
             <>
             <hr className="mt-4"/>
-            <NouakchottComptes/></>
+          
             <NouakchottComptes/></>
 
         ) :
         <>
             <hr className="mt-4"/>
-            <Nouadhibou/></> }
+            <NouadhiboutComptes/></> }
       </div>
          </div>
         

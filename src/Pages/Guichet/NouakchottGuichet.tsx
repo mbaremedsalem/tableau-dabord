@@ -6,11 +6,9 @@ import { Guichet } from "../../Services/types/Guiche";
 // import { getRowClassName } from "../../Services/types/Herpers";
 
 
-<<<<<<<< HEAD:src/Pages/Comptes/NouakchottComptes.tsx
-const NouakchottComptes =() => {
-========
+
 const NouakchottGuichet =() => {
->>>>>>>> dd683b34e640f42c01a46e639f3456833c079a4f:src/Pages/Guichet/NouakchottGuichet.tsx
+
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(14);
@@ -206,8 +204,6 @@ const NouakchottGuichet =() => {
     )
 }
 
-<<<<<<<< HEAD:src/Pages/Comptes/NouakchottComptes.tsx
-export default NouakchottComptes
-========
+
 export default NouakchottGuichet
->>>>>>>> dd683b34e640f42c01a46e639f3456833c079a4f:src/Pages/Guichet/NouakchottGuichet.tsx
+

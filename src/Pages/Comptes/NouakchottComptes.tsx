@@ -2,80 +2,19 @@ import { Input, Table, TableProps } from "antd";
 import { Compte } from "../../Services/types/Compte";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
+import { useGetComptes } from "../../Services/comptes/useGetComptes";
 // import { getRowClassName } from "../../Services/types/Herpers";
 
 
 const NouakchottComptes =() => {
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(14);
   const handleTableChange = (pagination: any) => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
   };
-  const data = [{
-    client:"me",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"devise 1"
-  },
-  {
-    client:"sidine",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"string"
-  },
-  {
-    client:"brahim",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"string"
-  },
-  {
-    client:"ahmed",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"string"
-  },
-  {
-    client:"string",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"string"
-  },
-  {
-    client:"string",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"string"
-  },
-  {
-    client:"string",
-    nom:"string",
-    agec:"string",
-    ageclib:"string",
-    libelle:"string",
-    compte:"string",
-    devise:"string"
-  }]
+ 
   console.log("searchValue : ", searchValue)
     const columns: TableProps<Compte>["columns"] = [
         {
@@ -84,100 +23,101 @@ const NouakchottComptes =() => {
           key: "client",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.client}</span>
+              <span>{record.CLIENT}</span>
             </div>
           ),
           onFilter: (_, record) => {
-            return record?.client?.toLowerCase().includes(searchValue.toLowerCase());
+            return record?.CLIENT?.toLowerCase().includes(searchValue.toLowerCase());
           },
           
         },
         {
-          title: ("Nom"),
-          dataIndex: "nom",
-          key: "nom",
+          title: ("AGENCE"),
+          dataIndex: "AGENCE",
+          key: "AGENCE",
         //   onFilter: (_, record) => {
         //     return record?.nom?.toLowerCase().includes(searchValue.toLowerCase());
         //   },
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.nom}</span>
+              <span>{record.AGENCE}</span>
             </div>
           ),
         },
         {
-          title: ("agec"),
-          dataIndex: "agec",
-          key: "agec",
+          title: ("NOM"),
+          dataIndex: "NOM",
+          key: "NOM",
         //   onFilter: (_, record) => {
         //     return record?.agec?.toLowerCase().includes(searchValue.toLowerCase());
         //   },
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.agec}</span>
+              <span>{record.NOM}</span>
             </div>
           ),
         },
         {
-            title: ("ageclib"),
-            dataIndex: "ageclib",
-            key: "ageclib",
+            title: ("NCG"),
+            dataIndex: "NCG",
+            key: "NCG",
             // onFilter: (_, record) => {
             //   return record?.ageclib?.toLowerCase().includes(searchValue.toLowerCase());
             // },
             render: (_, record) => (
               <div className="flex items-center gap-x-2">
-                <span>{record.ageclib}</span>
+                <span>{record.NCG}</span>
               </div>
             ),
           },
         {
-          title: ("Libelle"),
-          dataIndex: "libelle",
-          key: "libelle",
+          title: ("TYP"),
+          dataIndex: "TYP",
+          key: "TYP",
         //   onFilter: (_, record) => {
         //     return record?.libelle?.toLowerCase().includes(searchValue.toLowerCase());
         //   },
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.libelle}</span>
+              <span>{record.TYP}</span>
             </div>
           ),
         },
         {
-          title: ("compte"),
-          dataIndex: "compte",
-          key: "compte",
+          title: ("DATOUV"),
+          dataIndex: "DATOUV",
+          key: "DATOUV",
           render: (_, record) => {
             return (
               <div className="flex flex-col gap-y-1">
-                <span>{record?.compte}</span>
+                <span>{record?.DATOUV}</span>
               </div>
             );
           },
         },
         {
-          title: ("devise"),
-          dataIndex: "devise",
-          key: "devise",
+          title: ("DATFRM"),
+          dataIndex: "DATFRM",
+          key: "DATFRM",
     
           render: (_, record) => {
             return (
               <div className="flex flex-col gap-y-1">
-                <span>{record?.devise}</span>
+                <span>{record?.DATFRM}</span>
               </div>
             );
           },
         },
         
       ];
+      const {data, isPending} = useGetComptes(pageSize, "00001")
       console.log("data : ", data)
     return(
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
     <div className="flex flex-col">
         <span>Registred Comptes</span>
-        <span> {data.length} </span>
+        <span> {data?.count} </span>
     </div>
               <Input
                 value={searchValue ?? ""}
@@ -199,16 +139,16 @@ const NouakchottComptes =() => {
             </div>
             <div className="!max-w-full mt-4 md:!max-w-full overflow-x-auto">
             <Table
-            //   loading={isPending}
+              loading={isPending}
               columns={columns}
             //   rowClassName={getRowClassName}
               pagination={{
                 current: currentPage,
                 pageSize,
-                total: data?.length,
+                total: data?.count,
               }}
               onChange={handleTableChange}
-              dataSource={data}
+              dataSource={data?.results}
             />
           </div>
         </div>

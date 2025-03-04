@@ -4,6 +4,8 @@
 export type Compte = {
     COMPTE:string,
     CLIENT:string,
+    AGENCE:string,
+
     NOM:string,
     NCG:string,
     TYP:string,
@@ -12,7 +14,6 @@ export type Compte = {
     CODFRM:string,
     EXPL:string,
 
-    AGENCE:string,
     POSDEV:string,
     DATVAL:string,
 
