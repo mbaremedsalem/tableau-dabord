@@ -1,10 +1,12 @@
-import { Input, Table, TableProps } from "antd";
+import { CheckboxProps, DatePicker, Dropdown, Input, MenuProps, Table, TableProps } from "antd";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useGetGuichet } from "../../Services/Guichet/useGetGuichet";
 import { Guichet } from "../../Services/types/Guiche";
+import CustomCheckbox from "../../ui/CustomCheckbox";
 // import { getRowClassName } from "../../Services/types/Herpers";
 
+import filterIcon from "../../assets/images/style-stroke.svg";
 
 
 const NouakchottGuichet =() => {
@@ -16,6 +18,8 @@ const NouakchottGuichet =() => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
   };
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     // const [currentPage, setCurrentPage] = useState(1);
     // const [pageSize, setPageSize] = useState(8);
@@ -161,6 +165,34 @@ const NouakchottGuichet =() => {
        
       ];
       console.log("data : ", data)
+      const onChange: CheckboxProps["onChange"] = (e) => {
+        // const { value } = e.target;
+    
+        if (e.target.checked) {
+          // setSelectedCategory(value); // Set the category when checked
+        } else {
+          // setSelectedCategory(""); // Clear the category when unchecked
+        }
+      };
+
+      const items: MenuProps["items"] =  [
+        {
+          label: <span>Show</span>,
+          key: "-1",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Coach"
+              // checked={""}
+              value="Coach booking"
+            />
+          ),
+          key: "1",
+        },
+      ]
+
     return(
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
@@ -168,15 +200,37 @@ const NouakchottGuichet =() => {
         <span>Registred Guichet</span>
         <span> {data?.count} </span>
     </div>
-              <Input
-                value={searchValue ?? ""}
-                className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"
-                prefix={<CiSearch className="" />}
-                onChange={(e) => setSearchValue(e.target.value)}
-                aria-label="search input"
-                placeholder="Search..."
-                
-              />
+    <div className="flex items-center space-x-4">
+  
+      <DatePicker
+    className="w-[173px] border border-[#e7e7e7] rounded-[10px] h-[42px] "
+    
+    format={"ddd, Do MMM YYYY"}
+    />
+<Input
+   value={searchValue ?? ""}
+   className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"
+   prefix={<CiSearch className="" />}
+   onChange={(e) => setSearchValue(e.target.value)}
+   aria-label="search input"
+   placeholder="Search..."
+   
+ />
+   <Dropdown
+  onOpenChange={(e) => setIsMenuOpen(e)}
+  menu={{ items }}
+  trigger={["click"]}
+  >
+ <button
+   className={` w-[42px] h-[42px] px-[13px] py-[14px] rounded-full flex items-center justify-center border 
+    
+    ${isMenuOpen &&"bg-[#fbce39]/[0.19] border-none duration-75 transition-all"}
+     `}
+ >
+   <img src={filterIcon} alt="filter icon" />
+ </button>
+</Dropdown>
+</div>
               {/* <FilterDropdown
                 valueSearch={"users"}
                 filtersUsers={filtersusers}

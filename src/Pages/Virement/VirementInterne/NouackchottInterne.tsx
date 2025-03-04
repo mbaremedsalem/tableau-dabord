@@ -1,4 +1,4 @@
-import { Input, Table, TableProps } from "antd";
+import { DatePicker, Input, Table, TableProps } from "antd";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { Virement } from "../../../Services/types/Virement";
@@ -135,7 +135,16 @@ const NouakchottInterne =() => {
         <span>Registred Virement</span>
         <span> {data?.count} virement interne </span>
     </div>
-              <Input
+  <div className="flex items-center space-x-4">
+  
+               <DatePicker
+          className="w-[173px] border border-[#e7e7e7] rounded-[20px] h-[42px] "
+        //   suffixIcon={<img className="w-4 h-4" src={calendarIcon} />}
+        //   value={selectedDate}
+        //   onChange={(newDate) => handleDateChange(newDate.toDate())}
+          format={"ddd, Do MMM YYYY"}
+        />
+        <Input
                 value={searchValue ?? ""}
                 className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"
                 prefix={<CiSearch className="" />}
@@ -144,6 +153,7 @@ const NouakchottInterne =() => {
                 placeholder="Search..."
                 
               />
+  </div>
               {/* <FilterDropdown
                 valueSearch={"users"}
                 filtersUsers={filtersusers}
