@@ -30,6 +30,20 @@ const NouakchottInterne =() => {
           },
           
         },
+        {
+          title: ("Agence"),
+          dataIndex: "agence",
+          key: "agence",
+          render: (_, record) => (
+            <div className="flex items-center gap-x-2">
+              <span>{record?.agence}</span>
+            </div>
+          ),
+          onFilter: (_, record) => {
+            return record?.date_operation?.toLowerCase().includes(searchValue.toLowerCase());
+          },
+          
+        },
         // {
         //   title: ("Heure Operation"),
         

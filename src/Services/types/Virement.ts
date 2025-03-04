@@ -9,6 +9,7 @@ export type Virement = {
     compte_debit:string,
     compte_credit:string,
     status:string
+    agence:string
 }
 
 export type VirmentResponse = {
