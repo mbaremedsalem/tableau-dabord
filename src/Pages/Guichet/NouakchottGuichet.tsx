@@ -7,7 +7,7 @@ import CustomCheckbox from "../../ui/CustomCheckbox";
 // import { getRowClassName } from "../../Services/types/Herpers";
 
 import filterIcon from "../../assets/images/style-stroke.svg";
-
+const { RangePicker } = DatePicker;
 
 const NouakchottGuichet =() => {
 
@@ -18,6 +18,8 @@ const NouakchottGuichet =() => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
   };
+
+  
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -184,9 +186,9 @@ const NouakchottGuichet =() => {
           label: (
             <CustomCheckbox
               onChange={onChange}
-              label="Coach"
+              label="guichet"
               // checked={""}
-              value="Coach booking"
+              value="guichet"
             />
           ),
           key: "1",
@@ -201,6 +203,7 @@ const NouakchottGuichet =() => {
         <span> {data?.count} </span>
     </div>
     <div className="flex items-center space-x-4">
+    <RangePicker className="w-[] border border-[#e7e7e7] rounded-[10px] h-[42px] " />
   
       <DatePicker
     className="w-[173px] border border-[#e7e7e7] rounded-[10px] h-[42px] "
