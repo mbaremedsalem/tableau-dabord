@@ -216,11 +216,11 @@ const NouadhibouComptes =() => {
               loading={isPending}
               columns={columns}
             //   rowClassName={getRowClassName}
-              pagination={{
-                current: currentPage,
-                pageSize,
-                total: data?.count
-              }}
+            pagination={{
+              current: currentPage,
+              pageSize : pageSize,
+              total: data?.count,
+            }}
               onChange={handleTableChange}
               dataSource={data?.results}
             />

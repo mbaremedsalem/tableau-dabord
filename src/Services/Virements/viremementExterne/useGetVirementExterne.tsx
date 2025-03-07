@@ -6,7 +6,7 @@ import {  VirmentExterneResponse } from "../../types/Virement";
 import axios from "axios";
 
 
-export const VIREMENT_KEY = ["comptes"];
+export const VIREMENT_KEY = ["virements"];
 
 async function getVirement(
   page: number,

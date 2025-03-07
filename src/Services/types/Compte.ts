@@ -26,6 +26,7 @@ export type CompteResponse = {
         count: number;
         next: string | null;
         previous: string | null;
+        total_posdev:number,
         results: Compte[]
     
 }

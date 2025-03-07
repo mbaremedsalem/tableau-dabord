@@ -1,20 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
-// import { CompteResponse } from "../types/Compte";
-import {  VirmentResponse } from "../../types/Virement";
+import { CompteResponse } from "../types/Compte";
+// import api from "../../Auth-services/axios";
 import axios from "axios";
 
 
-export const VIREMENT_KEY = ["virements"];
+export const COMPTES_KEY = ["comptes"];
 
-async function getVirement(
-  page: number,
-  agence: string,
+async function getComptesStats(
+//   page: number,
+  agence : string
+  // size: number,
   // search: string,
   // type: string,
   // status: string,
-): Promise<VirmentResponse> {
+): Promise<CompteResponse> {
   const response = await axios.get(
-    `http://127.0.0.1:8000/api/virement_intern/?&page=${page}&agence=${agence}`,
+    // `/api/compte_details/`,
+    `http://127.0.0.1:8000/api/compte_depot/?AGENCE=${agence}`,
+
     // `/api/compte_details//?type=${type}&status=${status}&search=${search}&page=${page}&size=${size}`,
     {
     
@@ -22,20 +25,18 @@ async function getVirement(
   );
   return response.data;
 }
-export const useGetVirementInterne = (
-  page: number,
+export const useGetComptesStats = (
+//   page: number,
+  // size: number,
   agence: string,
-
-//   size: number,
-  // search: string,
   // type: string,
   // status: string,
   // target_audience: string
 ) => {
   return useQuery({
-    queryKey: ["virements", page, agence],
+    queryKey: ["comptes",agence],
     queryFn: () =>
-        getVirement(page, agence),
+        getComptesStats( agence),
     // getEntities(page, size, search, type, status),
   });
 };

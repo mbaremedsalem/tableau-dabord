@@ -1,0 +1,31 @@
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { ClientResponse } from "../types/Client";
+
+
+export const VIREMENT_INTERNE = ["virements"];
+
+async function getVirementInterne(
+  agence : string
+): Promise<ClientResponse> {
+  const response = await axios.get(
+    `http://127.0.0.1:8000/api/virement_intern/?agence=${agence}`,
+
+    {
+    
+    }
+  );
+  return response.data;
+}
+export const useGetStatsVirementInterne = (
+
+  agence: string,
+  
+) => {
+  return useQuery({
+    queryKey: ["virements",agence],
+    queryFn: () =>
+        getVirementInterne( agence),
+  });
+};
+

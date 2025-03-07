@@ -1,41 +1,55 @@
-import StatBox from "../../ui/StatBox";
+import { useState } from "react";
+import Toggle from "../../ui/Toggle";
+import AdminNouadhibou from "./AdminNouadhibou";
+import AdminNouakchott from "./AdminNouakchott";
 
 
 
 const Admin =() => {
     
-    const stats = [
-        {
-          label: "Comptes",
-          value: 34,
-        },
-        {
-          label: 'Clients',
-          value: 55
-        },
-        {
-          label: "Virements Internes",
-          value: 72,
-        },
-        {
-          label: ("Virement Externe"),
-          value: 340
-        },
-        {
-            label: ("Guichet"),
-            value: 210
-          },
-      ];
+    
+        const [active, setActive] = useState<number>(0);
+        const handleToggleChange = (index: number) => {
+          setActive(index);
+        };
+   
 
     return (
         
         <div>
-            <div>
-            <div className="mt-[29px] mb-[18px] flex items-center justify-between gap-x-[27px] pb-[21px] border-b border-[#eeeeee]">
-        {stats.map((el) => {
-          return <StatBox key={el.label} label={el.label} value={el.value!} />;
-        })}
+
+<div className="flex items-center justify-between">
+        <h1 className="font-semibold">Home</h1>
+
+        <Toggle
+          options={["Nouakchott", "Nouadhibou"]}
+          activeIndex={active}
+          onToggle={handleToggleChange}
+        />
       </div>
+
+      <div>
+        {active === 0? (
+            <>
+            <hr className="mt-4"/>
+            <AdminNouakchott/>
+          
+            
+            </>
+
+        ) :
+        <>
+            <hr className="mt-4"/>
+            <AdminNouadhibou/>
+
+            </>
+      
+      }
+      </div>
+
+
+            <div>
+           
             </div>
         </div>
         
