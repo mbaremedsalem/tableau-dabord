@@ -4,9 +4,11 @@
 
 const Footer = () => {
     return (
-        <div className=" flex items-end justify-center ">
+        <div className=" flex items-end justify-center   mt-6 ">
 
-           Tous les droits reserves AUB
+     <div>
+                <h2 className="">Copyright {"\u00A9"} AUB 2025</h2>
+            </div>
            
         </div>
     )
