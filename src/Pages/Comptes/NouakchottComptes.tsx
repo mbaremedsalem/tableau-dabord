@@ -3,13 +3,12 @@ import { Compte } from "../../Services/types/Compte";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useGetComptes } from "../../Services/comptes/useGetComptes";
-// import { getRowClassName } from "../../Services/types/Herpers";
 
 
 const NouakchottComptes =() => {
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(14);
+  const [pageSize, setPageSize] = useState(9);
   const handleTableChange = (pagination: any) => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
@@ -19,15 +18,27 @@ const NouakchottComptes =() => {
     const columns: TableProps<Compte>["columns"] = [
         {
           title: ("CLIENT"),
-          dataIndex: "client",
-          key: "client",
+          dataIndex: "CLIENT",
+          key: "CLIENT",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
               <span>{record.CLIENT}</span>
             </div>
           ),
-          onFilter: (_, record) => {
-            return record?.CLIENT?.toLowerCase().includes(searchValue.toLowerCase());
+          filteredValue:[searchValue],
+          onFilter:(_, record)=>{
+            return (
+              record?.CLIENT?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+              record?.COMPTE?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+              record?.NOM?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+              record?.NCG?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+              record?.TYP?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+              record?.DATOUV?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+              record?.DATFRM?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+              record?.POSDEV?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+              record?.DATVAL?.toLowerCase().includes(searchValue.toLocaleLowerCase()) 
+              
+            )
           },
           
         },
@@ -35,9 +46,7 @@ const NouakchottComptes =() => {
           title: ("AGENCE"),
           dataIndex: "AGENCE",
           key: "AGENCE",
-        //   onFilter: (_, record) => {
-        //     return record?.nom?.toLowerCase().includes(searchValue.toLowerCase());
-        //   },
+       
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
               <span>{record.AGENCE}</span>
@@ -138,7 +147,7 @@ const NouakchottComptes =() => {
         
         
       ];
-      const {data, isPending} = useGetComptes(pageSize, "00001")
+      const {data, isPending} = useGetComptes(currentPage, "00001", "")
       console.log("data : ", data)
     return(
         <div className="mt-5">
@@ -156,20 +165,12 @@ const NouakchottComptes =() => {
                 placeholder="Search..."
                 
               />
-              {/* <FilterDropdown
-                valueSearch={"users"}
-                filtersUsers={filtersusers}
-                handleCheckboxChange={handleCheckboxChange}
-              /> */}
-
-             
               
             </div>
             <div className="!max-w-full mt-4 md:!max-w-full overflow-x-auto">
             <Table
               loading={isPending}
               columns={columns}
-            //   rowClassName={getRowClassName}
               pagination={{
                 current: currentPage,
                 pageSize,

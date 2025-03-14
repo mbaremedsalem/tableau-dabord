@@ -9,6 +9,7 @@ const ResetPassword = lazy(() => import("../Pages/Auth/ResetPassword"));
 const Admin = lazy(() => import("../Pages/Admin/Admin"));
 const Compte = lazy(() => import("../Pages/Comptes/Compte"));
 const Guichet = lazy(() => import("../Pages/Guichet/Guichet"));
+const Client = lazy(() => import("../Pages/Clients/ClientView"));
 const SendLink = lazy(() => import("../Pages/Auth/SendLink"));
 const SuccessResetPassword = lazy(() => import("../Pages/Auth/SuccessResetPassword"));
 
@@ -103,6 +104,16 @@ var PrincipalRouter = [
         layout : "private",
         role:"admin"
     },
+    {
+      path:"/clients",
+      element: (
+          <Suspense fallback={<Spinner center={true} />}>
+            <Client />
+          </Suspense>
+        ),
+      layout : "private",
+      role:"admin"
+  },
     
     {
       path:"/virement/interne",

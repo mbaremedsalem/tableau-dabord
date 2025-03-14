@@ -14,6 +14,8 @@ import logout from "../assets/new_images/logout.png"
 import nuit from "../assets/new_images/mode-nuit.png"
 import jour from "../assets/new_images/mode-jour.png"
 import cacher from "../assets/new_images/cacher.png"
+
+import client from "../assets/new_images/user.png"
 import { Switch } from 'antd';
 import { useTranslation } from 'react-i18next';
 type props ={
@@ -73,7 +75,13 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
             name:"Guichet",
             logo:guichet,
             link : "/guichet"
-        }
+        },
+        {
+          id:5,
+          name:"Clients",
+          logo:client,
+          link : "/clients"
+      }
     ]
     const [active, setActive] = useState<number>(() => {
         const savedIndex = localStorage.getItem("activeMenuIndex");

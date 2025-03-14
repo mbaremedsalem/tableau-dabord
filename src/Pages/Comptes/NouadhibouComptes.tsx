@@ -3,7 +3,6 @@ import { Compte } from "../../Services/types/Compte";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useGetComptes } from "../../Services/comptes/useGetComptes";
-// import { getRowClassName } from "../../Services/types/Herpers";
 
 
 const NouadhibouComptes =() => {
@@ -15,13 +14,8 @@ const NouadhibouComptes =() => {
     setPageSize(pagination.pageSize);
   };
 
-    // const [currentPage, setCurrentPage] = useState(1);
-    // const [pageSize, setPageSize] = useState(8);
-    // const handleTableChange = (pagination: any) => {
-    //   setCurrentPage(pagination.current);
-    //   setPageSize(pagination.pageSize);
-    // };
-      const {data, isPending} = useGetComptes(currentPage,"00002")
+    
+      const {data, isPending} = useGetComptes(currentPage,"00002", "")
 
   
   console.log("searchValue : ", searchValue)

@@ -1,22 +1,24 @@
 import { useQuery } from "@tanstack/react-query";
-import { CompteResponse } from "../types/Compte";
 // import api from "../../Auth-services/axios";
 import axios from "axios";
+import { ClientResponse } from "../types/Client";
 
 
-export const CLIENTS_KEY = ["clients"];
+export const CLIENTS_KEY = ["clients-VIEW"];
 
 async function getClients(
   page: number,
-  agence : string
+  agence : string,
   // size: number,
   // search: string,
-  // type: string,
+  type: string,
   // status: string,
-): Promise<CompteResponse> {
+): Promise<ClientResponse> {
   const response = await axios.get(
     // `/api/compte_details/`,
-    `http://127.0.0.1:8000/api/client/?page=${page}&AGENCE=${agence}`,
+    // `http://127.0.0.1:8000/api/client/?page=${page}&agence=${agence}`,
+    `http://127.0.0.1:8000/api/client/?&page=${page}&agence=${agence}&type=${type}`,
+
 
     // `/api/compte_details//?type=${type}&status=${status}&search=${search}&page=${page}&size=${size}`,
     {
@@ -29,14 +31,14 @@ export const useGetClients = (
   page: number,
   // size: number,
   agence: string,
-  // type: string,
+  type: string
   // status: string,
   // target_audience: string
 ) => {
   return useQuery({
-    queryKey: ["clients", page,agence],
+    queryKey: ["clients-VIEW", page,agence, type],
     queryFn: () =>
-      getClients(page, agence),
+      getClients(page, agence, type),
     // getEntities(page, size, search, type, status),
   });
 };

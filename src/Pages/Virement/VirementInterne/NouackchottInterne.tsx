@@ -1,8 +1,10 @@
-import { DatePicker, Input, Table, TableProps } from "antd";
+import { CheckboxProps, DatePicker, Dropdown, Input, MenuProps, Table, TableProps } from "antd";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { Virement } from "../../../Services/types/Virement";
 import { useGetVirementInterne } from "../../../Services/Virements/VirementInterne/useGetVirementInterne";
+import CustomCheckbox from "../../../ui/CustomCheckbox";
+import filterIcon from "../../../assets/images/style-stroke.svg";
 
 
 const NouakchottInterne =() => {
@@ -13,6 +15,8 @@ const NouakchottInterne =() => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
   };
+const { RangePicker } = DatePicker;
+
     const {data, isPending} = useGetVirementInterne(currentPage, "00001")
   console.log("searchValue : ", searchValue)
     const columns: TableProps<Virement>["columns"] = [
@@ -44,19 +48,6 @@ const NouakchottInterne =() => {
           },
           
         },
-        // {
-        //   title: ("Heure Operation"),
-        
-        //   render: (_, record) => (
-        //     <div className="flex items-center gap-x-2">
-        //       <span>{record.date_operation.slice(11,19)}</span>
-        //     </div>
-        //   ),
-        //   onFilter: (_, record) => {
-        //     return record?.date_operation?.toLowerCase().includes(searchValue.toLowerCase());
-        //   },
-          
-        // },
         {
           title: ("Montant Debit"),
           dataIndex: "montant_debit",
@@ -81,9 +72,7 @@ const NouakchottInterne =() => {
           title: ("Client"),
           dataIndex: "client",
           key: "client",
-        //   onFilter: (_, record) => {
-        //     return record?.agec?.toLowerCase().includes(searchValue.toLowerCase());
-        //   },
+       
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
               <span>{record.client}</span>
@@ -127,6 +116,69 @@ const NouakchottInterne =() => {
         
         
       ];
+       const onChange: CheckboxProps["onChange"] = (e) => {
+              const { value } = e.target;
+          
+              if (e.target.checked) {
+                setFilterDate(value)
+                setCurrentPage(1)
+                // setSelectedDate(null)
+              } else {
+                setFilterDate("")
+                setCurrentPage(1)
+                // setSelectedDate(null)
+      
+      
+              }
+            };
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [filterDate, setFilterDate] = useState("Date")
+
+  const items: MenuProps["items"] =  [
+    {
+      label: <span>Filter</span>,
+      key: "-1",
+    },
+    {
+      label: (
+        <CustomCheckbox
+          onChange={onChange}
+          label="Date"
+          checked={filterDate === "Date"}
+          value="Date"
+        />
+      ),
+      key: "1",
+    },
+    {
+      label: (
+        <CustomCheckbox
+          onChange={onChange}
+          label="Enter deux date"
+          checked={filterDate === "deuxdate"}
+
+          value="deuxdate"
+        />
+      ),
+      key: "2",
+    },
+  ]
+
+  // const [dates, setDates] = useState<[string | null, string | null]>([null, null]);
+
+      // const handleDateChange = (values: any, dateStrings: [string, string]) => {
+      //   console.log(values)
+      //   // setDates(dateStrings);
+      //   // setSelectedDate(null)
+      //   setCurrentPage(1)
+    
+      // };
+  // const [selectedDate, setSelectedDate] = useState<Date | null>();
+
+      // const onChangeDate = (date:Date | null) => {
+      //   setSelectedDate(date)
+      // }
+
 
     return(
         <div className="mt-5">
@@ -136,14 +188,37 @@ const NouakchottInterne =() => {
         <span> {data?.count} virement interne </span>
     </div>
   <div className="flex items-center space-x-4">
-  
-               <DatePicker
-          className="w-[173px] border border-[#e7e7e7] rounded-[20px] h-[42px] "
-        //   suffixIcon={<img className="w-4 h-4" src={calendarIcon} />}
-        //   value={selectedDate}
-        //   onChange={(newDate) => handleDateChange(newDate.toDate())}
-          format={"ddd, Do MMM YYYY"}
-        />
+  <Dropdown
+  onOpenChange={(e) => setIsMenuOpen(e)}
+  menu={{ items }}
+  trigger={["click"]}
+  >
+ <button
+   className={` w-[42px] h-[42px] px-[13px] py-[14px] rounded-full flex items-center justify-center border 
+    
+    ${isMenuOpen &&"bg-[#fbce39]/[0.19] border-none duration-75 transition-all"}
+     `}
+ >
+   <img src={filterIcon} alt="filter icon" />
+ </button>
+</Dropdown>
+             
+  {filterDate === "deuxdate" && (
+    <RangePicker className="w-[] border border-[#e7e7e7] rounded-[10px] h-[42px] "
+    // onChange={handleDateChange} 
+    />
+
+      )}
+  {filterDate === "Date" && (
+ <DatePicker
+//  locale={dayjs.locale("fr")}
+ className="w-[173px] border border-[#e7e7e7] rounded-[10px] h-[42px] "
+//  value={selectedDate}
+//  onChange={onChangeDate}
+//  onChange={onChangeDate}
+ format={"dddd, DD MMMM YYYY"}
+ />
+  )}
         <Input
                 value={searchValue ?? ""}
                 className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"
