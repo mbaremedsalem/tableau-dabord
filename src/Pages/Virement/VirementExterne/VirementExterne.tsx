@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Toggle from "../../../ui/Toggle";
 import NouakchottExterne from "./NouakchottExterne";
 import NouadhibouExterne from "./NouadhibouExterne";
@@ -7,6 +7,22 @@ import NouadhibouExterne from "./NouadhibouExterne";
 
 
 const VirementExterne =() => {
+  
+  
+    const [agence, setAgence] = useState("");
+    useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      // const typeParam = params.get("type");
+      const agenceParam = params.get("agence");
+  
+      // if (typeParam) setType(typeParam);
+      if (agenceParam) setAgence(agenceParam);
+    }, []);
+    useEffect(() => {
+      if (agence) {
+        setActive(agence === "nktt" ? 0 : 1);
+      }
+    }, [agence]); 
   const [active, setActive] = useState<number>(0);
 
 
@@ -31,7 +47,7 @@ const VirementExterne =() => {
         {active === 0? (
             <>
             <hr className="mt-4"/>
-            <NouakchottExterne/></>
+            <NouakchottExterne /></>
 
         ) :
         <>

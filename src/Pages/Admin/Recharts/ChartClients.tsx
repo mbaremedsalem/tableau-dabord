@@ -17,11 +17,13 @@ ChartJS.register(LineController, LineElement, PointElement, LinearScale, Title, 
 interface ChartjsPolarAreaChartProps {
   labelColor: string;
   agence: string;
+  nameAgence:string;
+
 }
 
-const ChartjsPolarAreaChart: FC<ChartjsPolarAreaChartProps> = ({ labelColor, agence }) => {
+const ChartjsPolarAreaChart: FC<ChartjsPolarAreaChartProps> = ({ labelColor, agence, nameAgence }) => {
   const chartRef = useRef<any>(null);
-  const navigate = useNavigate(); // Initialize the navigation hook
+  const navigate = useNavigate(); 
 
   const { data: ClientChart, isPending: isPendingClient } = useGetChartsClient(agence);
   console.log('charts : ', ClientChart);
@@ -55,11 +57,12 @@ const ChartjsPolarAreaChart: FC<ChartjsPolarAreaChartProps> = ({ labelColor, age
         },
       },
     },
-    onClick: ( elements: any) => {
+    onClick: (event: any, elements: any) => {
+      console.log("event : ", event)
       if (elements.length > 0) {
         const index = elements[0].index;
         const clickedLabel = ClientChart ? ClientChart[index].ageclib : '';
-        navigate(`/clients/?type=${encodeURIComponent(clickedLabel)}`);
+        navigate(`/clients/?type=${encodeURIComponent(clickedLabel)}&agence=${nameAgence}`);
       }
     },
   };
@@ -99,13 +102,15 @@ const ChartjsPolarAreaChart: FC<ChartjsPolarAreaChartProps> = ({ labelColor, age
         <img src={users} className="w-9 h-9" />
       </CardHeader>
       <CardBody>
-        <div style={{ height: '350px' }} className="text-[12px]">
+        <div style={{ height: '350px', cursor:"pointer" }} className="text-[12px]">
           <PolarArea
+          
             className="text-[12px]"
             ref={chartRef}
             data={data}
             options={options}
             height={350}
+
           />
         </div>
       </CardBody>

@@ -5,13 +5,16 @@ import { ChartOptions, ChartData } from "chart.js";
 import imgdepot from '../../../assets/new_images/compte.png'
 import Spinner from "../../../ui/Spinner";
 import { useGetChartsComptes } from "../../../Services/charts/useGetChartComptes";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 type props = {
-  agence : string
+  agence : string,
+  nameAgence : string,
 }
-const ChartCompte = ({agence}:props) => {
+const ChartCompte = ({agence, nameAgence}:props) => {
+  const {data:Depot, isPending:isPendingDepot} = useGetChartsComptes(agence)
+const navigate = useNavigate()
   const options: ChartOptions<'doughnut'> = {
     maintainAspectRatio: false,
     cutout: "60%",
@@ -32,10 +35,17 @@ const ChartCompte = ({agence}:props) => {
         bodyColor: "#000",
       },
     },
+    onClick: (event: any, elements: any) => {
+      console.log("event : ", event)
+      if (elements.length > 0) {
+        const index = elements[0].index;
+        const clickedLabel = Depot ? Depot[index].libelle : '';
+        navigate(`/comptes/?type=${encodeURIComponent(clickedLabel)}&agence=${nameAgence}`);
+      }
+    },
   };
 
 
-    const {data:Depot, isPending:isPendingDepot} = useGetChartsComptes(agence)
    
   
 
@@ -70,38 +80,30 @@ console.log("colors[2] : ", colors[0])
       </CardHeader>
       <CardBody className="">
         <div style={{ height: 290 }}>
-          <Doughnut data={data} options={options} />
+          <Doughnut data={data} className="cursor-pointer" options={options} />
         </div>
       <div className="flex flex-col items-center">
       <div className="flex justify-between mt-3 mb-1">
         
         </div>
-        <div className="flex flex-wrap space-x-3 items-center flex-col justify-center ">
+        <div className="flex flex-wrap space-x-3 items-center  justify-center ">
             {Depot?.map((depot, index)=>{
                 return (
                     <div key={index} className="flex justify-between mb-1 ">
-                        <Link to={"/comptes"}>
+                        <Link to={`/comptes?type=${depot.libelle}&agence=${nameAgence}`}>
                     <div className="flex items-center text-justify cursor-pointer">
                       <div 
                         style={{ backgroundColor: colors[index] }}
                       className={`w-4 h-4  rounded-full`}></div>
-                      <span className="font-bold ml-2 mr-1">{depot.libelle}</span>
-                      <span> - </span>
-                      <span> {depot.count}  </span>
+                      <span className="font-bold ml-2 mr-1">{depot.count}</span>
+                     
                     </div>
                     </Link>
                   </div>
                 )
             })}
         </div>
-        {/* <div className="flex justify-between mb-1">
-          <div className="flex items-center">
-            <div className="w-4 h-4 bg-yellow-500 rounded-full"></div>
-            <span className="font-bold ml-2 mr-1">Interne</span>
-            <span> - </span>
-            <span> 400 </span>
-          </div>
-        </div> */}
+       
        
       </div>
       </CardBody>

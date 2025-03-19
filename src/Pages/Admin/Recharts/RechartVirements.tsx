@@ -6,7 +6,7 @@ import imgvirement from '../../../assets/new_images/virement.png'
 import { useGetStatsVirementInterne } from "../../../Services/Admin/useGetStatsVirementInterne";
 import Spinner from "../../../ui/Spinner";
 import { useGetStatsVirementExterne } from "../../../Services/Admin/useGetStatsVirementExterne";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // ** Enregistrer les composants nécessaires **
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -16,13 +16,18 @@ interface ChartjsRadarChartProps {
   warningLightColor: string;
   primary: string;
   agence: string;
+  nameAgence:string;
 }
 
 const ChartjsRadarChart: React.FC<ChartjsRadarChartProps> = ({
   successColorShade,
   warningLightColor,
-  agence
+  agence,
+  nameAgence
 }) => {
+  const {data:VirementInterne, isPending:isPendingVirement} = useGetStatsVirementInterne(agence)
+    const {data:virementExterne, isPending:isPendingVirementExterne} = useGetStatsVirementExterne(agence)
+    const navigate = useNavigate()
   const options: ChartOptions<'doughnut'> = {
     maintainAspectRatio: false,
     cutout: "60%",
@@ -43,11 +48,26 @@ const ChartjsRadarChart: React.FC<ChartjsRadarChartProps> = ({
         bodyColor: "#000",
       },
     },
+    onClick: (event: any, elements: any) => {
+      console.log("event : ", event)
+      console.log(elements[0])
+      if(elements[0].index === 0){
+        navigate(`/virement/interne/?agence=${nameAgence}`);
+
+      } else {
+        navigate(`/virement/externe/?agence=${nameAgence}`);
+
+      }
+      // if (elements.length > 0) {
+      //   if(elements.labell === "Interne"){
+
+      //   }
+      // }
+    },
   };
 
 
-    const {data:VirementInterne, isPending:isPendingVirement} = useGetStatsVirementInterne(agence)
-    const {data:virementExterne, isPending:isPendingVirementExterne} = useGetStatsVirementExterne(agence)
+    
     console.log("VirementInterne : ", VirementInterne)
     console.log("Virement externe : ", virementExterne)
   
@@ -55,7 +75,7 @@ const ChartjsRadarChart: React.FC<ChartjsRadarChartProps> = ({
     labels: ["Interne", "Externe"],
     datasets: [
       {
-        data: [virementExterne?.count!, VirementInterne?.count!],
+        data: [VirementInterne?.count!, virementExterne?.count!],
         backgroundColor: [successColorShade, warningLightColor],
         borderWidth: 0,
       },
@@ -78,25 +98,25 @@ const ChartjsRadarChart: React.FC<ChartjsRadarChartProps> = ({
       </CardHeader>
       <CardBody className="">
         <div style={{ height: 290 }}>
-          <Doughnut data={data} options={options} />
+          <Doughnut data={data} className="cursor-pointer" options={options} />
         </div>
       <div className="flex flex-col items-center">
       <div className="flex justify-between mt-3 mb-1">
         
         </div>
-        <Link to={"/virement/interne"}>
+        <Link to={`/virement/interne/?agence=${nameAgence}`}>
         <div className="flex justify-between mb-1 cursor-pointer">
           <div className="flex items-center">
-            <div className="w-4 h-4 bg-yellow-500 rounded-full cursor-pointer"></div>
+            <div className="w-4 h-4 bg-green-500 rounded-full cursor-pointer"></div>
             <span className="font-bold ml-2 mr-1">Interne</span>
             <span> -  {VirementInterne?.count} </span>
           </div>
         </div>
         </Link>
-        <Link to={"/virement/externe"}>
+        <Link to={`/virement/externe/?agence=${nameAgence}`}>
         <div className="flex justify-between cursor-pointer">
           <div className="flex items-center">
-            <div className="w-4 h-4 bg-green-500 rounded-full cursor-pointer"></div>
+            <div className="w-4 h-4  bg-yellow-500  rounded-full cursor-pointer"></div>
 
             <span className="font-bold ml-2 mr-1 ">Externe</span>
             <span>- {virementExterne?.count}</span>

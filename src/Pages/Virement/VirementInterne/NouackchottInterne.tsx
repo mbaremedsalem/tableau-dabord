@@ -1,11 +1,11 @@
-import { CheckboxProps, DatePicker, Dropdown, Input, MenuProps, Table, TableProps } from "antd";
+import {  Button, DatePicker, Input, Table, TableProps } from "antd";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { Virement } from "../../../Services/types/Virement";
 import { useGetVirementInterne } from "../../../Services/Virements/VirementInterne/useGetVirementInterne";
-import CustomCheckbox from "../../../ui/CustomCheckbox";
-import filterIcon from "../../../assets/images/style-stroke.svg";
-
+import dayjs from "dayjs";
+// import * as XLSX from "xlsx";
+// import { saveAs } from "file-saver";
 
 const NouakchottInterne =() => {
   const [searchValue, setSearchValue] = useState("");
@@ -15,10 +15,13 @@ const NouakchottInterne =() => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
   };
-const { RangePicker } = DatePicker;
+const [selectedDate, setSelectedDate] = useState<Date | null>();
 
-    const {data, isPending} = useGetVirementInterne(currentPage, "00001")
-  console.log("searchValue : ", searchValue)
+const onChangeDate = (date:Date | null) => {
+  setSelectedDate(date)
+}
+    const {data, isPending} = useGetVirementInterne(currentPage, "00001", selectedDate?String(dayjs(selectedDate).format("YYYY-MM-DD")) : "")
+ 
     const columns: TableProps<Virement>["columns"] = [
         {
           title: ("Date Operation"),
@@ -29,9 +32,7 @@ const { RangePicker } = DatePicker;
               <span>{record?.date_operation?.slice(0,10)}</span>
             </div>
           ),
-          onFilter: (_, record) => {
-            return record?.date_operation?.toLowerCase().includes(searchValue.toLowerCase());
-          },
+        
           
         },
         {
@@ -43,8 +44,19 @@ const { RangePicker } = DatePicker;
               <span>{record?.agence}</span>
             </div>
           ),
-          onFilter: (_, record) => {
-            return record?.date_operation?.toLowerCase().includes(searchValue.toLowerCase());
+          filteredValue:[searchValue],
+          onFilter:(_, record)=>{
+            return (
+              record?.agence?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+              record?.client?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+              record?.compte_credit?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+              record?.compte_debit?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+              record?.date_operation?.includes(searchValue.toLocaleLowerCase()) || 
+              record?.montant_credit?.toString()?.includes(searchValue.toLocaleLowerCase()) ||
+              record?.montant_debit?.toString()?.includes(searchValue.toLocaleLowerCase()) || 
+              record?.status?.toLowerCase().includes(searchValue.toLocaleLowerCase()) 
+              
+            )
           },
           
         },
@@ -116,70 +128,31 @@ const { RangePicker } = DatePicker;
         
         
       ];
-       const onChange: CheckboxProps["onChange"] = (e) => {
-              const { value } = e.target;
-          
-              if (e.target.checked) {
-                setFilterDate(value)
-                setCurrentPage(1)
-                // setSelectedDate(null)
-              } else {
-                setFilterDate("")
-                setCurrentPage(1)
-                // setSelectedDate(null)
-      
-      
-              }
-            };
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [filterDate, setFilterDate] = useState("Date")
-
-  const items: MenuProps["items"] =  [
-    {
-      label: <span>Filter</span>,
-      key: "-1",
-    },
-    {
-      label: (
-        <CustomCheckbox
-          onChange={onChange}
-          label="Date"
-          checked={filterDate === "Date"}
-          value="Date"
-        />
-      ),
-      key: "1",
-    },
-    {
-      label: (
-        <CustomCheckbox
-          onChange={onChange}
-          label="Enter deux date"
-          checked={filterDate === "deuxdate"}
-
-          value="deuxdate"
-        />
-      ),
-      key: "2",
-    },
-  ]
-
-  // const [dates, setDates] = useState<[string | null, string | null]>([null, null]);
-
-      // const handleDateChange = (values: any, dateStrings: [string, string]) => {
-      //   console.log(values)
-      //   // setDates(dateStrings);
-      //   // setSelectedDate(null)
-      //   setCurrentPage(1)
+       
+      const exportToExcel = () => {
+        if (!data?.results) return;
     
-      // };
-  // const [selectedDate, setSelectedDate] = useState<Date | null>();
-
-      // const onChangeDate = (date:Date | null) => {
-      //   setSelectedDate(date)
-      // }
-
-
+        // Ajouter les numéros de ligne
+        // const formattedData = data.results.map((row, index) => ({
+        //   "N° Ligne": index + 1,
+        //   "Date Operation": row.date_operation?.slice(0, 10),
+        //   Agence: row.agence,
+        //   "Montant Debit": row.montant_debit,
+        //   "Montant Credit": row.montant_credit,
+        //   Client: row.client,
+        //   "Compte Debit": row.compte_debit,
+        //   "Compte Credit": row.compte_credit,
+        //   Status: row.status,
+        // }));
+    
+        // const worksheet = XLSX.utils.json_to_sheet(formattedData);
+        // const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
+        // const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+        // const dataBlob = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    
+        // Télécharger le fichier Excel
+        // saveAs(dataBlob, "virement_data.xlsx");
+      };
     return(
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
@@ -188,37 +161,18 @@ const { RangePicker } = DatePicker;
         <span> {data?.count} virement interne </span>
     </div>
   <div className="flex items-center space-x-4">
-  <Dropdown
-  onOpenChange={(e) => setIsMenuOpen(e)}
-  menu={{ items }}
-  trigger={["click"]}
-  >
- <button
-   className={` w-[42px] h-[42px] px-[13px] py-[14px] rounded-full flex items-center justify-center border 
-    
-    ${isMenuOpen &&"bg-[#fbce39]/[0.19] border-none duration-75 transition-all"}
-     `}
- >
-   <img src={filterIcon} alt="filter icon" />
- </button>
-</Dropdown>
-             
-  {filterDate === "deuxdate" && (
-    <RangePicker className="w-[] border border-[#e7e7e7] rounded-[10px] h-[42px] "
-    // onChange={handleDateChange} 
-    />
+  
+  
 
-      )}
-  {filterDate === "Date" && (
  <DatePicker
-//  locale={dayjs.locale("fr")}
- className="w-[173px] border border-[#e7e7e7] rounded-[10px] h-[42px] "
-//  value={selectedDate}
-//  onChange={onChangeDate}
-//  onChange={onChangeDate}
+ className="w-[180px] border border-[#e7e7e7] rounded-[10px] h-[42px] "
+ onChange={onChangeDate}
+ placeholder="Select date operation"
  format={"dddd, DD MMMM YYYY"}
  />
-  )}
+ <Button type="primary" onClick={exportToExcel}>
+            Export Excel
+          </Button>
         <Input
                 value={searchValue ?? ""}
                 className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"
@@ -228,6 +182,8 @@ const { RangePicker } = DatePicker;
                 placeholder="Search..."
                 
               />
+              
+              
   </div>
               {/* <FilterDropdown
                 valueSearch={"users"}

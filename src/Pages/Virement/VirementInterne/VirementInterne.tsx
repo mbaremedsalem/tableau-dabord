@@ -1,10 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Toggle from "../../../ui/Toggle";
 import NouakchottInterne from "./NouackchottInterne";
 import NouadhibouInterne from "./NouadhibouInterne";
 
 
 const VirementInterne =() => {
+    // const [type, setType] = useState("");
+      const [agence, setAgence] = useState("");
+      useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        // const typeParam = params.get("type");
+        const agenceParam = params.get("agence");
+    
+        // if (typeParam) setType(typeParam);
+        if (agenceParam) setAgence(agenceParam);
+      }, []);
+      useEffect(() => {
+        if (agence) {
+          setActive(agence === "nktt" ? 0 : 1);
+        }
+      }, [agence]); 
   const [active, setActive] = useState<number>(0);
 
 

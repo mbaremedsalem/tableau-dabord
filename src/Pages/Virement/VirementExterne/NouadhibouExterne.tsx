@@ -1,8 +1,9 @@
-import { Input, Table, TableProps } from "antd";
+import { DatePicker, Input, Table, TableProps } from "antd";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import {  VirementExterne } from "../../../Services/types/Virement";
 import { useGetVirementExterne } from "../../../Services/Virements/viremementExterne/useGetVirementExterne";
+const { RangePicker } = DatePicker;
 
 
 
@@ -14,23 +15,20 @@ const NouadhibouExterne =() => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
   };
-    const {data, isPending} = useGetVirementExterne(currentPage)
+  const [dates, setDates] = useState<[string | null, string | null]>([null, null]);
+
+      const handleDateChange = (values: any, dateStrings: [string, string]) => {
+        console.log(values)
+        setDates(dateStrings);
+        setCurrentPage(1)
+    
+      };
+  console.log("date 1 : ", dates[0])
+  console.log("date 2 : ", dates[1])
+    const {data, isPending} = useGetVirementExterne(currentPage, "00002", dates[0]?dates[0]! : "", dates[1]?dates[1]!:"")
   console.log("searchValue : ", searchValue)
     const columns: TableProps<VirementExterne>["columns"] = [
-        // {
-        //   title: ("Oper"),
-        //   dataIndex: "oper",
-        //   key: "oper",
-        //   render: (_, record) => (
-        //     <div className="flex items-center gap-x-2">
-        //       <span>{record.oper}</span>
-        //     </div>
-        //   ),
-        //   onFilter: (_, record) => {
-        //     return record?.oper?.toLowerCase().includes(searchValue.toLowerCase());
-        //   },
-          
-        // },
+        
         {
           title: ("Compte"),
           dataIndex: "compte_benef",
@@ -55,12 +53,10 @@ const NouadhibouExterne =() => {
           title: ("DATE Transaction"),
           dataIndex: "date_transaction",
           key: "date_transaction",
-        //   onFilter: (_, record) => {
-        //     return record?.agec?.toLowerCase().includes(searchValue.toLowerCase());
-        //   },
+       
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.date_transaction}</span>
+              <span>{record.date_transaction.slice(0,10)}</span>
             </div>
           ),
         },
@@ -138,7 +134,6 @@ const NouadhibouExterne =() => {
             );
           },
         },
-
         // {
         //   title: ("produit"),
         //   dataIndex: "produit",
@@ -226,7 +221,7 @@ const NouadhibouExterne =() => {
         
         
       ];
-
+  
     return(
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
@@ -234,6 +229,10 @@ const NouadhibouExterne =() => {
         <span>Registred Virement</span>
         <span> {data?.count } virement Externe </span>
     </div>
+              <div className="flex items-center gap-3">
+              <RangePicker className="w-[] border border-[#e7e7e7] rounded-[10px] h-[42px] "
+    onChange={handleDateChange} 
+    />
               <Input
                 value={searchValue ?? ""}
                 className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"
@@ -243,11 +242,8 @@ const NouadhibouExterne =() => {
                 placeholder="Search..."
                 
               />
-              {/* <FilterDropdown
-                valueSearch={"users"}
-                filtersUsers={filtersusers}
-                handleCheckboxChange={handleCheckboxChange}
-              /> */}
+              
+              </div>
 
              
               

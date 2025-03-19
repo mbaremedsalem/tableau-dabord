@@ -70,6 +70,8 @@ const AdminNouakchott = () => {
   <ChartjsPolarAreaChart
         labelColor="#6E6B7B"
         agence="00001"
+        nameAgence="nktt"
+        
        
       />
   
@@ -83,18 +85,19 @@ const AdminNouakchott = () => {
         warningLightColor="#FF9F43"
         primary="#7367F0"
         agence="00001"
+        nameAgence="nktt"
       />
       </div>
       <div className="p-8 bg- rounded-xl shadow-2xl border-t-2 border-green-500 mt-4">
        <ChartDepot agence="00001"/>
       </div>
       <div className="p-8 bg- rounded-xl shadow-2xl border-t-2 border-green-500 mt-4">
-       <ChartCompte agence="00001"/>
+       <ChartCompte agence="00001" nameAgence="nktt"/>
       </div>
       
   </div>
   <div className="grid grid-cols-1 p-8 bg- rounded-xl shadow-2xl border-t-2 border-green-500 mt-7">
-        <ChartGuichet agence="00001"/>
+        <ChartGuichet agence="00001" nameAgence="nktt"/>
       </div>
   <div>
     

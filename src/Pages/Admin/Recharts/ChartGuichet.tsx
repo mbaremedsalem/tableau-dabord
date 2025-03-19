@@ -2,10 +2,14 @@ import { Bar, BarChart, CartesianGrid, Cell, Legend, ResponsiveContainer, Toolti
 import { useGetChartsGuichet } from "../../../Services/charts/useGetChartOperation";
 import Spinner from "../../../ui/Spinner";
 import imgGuichet from "../../../assets/new_images/guichet.png"
+import { useNavigate } from "react-router-dom";
 type props = {
   agence : string
+  nameAgence:string
 }
-const ChartGuichet = ({agence}:props) => {
+const ChartGuichet = ({agence, nameAgence}:props) => {
+  const navigate = useNavigate()
+
   const { data: OperationGuichet, isPending: isPendingOperation } = useGetChartsGuichet(agence);
 
  
@@ -17,6 +21,9 @@ const ChartGuichet = ({agence}:props) => {
   if (isPendingOperation) {
     return <Spinner center={true} />;
   }
+  const naviger = (type:string) =>{
+    return navigate(`/guichet/?type=${type}&agence=${nameAgence}`)
+  }
  
   return (
   <div className="my-6">
@@ -27,15 +34,14 @@ const ChartGuichet = ({agence}:props) => {
       <ResponsiveContainer width="100%" height={550} className={"my-5 cursor-pointer"} >
     <BarChart data={formattedData} className="mt-7 text-[10px] mb-7 cursor-pointer">
       <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="type_operation" angle={-25} textAnchor="end"
-      />
+      <XAxis dataKey="type_operation" angle={-25} textAnchor="end"/>
       <YAxis />
       <Tooltip />
       <Legend className=""/>
       
       <Bar dataKey="Nombre" className="cursor-pointer">
         {formattedData?.map((entry, index) => (
-          <Cell key={`cell-${index}`} alphabetic={entry.Nombre} fill={colors[index % colors.length]}
+          <Cell onClick={()=>naviger(entry.type_operation)} key={`cell-${index}`} alphabetic={entry.Nombre} fill={colors[index % colors.length]}
            />
         ))}
       </Bar>

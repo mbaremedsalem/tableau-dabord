@@ -1,11 +1,18 @@
-import { Input, Table, TableProps } from "antd";
+import { CheckboxProps, DatePicker, Dropdown, Input, MenuProps, Table, TableProps } from "antd";
 import { Compte } from "../../Services/types/Compte";
-import { useState } from "react";
+import {  useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useGetComptes } from "../../Services/comptes/useGetComptes";
+import CustomCheckbox from "../../ui/CustomCheckbox";
+import filterIcon from "../../assets/images/style-stroke.svg";
+import dayjs from "dayjs";
 
-
-const NouakchottComptes =() => {
+type props = {
+  typeC:string
+}
+const NouakchottComptes =({typeC}:props) => {
+  dayjs.locale("fr")
+  
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(9);
@@ -35,7 +42,7 @@ const NouakchottComptes =() => {
               record?.TYP?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
               record?.DATOUV?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
               record?.DATFRM?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
-              record?.POSDEV?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+              record?.POSDEV?.toString().includes(searchValue.toLocaleLowerCase()) || 
               record?.DATVAL?.toLowerCase().includes(searchValue.toLocaleLowerCase()) 
               
             )
@@ -147,8 +154,66 @@ const NouakchottComptes =() => {
         
         
       ];
-      const {data, isPending} = useGetComptes(currentPage, "00001", "")
+      
+
+  const [filterDate, setFilterDate] = useState("")
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>();
+      const {data, isPending} = useGetComptes(currentPage, "00001", typeC,(filterDate=== "Dateo" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "",  
+    (  filterDate=== "Datef" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "")
       console.log("data : ", data)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+
+  console.log("|selectedDate : ", String(dayjs(selectedDate).format("YYYY-MM-DD")))
+const onChange: CheckboxProps["onChange"] = (e) => {
+        const { value } = e.target;
+    
+        if (e.target.checked) {
+          setFilterDate(value)
+          setCurrentPage(1)
+          setSelectedDate(null)
+        } else {
+          setFilterDate("")
+          setCurrentPage(1)
+          setSelectedDate(null)
+
+
+        }
+      };
+      const onChangeDate = (date:Date | null) => {
+        setSelectedDate(date)
+      }
+
+      const items: MenuProps["items"] =  [
+        {
+          label: <span>Filter Par Date</span>,
+          key: "-1",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Date Ouverture"
+              checked={filterDate === "Dateo"}
+              value="Dateo"
+            />
+          ),
+          key: "1",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Date Fermeture"
+              checked={filterDate === "Datef"}
+
+              value="Datef"
+            />
+          ),
+          key: "2",
+        },
+      ]
     return(
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
@@ -156,7 +221,28 @@ const NouakchottComptes =() => {
         <span>Registred Comptes</span>
         <span> {data?.count} </span>
     </div>
-              <Input
+             <div className="flex items-center justify-center space-x-3">
+             <Dropdown
+  onOpenChange={(e) => setIsMenuOpen(e)}
+  menu={{ items }}
+  trigger={["click"]}
+  >
+ <button
+   className={` w-[42px] h-[42px] px-[13px] py-[14px] rounded-full flex items-center justify-center border 
+    
+    ${isMenuOpen &&"bg-[#fbce39]/[0.19] border-none duration-75 transition-all"}
+     `}
+ >
+   <img src={filterIcon} alt="filter icon" />
+ </button>
+</Dropdown>
+<DatePicker
+ className="w-[200px] border border-[#e7e7e7] rounded-[10px] h-[42px] "
+ onChange={onChangeDate}
+ placeholder={filterDate === "Dateo" ? "Select Date Ouverture" : (filterDate === "Datef" ? "Select Date Fermeture"  : "")}
+ format={"dddd, DD MMMM YYYY"}
+ />
+             <Input
                 value={searchValue ?? ""}
                 className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"
                 prefix={<CiSearch className="" />}
@@ -165,6 +251,9 @@ const NouakchottComptes =() => {
                 placeholder="Search..."
                 
               />
+              
+               
+             </div>
               
             </div>
             <div className="!max-w-full mt-4 md:!max-w-full overflow-x-auto">

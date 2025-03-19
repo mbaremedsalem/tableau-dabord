@@ -1,8 +1,9 @@
-import { Input, Table, TableProps } from "antd";
+import {  DatePicker, Input, Table, TableProps } from "antd";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { Virement } from "../../../Services/types/Virement";
 import { useGetVirementInterne } from "../../../Services/Virements/VirementInterne/useGetVirementInterne";
+import dayjs from "dayjs";
 
 
 const NouadhibouInterne =() => {
@@ -13,7 +14,12 @@ const NouadhibouInterne =() => {
     setCurrentPage(pagination.current);
     setPageSize(pagination.pageSize);
   };
-    const {data, isPending} = useGetVirementInterne(currentPage, "00002")
+const [selectedDate, setSelectedDate] = useState<Date | null>();
+
+const onChangeDate = (date:Date | null) => {
+  setSelectedDate(date)
+}
+    const {data, isPending} = useGetVirementInterne(currentPage, "00002", selectedDate?String(dayjs(selectedDate).format("YYYY-MM-DD")) : "")
   console.log("searchValue : ", searchValue)
     const columns: TableProps<Virement>["columns"] = [
         {
@@ -25,24 +31,9 @@ const NouadhibouInterne =() => {
               <span>{record?.date_operation?.slice(0,10)}</span>
             </div>
           ),
-          onFilter: (_, record) => {
-            return record?.date_operation?.toLowerCase().includes(searchValue.toLowerCase());
-          },
+        
           
         },
-        // {
-        //   title: ("Heure Operation"),
-        
-        //   render: (_, record) => (
-        //     <div className="flex items-center gap-x-2">
-        //       <span>{record.date_operation.slice(11,19)}</span>
-        //     </div>
-        //   ),
-        //   onFilter: (_, record) => {
-        //     return record?.date_operation?.toLowerCase().includes(searchValue.toLowerCase());
-        //   },
-          
-        // },
         {
           title: ("Agence"),
           dataIndex: "agence",
@@ -52,8 +43,19 @@ const NouadhibouInterne =() => {
               <span>{record?.agence}</span>
             </div>
           ),
-          onFilter: (_, record) => {
-            return record?.date_operation?.toLowerCase().includes(searchValue.toLowerCase());
+          filteredValue:[searchValue],
+          onFilter:(_, record)=>{
+            return (
+              record?.agence?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+              record?.client?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+              record?.compte_credit?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+              record?.compte_debit?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+              record?.date_operation?.includes(searchValue.toLocaleLowerCase()) || 
+              record?.montant_credit?.toString()?.includes(searchValue.toLocaleLowerCase()) ||
+              record?.montant_debit?.toString()?.includes(searchValue.toLocaleLowerCase()) || 
+              record?.status?.toLowerCase().includes(searchValue.toLocaleLowerCase()) 
+              
+            )
           },
           
         },
@@ -81,9 +83,7 @@ const NouadhibouInterne =() => {
           title: ("Client"),
           dataIndex: "client",
           key: "client",
-        //   onFilter: (_, record) => {
-        //     return record?.agec?.toLowerCase().includes(searchValue.toLowerCase());
-        //   },
+       
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
               <span>{record.client}</span>
@@ -127,6 +127,7 @@ const NouadhibouInterne =() => {
         
         
       ];
+       
 
     return(
         <div className="mt-5">
@@ -135,7 +136,17 @@ const NouadhibouInterne =() => {
         <span>Registred Virement</span>
         <span> {data?.count} virement interne </span>
     </div>
-              <Input
+  <div className="flex items-center space-x-4">
+  
+  
+
+ <DatePicker
+ className="w-[180px] border border-[#e7e7e7] rounded-[10px] h-[42px] "
+ onChange={onChangeDate}
+ placeholder="Select date operation"
+ format={"dddd, DD MMMM YYYY"}
+ />
+        <Input
                 value={searchValue ?? ""}
                 className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"
                 prefix={<CiSearch className="" />}
@@ -144,6 +155,7 @@ const NouadhibouInterne =() => {
                 placeholder="Search..."
                 
               />
+  </div>
               {/* <FilterDropdown
                 valueSearch={"users"}
                 filtersUsers={filtersusers}
