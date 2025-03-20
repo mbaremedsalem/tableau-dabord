@@ -38,12 +38,7 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
     setisHide(!isHide)
     handleHideSide(!isHide)
   }
-  // const [activeSubItem, setActiveSubItem] = useState<number | null>(null);
-  const [activeSubItem, setActiveSubItem] = useState<number>(() => {
-    const savedIndex = localStorage.getItem("activeMenuIndex");
-    console.log("savedIndex : ", savedIndex)
-    return savedIndex ? parseInt(savedIndex, 10) : 0;
-  });
+  
 
     const navsItems = [
         {
@@ -83,23 +78,39 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
           link : "/clients"
       }
     ]
-    const [active, setActive] = useState<number>(() => {
-        const savedIndex = localStorage.getItem("activeMenuIndex");
-        console.log("savedIndex : ", savedIndex)
-        return savedIndex ? parseInt(savedIndex, 10) : 0;
-      });
+   
+    const isActive = ( link: string ) => {
+      if (link === "/" && location.pathname === "/") {
+        return true;
+      }
+      return link !== "/" && location.pathname.startsWith(link);
+    };
+   
 
-    useEffect(() => {
-        const activeIndex = navsItems.findIndex((nav) => nav.link === location.pathname);
+   
+      
+      useEffect(() => {
+        const activeIndex = navsItems.findIndex((nav) =>
+          location.pathname.startsWith(nav.link!)  
+        );
         if (activeIndex !== -1) {
-          setActive(activeIndex);
-          setActiveSubItem(activeIndex)
         }
       }, [location.pathname]);
-      
 
       useEffect(() => {
-        // console.log("is change : ", isNuit)
+        const matchingSubItem = navsItems.find(item => 
+          item.isDropdown && item.subItems?.some(subItem => 
+            location.pathname.startsWith(subItem.link)
+          )
+        );
+        if (matchingSubItem) {
+          setOpenDropdown(navsItems.indexOf(matchingSubItem))
+        } else {
+          setOpenDropdown(null)
+        }
+      }, [location.pathname]);
+
+      useEffect(() => {
         if (isNuit) {
           document.body.classList.add("dark");
           localStorage.setItem("theme", "dark");
@@ -116,10 +127,7 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
         setIsNuitFromSide(isNuit);
       }, [isNuit, setIsNuitFromSide]);
     
-    //   const handleNavClick = (index: number) => {
-    //     setActive(index);
-    //     localStorage.setItem("activeMenuIndex", index.toString());
-    //   };
+
     
       const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
@@ -132,11 +140,6 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
         } else {
           console.log("in drop :", index)
 
-            // setActive(index);
-            // localStorage.setItem("activeMenuIndex", index.toString());
-
-            setActive(index);
-        setActiveSubItem(null!);
         localStorage.setItem("activeMenuIndex", index.toString());
         setOpenDropdown(null)
             
@@ -146,8 +149,6 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
     const handleSubItemClick = (subItemId: number) => {
       localStorage.setItem("activeMenuIndex", subItemId.toString());
 
-      setActiveSubItem(subItemId);
-      setActive(null!);
   };
     const {i18n} = useTranslation()
 
@@ -156,15 +157,11 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
         localStorage.removeItem("activeMenuIndex");
         localStorage.removeItem("darkMode");
         window.location.href = "/login";
-      };
-    //   initial={isMobile? {  y:-240,scale:0 , opacity:0} : {  y:230, scale:0.001}}
-    //                       animate={selectedIcon === 1  && isInView ? (isMobile?{ opacity: 1, y: -50, x:0, scale: 1 } : {opacity: 1, y: 0, scale: 1}) : {}}
-    //                       transition={{duration : 0.5}}
+      }
     return(
         <AnimatePresence mode='popLayout'  >
             <motion.div
-        //  initial={isHide?{x:0, scale:0}:""}
-        //  animate={isHide?{x:"-100vw", scale:1} : {x:0, scale:1}}
+      
          transition={{duration:2}}
       
         
@@ -178,7 +175,9 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
       <Link to={item.link!}>
       <div
         className={`${
-          active === index
+          // active === index
+          // location.pathname.startsWith(item.link!)
+          isActive(item.link!)
             ? isNuit
               ? "bg-white border-r-4 border-main-color text-black"
               : "border-r-4 bg-white border-main-color"
@@ -192,12 +191,20 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
       </div>
       </Link>
     </div>
-    {item.isDropdown && openDropdown === index &&  (
+    {(item.isDropdown && openDropdown === index)  &&   (
       <ul className={`${i18n.language === "ar" ? "mr-8 "  : "ml-8 "}mt-2  space-y-2 `}>
         {item.subItems?.map((subItem) => (
           <li key={subItem.id}>
             <Link to={subItem.link}>
-              <div onClick={() => handleSubItemClick(subItem.id)}   className={`flex items-center  ${activeSubItem === subItem.id  ? "bg-white text-black" : ""}  gap-x-4 px-4 py-2 text-sm rounded-md hover:text-black  hover:bg-gray-200 transition-all`}>
+              <div onClick={() => handleSubItemClick(subItem.id)}  
+               className={`flex items-center  
+               ${
+                // activeSubItem === subItem.id  
+                isActive(subItem.link)
+                ? 
+                "bg-white text-black" : ""
+                } 
+                gap-x-4 px-4 py-2 text-sm rounded-md hover:text-black  hover:bg-gray-200 transition-all`}>
                 <img className='w-7 h-7' src={subItem.logo}/>
                 <span>{subItem.name}</span>
               </div>
