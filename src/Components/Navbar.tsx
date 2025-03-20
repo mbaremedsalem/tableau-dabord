@@ -2,7 +2,7 @@
 import { Dropdown, MenuProps, Modal } from 'antd'
 import logo from '../assets/images/image.svg'
 // import logoMin from '../assets/images/AUB.png'
-import AuthService from '../Auth-services/AuthService'
+// import AuthService from '../Auth-services/AuthService'
 // import globe from '../assets/new_images/globe.svg'
 import { motion} from 'framer-motion'
 import menu from '../assets/new_images/menu.png'
@@ -10,6 +10,8 @@ import { useState } from 'react'
 // import Sidebar from './Sidebar'
 import SideMenu from './SideMenu'
 import LanguageSwitch from '../ui/LanguageSwitch'
+import { UpdateProfileAdmin } from '../Pages/Users/UpdateProfileAdmin'
+import { getUserInfo } from '../Services/Auth/useGetUser'
 
 type props = {
     isNuit:boolean
@@ -18,12 +20,22 @@ type props = {
 }
 const Navbar =({isNuit, setIsNuitFromSide}:props) => {
     console.log("isNuit : ", isNuit)
+    const {data:clients}= getUserInfo()
+
     // const fullName = AuthService.getFullNameUserConnect()
+  const [isModalOpenProfile, setIsModalOpenProfile] = useState(false);
+  const handlecancelProfile = () => {
+    setIsModalOpenProfile(false)
+  }
+
+    const showModalProfile = () => {
+      setIsModalOpenProfile(true);
+    };
     const items: MenuProps["items"] = [
         {
           label: ("Edit Profile"),
           key: "1",
-        //   onClick: () => showModal(),
+          onClick: () => showModalProfile(),
         },
       ];
 
@@ -67,12 +79,12 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
           <div className="flex items-center gap-x-[9px] cursor-pointer">
             <img
               className="w-[38px] h-[38px] rounded-full"
-            //   src={profile}
-              alt="profile img"
+              src={clients?.image}
+              alt="pr"
             />
             <div className="flex flex-col gap-y-[2px]">
               <span className="text-[13px] font-medium text-black">
-                {AuthService.getFullNameUserConnect()}
+                {clients?.first_name}
               </span>
               <span className="text-[11px] text-[#848484] font-light">
                 Edit Details
@@ -93,6 +105,20 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
     
               >
                <SideMenu setIsNuitFromSide={setIsNuitFromSide} isNuit={isNuit} handlecancel={handlecancel}/>
+              </Modal>
+              <Modal
+                destroyOnClose={true}
+                onCancel={handlecancelProfile}
+                open={isModalOpenProfile}
+                footer={null}
+                width={412}
+                closable={false}
+                // className={isNuit ? "dark-mode" : ""}
+                className=''
+                
+    
+              >
+              <UpdateProfileAdmin handleCancel={handlecancelProfile}/>
               </Modal>
       </div>
     </header>

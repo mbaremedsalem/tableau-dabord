@@ -87,6 +87,7 @@ var PrincipalRouter = [
         path:"/comptes",
         element: (
             <Suspense fallback={<Spinner center={true} />}>
+              
               < Compte/>
             </Suspense>
           ),

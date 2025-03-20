@@ -1,4 +1,4 @@
-import { CheckboxProps, DatePicker, Dropdown, Input, MenuProps, Table, TableProps } from "antd";
+import { CheckboxProps, DatePicker, Dropdown, Input, MenuProps, Skeleton, Table, TableProps } from "antd";
 import { Compte } from "../../Services/types/Compte";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
@@ -212,6 +212,10 @@ const onChange: CheckboxProps["onChange"] = (e) => {
           key: "2",
         },
       ]
+
+      if(isPending){
+        <Skeleton active />;
+      }
     return(
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
