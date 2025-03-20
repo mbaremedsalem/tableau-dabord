@@ -6,6 +6,10 @@ import {AnimatePresence, motion} from 'framer-motion'
 import home from "../assets/new_images/home.png"
 import guichet from "../assets/new_images/guichet.png"
 import virement from "../assets/new_images/virement.png"
+import virementInterne from "../assets/new_images/internal-link.png"
+import virementExterne from "../assets/new_images/external-link (1).png"
+
+
 import right from "../assets/new_images/CaretRight.png"
 import right1 from "../assets/new_images/Vector.png"
 import compte from "../assets/new_images/compte.png"
@@ -61,8 +65,8 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
             logo: virement,
             isDropdown: true, 
             subItems: [
-                { id: 31, name: "Interne", link: "/virement/interne",  logo: virement, },
-                { id: 32, name: "Externe", link: "/virement/externe",  logo: virement, }
+                { id: 31, name: "Interne", link: "/virement/interne",  logo: virementInterne, },
+                { id: 32, name: "Externe", link: "/virement/externe",  logo: virementExterne, }
             ]
         },
         {
