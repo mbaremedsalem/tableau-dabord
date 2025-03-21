@@ -144,6 +144,14 @@ body.dark {
   color: white;
   border: none;
 }
+.secondary-button {
+  background-color: gray;
+  font-weight: bold;
+  border-radius: 23px;
+  color: white;
+  border: none;
+}
+
 
 .react-aria-Checkbox {
   --selected-color: #1C8244;
@@ -162,5 +170,8 @@ body.dark {
 @layer components {
   .primary-button {
     @apply bg-main-color  hover:!bg-main-color hover:!text-white text-white;
+  }
+  .secondary-button {
+    @apply bg-gray-300  hover:!bg-gray-300 hover:!text-white text-black;
   }
 }

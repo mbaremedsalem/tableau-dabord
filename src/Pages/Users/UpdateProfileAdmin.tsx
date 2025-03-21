@@ -1,100 +1,101 @@
 
 
-import {  Button, Input,  Select, Space } from "antd";
-// import {  useEffect, useState } from "react";
+import {  Button, Input, message, Space } from "antd";
 import { useTranslation } from "react-i18next";
-// import AuthService from "../../Auth-services/AuthService";
-// import Spinner from "../../ui/Spinner";
-// import { getUserInfo } from "../../Services/Auth/useGetUser";
+import { getUserInfo } from "../../Services/Auth/useGetUser";
+import Spinner from "../../ui/Spinner";
+import { useEffect, useState } from "react";
+import { validateEmail } from "../../Services/types/validateEmail";
+import { useUpdateUser } from "../../Services/Auth/useUpdateProfile";
+import { User } from "../../Services/types/User";
 type Props = {
   handleCancel: () => void;
 };
 export  function UpdateProfileAdmin({handleCancel} : Props) {
-//     const idConnect = AuthService.getIDUserConnect()
-//     const [email, setEmail] = useState("");
-//   const [fullName, setFullName] = useState("");
-//   const [gender, setGender] = useState("");
-//   const [phone, setphone] = useState("");
+      const {data:clients, isPending:isPendingClient}= getUserInfo()
 
-//   const { mutate: updateProfileAdmin, isPending } = useUpdateUser();
+
   const {t} = useTranslation()
-  
-//  const handleSelectGender = (value:string)=>{
-//   setGender(value)
-//  }
+  if(isPendingClient){
+    return <Spinner center={true}/>
+  }
+  const [first_name, setFirstName] = useState("")
+  const [last_name, setLastName] = useState("")
+  const [email, setEmail] = useState("")
+  const {mutate:UpdateProfile, isPending:isPendingProfile} = useUpdateUser()
 
+  useEffect(()=>{
+    setFirstName(clients?.first_name || "")
+    setLastName(clients?.last_name || "")
+    setEmail(clients?.email || "")
+  }, [clients])
 
-
-// if(isPendingGet) { 
-//   return (<Spinner  center={true}/>)
-// }
-
+  const onSubmit = () => {
+    if(!first_name || !last_name || !email){
+      message.error("Tous les champs sont obligatoires !")
+    } else  if (!validateEmail(email)){
+                return message.error(t("Entrez une adresse e-mail valide !"))
+            }
+      else { 
+        const params :User = {
+          email:email,
+          first_name:first_name,
+          last_name:last_name,
+        
+        }
+        UpdateProfile(params,{
+          onSuccess:()=>{
+            handleCancel()
+          }
+        })
+      }
+  }
   return (
     <div>
      
-      <div className="grid grid-cols-2 gap-y-2 gap-x-3">
+      <div className="grid grid-cols-2 gap-y-1 gap-x-3">
         <Space direction="vertical">
+          <label className="text-blue-2a text-[13px]" htmlFor="">
+          {t("First Name")}
+            
+          </label>
+          <Input
+            onChange={(e) => setFirstName(e.target.value)}
+           value={first_name}
+            placeholder="First Name"
+          />
+        </Space>
+
+        <Space direction="vertical">
+          <label className="text-blue-2a text-[13px]" htmlFor="">
+          {t("Last Name")}
+          </label>
+          <Input
+            onChange={(e) => setLastName(e.target.value)}
+           
+            value={last_name}
+            placeholder="Last Name"
+
+          />
+        </Space>
+        
+        <Space direction="vertical" className="grid col-span-2">
           <label className="text-blue-2a text-[13px]" htmlFor="">
           {t("Email")}
-            
           </label>
           <Input
-        //     onChange={(e) => setEmail(e.target.value)}
-        //    value={email}
-            placeholder="Email"
-          />
-        </Space>
-
-        <Space direction="vertical">
-          <label className="text-blue-2a text-[13px]" htmlFor="">
-          {t("Full Name")}
-          </label>
-          <Input
-            // onChange={(e) => setFullName(e.target.value)}
+          type="text"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
            
-            // value={fullName}
-            placeholder="Full Name"
-
-          />
-        </Space>
-        <Space direction="vertical">
-          <label className="text-blue-2a text-[13px]" htmlFor="">
-          {t("gender")}
-            
-          </label>
-          <Select
-          variant={"borderless"}
-          className="border !w-[130px] rounded-md"
-            // onChange={handleSelectGender}
-           options={[
-            {label : "Male", 
-              value : "Male",
-            },
-            {label : "Female", 
-              value : "Female",
-            }
-           ]}
-            // value={gender}
-            // placeholder={t("gender")}
-          />
-        </Space>
-        <Space direction="vertical">
-          <label className="text-blue-2a text-[13px]" htmlFor="">
-          {t("Phone")}
-          </label>
-          <Input
-          type="number"
-            // onChange={(e) => setphone(e.target.value)}
-           
-// value={phone}            
-placeholder={t("Phone")}
+placeholder={t("Email")}
           />
         </Space>
         
       </div>
-      <div className="flex items-center gap-x-4 mt-4 md:mt-5">
-          <Button className="w-[153.8px] h-[50.6px]   mt-2 secondary-button" onClick={handleCancel}>Cancel</Button>
-            {/* <Button className="w-[153.8px] h-[50.6px] mt-2 primary-button" loading={isPending} onClick={handleChanges}>Confirm</Button> */}
+      <div className="grid grid-cols-2 items-center gap-x-4 mt-4 md:mt-5">
+          <Button className=" h-[50.6px]   mt-2 secondary-button" onClick={handleCancel}>Cancel</Button>
+            <Button className=" h-[50.6px] mt-2 primary-button" onClick={onSubmit} loading={isPendingProfile}>Confirm</Button>
             
       </div>
     </div>

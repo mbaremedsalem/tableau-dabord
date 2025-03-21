@@ -11,7 +11,7 @@ export type ClientUser = {
 }
 
 async function getMe():Promise<ClientUser>{
-    const res = await api.get("/me")
+    const res = await api.get("api/me/")
     return res.data
 }
 

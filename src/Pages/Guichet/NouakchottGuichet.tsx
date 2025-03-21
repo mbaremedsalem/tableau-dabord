@@ -1,5 +1,5 @@
 import { CheckboxProps, DatePicker, Dropdown, Input, MenuProps, Table, TableProps } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useGetGuichet } from "../../Services/Guichet/useGetGuichet";
 import { Guichet } from "../../Services/types/Guiche";
@@ -22,6 +22,14 @@ const NouakchottGuichet =() => {
   };
 
   
+   const [type, setType] = useState("")
+  useEffect(()=>{
+    const params = new URLSearchParams(window.location.search)
+    const codeParam = params.get("type")
+    if(codeParam){
+      setType(codeParam)
+    }
+  }, [])
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -42,7 +50,7 @@ const NouakchottGuichet =() => {
         filterDate === "Date" ?  (selectedDate ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "") : (dates[0]! ? dates[0]! : ""), 
         filterDate === "Date" ?  (selectedDate ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "") : (dates[1]! ? dates[1]! : ""), 
         
-        "00001")
+        "00001", type)
       const onChangeDate = (date:Date | null) => {
         setSelectedDate(date)
       }

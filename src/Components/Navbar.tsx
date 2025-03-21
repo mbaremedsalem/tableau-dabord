@@ -12,6 +12,7 @@ import SideMenu from './SideMenu'
 import LanguageSwitch from '../ui/LanguageSwitch'
 import { UpdateProfileAdmin } from '../Pages/Users/UpdateProfileAdmin'
 import { getUserInfo } from '../Services/Auth/useGetUser'
+import { EditPassword } from '../Pages/Users/EditPassword'
 
 type props = {
     isNuit:boolean
@@ -24,18 +25,30 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
 
     // const fullName = AuthService.getFullNameUserConnect()
   const [isModalOpenProfile, setIsModalOpenProfile] = useState(false);
+  const [isModalOpenPassword, setIsModalOpenPassword] = useState(false);
   const handlecancelProfile = () => {
     setIsModalOpenProfile(false)
+  }
+  const handlecancelPassword = () => {
+    setIsModalOpenPassword(false)
   }
 
     const showModalProfile = () => {
       setIsModalOpenProfile(true);
     };
+    const showModalPassword = () => {
+      setIsModalOpenPassword(true);
+    };
     const items: MenuProps["items"] = [
         {
-          label: ("Edit Profile"),
+          label: ("Modifier le profil"),
           key: "1",
           onClick: () => showModalProfile(),
+        },
+        {
+          label: ("Modifier le mot de passe"),
+          key: "2",
+          onClick: () => showModalPassword(),
         },
       ];
 
@@ -79,7 +92,7 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
           <div className="flex items-center gap-x-[9px] cursor-pointer">
             <img
               className="w-[38px] h-[38px] rounded-full"
-              src={clients?.image}
+              src={`http://127.0.0.1:8000/${clients?.image}`}
               alt="pr"
             />
             <div className="flex flex-col gap-y-[2px]">
@@ -119,6 +132,16 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
     
               >
               <UpdateProfileAdmin handleCancel={handlecancelProfile}/>
+              </Modal>
+              <Modal
+                destroyOnClose={true}
+                onCancel={handlecancelPassword}
+                open={isModalOpenPassword}
+                footer={null}
+                width={390}
+                closable={false}
+                className=''              >
+              <EditPassword handleCancel={handlecancelPassword}/>
               </Modal>
       </div>
     </header>

@@ -12,10 +12,11 @@ async function getGuichet(
   start_date: string,
   end_date: string,
   agence: string,
+  type_operation:string
 ): Promise<GuichetResponse> {
   const response = await axios.get(
     // `/api/compte_details/`,
-    `http://127.0.0.1:8000/api/guichet/?agence=${agence}&page=${page}&start_date=${start_date}&end_date=${end_date}`,
+    `http://127.0.0.1:8000/api/guichet/?agence=${agence}&page=${page}&start_date=${start_date}&end_date=${end_date}&type_operation=${type_operation}`,
 
     // `/api/compte_details//?type=${type}&status=${status}&search=${search}&page=${page}&size=${size}`,
     {
@@ -29,12 +30,14 @@ export const useGetGuichet = (
   start_date: string,
   end_date: string,
   agence: string,
+  type_operation:string
+
   // target_audience: string
 ) => {
   return useQuery({
-    queryKey: ["guichet", page, start_date, end_date, agence],
+    queryKey: ["guichet", page, start_date, end_date, agence, type_operation],
     queryFn: () =>
-        getGuichet(page, start_date, end_date, agence),
+        getGuichet(page, start_date, end_date, agence, type_operation),
     // getEntities(page, size, search, type, status),
   });
 };
