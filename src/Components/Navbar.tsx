@@ -99,8 +99,8 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
               <span className="text-[13px] font-medium text-black">
                 {clients?.first_name}
               </span>
-              <span className="text-[11px] text-[#848484] font-light">
-                Edit Details
+              <span className="text-[11px] font-light">
+               {clients?.post}
               </span>
             </div>
           </div>

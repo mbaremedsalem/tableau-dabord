@@ -1,11 +1,16 @@
-import { DatePicker, Input, Table, TableProps } from "antd";
+import { Button, DatePicker, Dropdown, Input, MenuProps, message, Modal, Space, Spin, Table, TableProps } from "antd";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
-import {  VirementExterne } from "../../../Services/types/Virement";
+import {  VirementExterne, VirmentExterneResponse } from "../../../Services/types/Virement";
 import { useGetVirementExterne } from "../../../Services/Virements/viremementExterne/useGetVirementExterne";
 const { RangePicker } = DatePicker;
-
-
+import { CopyFilled, DownOutlined, FileExcelFilled, FilePdfFilled } from '@ant-design/icons'
+import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import axios from "axios";
+import logoBanque from "../../../assets/images/image.png"
+import { FaFileCsv } from "react-icons/fa";
 
 const NouadhibouExterne =() => {
   const [searchValue, setSearchValue] = useState("");
@@ -73,6 +78,7 @@ const NouadhibouExterne =() => {
           },
         {
           title: ("Montant Transaction"),
+        
           dataIndex: "montant_transaction",
           key: "montant_transaction",
           render: (_, record) => {
@@ -134,18 +140,7 @@ const NouadhibouExterne =() => {
             );
           },
         },
-        // {
-        //   title: ("produit"),
-        //   dataIndex: "produit",
-        //   key: "produit",
-        //   render: (_, record) => {
-        //     return (
-        //       <div className="flex flex-col gap-y-1">
-        //         <span>{record?.produit}</span>
-        //       </div>
-        //     );
-        //   },
-        // },
+        
         {
           title: ("Reference Transaction"),
           dataIndex: "reference_transaction",
@@ -221,7 +216,262 @@ const NouadhibouExterne =() => {
         
         
       ];
+       
+      const fetchExterne = async (
+        page: number,
+        agence:string,
+        date_debut:string,
+        date_fin:string
+      ) => {
+        
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/virement/?&page=${page}&agence=${agence}&date_debut=${date_debut}&date_fin=${date_fin}`
+        );
+        return response.data;
+      };
+      
+      const exportToPDF = async () => {
+        let allData: any[] = [];
+        let page = 1;
+        const totalPages = Math.ceil(data!.count / pageSize);
+        setLoading(true); // Active le spinner
+    
+        try {
+            for (let p = page; p <= totalPages; p++) {
+                console.log("Fetching data for page: ", p);
+    
+                const responseData = await fetchExterne(
+                    p, "00002", dates[0]?dates[0]! : "", dates[1]?dates[1]!:""
+                );
+    
+                if (responseData?.results) {
+                    allData = [...allData, ...responseData.results];
+                }
+                console.log("response : ", responseData);
+            }
+    
+            if (!allData.length) {
+                message.error("Aucune donnée à exporter !");
+                return;
+            }
+    
+            const doc = new jsPDF();
+            const logo = logoBanque;
+            doc.addImage(logo, "PNG", 10, 5, 70, 14);
+            doc.setFontSize(16);
+            doc.text(`Liste des virements externes - Agence de Nouadhibou`, 10, 25);
+            if (dates[0] && dates[1]) {
+                doc.text("Entre  le " + dates[0]+ " et " +dates[1], 10, 32);
+            }
+
+            const selectedColumns = [
+              {title:'compte', dataIndex:"compte_benef"},
+              {title:'Beneficiaire', dataIndex:"beneficiaire"},
+              {title:'Date', dataIndex:"date_transaction"},
+              {title:'Devise', dataIndex:"devise"},
+              {title:'Montant', dataIndex:"montant_transaction"},
+              {title:"Compte D d'ordre", dataIndex:"compte_don"},
+              {title:"Nom D d'ordre", dataIndex:"nom_donneur_ordre"},
+              {title:"Reference", dataIndex:"reference_transaction"},
+            ]
+    
+            autoTable(doc, {
+                startY: 35,
+                head: [selectedColumns.map(col => col.title as string)],
+                body: allData.map(row =>
+                  selectedColumns.map(col =>
+                        "dataIndex" in col ? row[col.dataIndex as keyof VirmentExterneResponse] : null
+                    )
+                ),
+                theme: "grid",
+                headStyles: { fillColor: "#1C8244", textColor: [255, 255, 255] },
+            });
+    
+            doc.save("virement-externe-ndb.pdf");
+            message.success("Fichier PDF exporté avec succès !");
+        } catch (error) {
+            console.error("Erreur lors de l'exportation :", error);
+            message.error("Erreur lors de l'exportation des données !");
+        } finally {
+            setLoading(false); 
+        }
+    };
+    
+    const [loading, setLoading] = useState(false);
+
+    const exportToExcel = async () => {
+      let allData: any[] = [];
+      let page = 1;
+      const totalPages = Math.ceil(data!.count / pageSize);
+      setLoading(true)
+      try {
+    
+      for (let p = page; p <= totalPages; p++) {
+          const responseData = await fetchExterne(
+            p, "00002", dates[0]?dates[0]! : "", dates[1]?dates[1]!:"");
+          if (responseData?.results) {
+            allData = [...allData, ...responseData.results];
+          }
+        } 
+      
+    
+      if (!allData.length) {
+        message.error("Aucune donnée à exporter !");
+        return;
+      }
+      // const selectedColumns = [
+      //         {title:'compte', dataIndex:"compte_benef"},
+      //         {title:'Beneficiaire', dataIndex:"beneficiaire"},
+      //         {title:'Date', dataIndex:"date_transaction"},
+      //         {title:'Devise', dataIndex:"devise"},
+      //         {title:'Montant', dataIndex:"montant_transaction"},
+      //         {title:"Compte D d'ordre", dataIndex:"compte_don"},
+      //         {title:"Nom D d'ordre", dataIndex:"nom_donneur_ordre"},
+      //         {title:"Reference", dataIndex:"reference_transaction"},
+      //       ]
+      
+      const formattedData = allData.map(row => {
+        const newRow: any = {};
+        columns.forEach(col => {
+          if ('dataIndex' in col) {
+            newRow[col.title as string] = row[col.dataIndex as keyof VirmentExterneResponse];
+          }
+        });
+        return newRow;
+      });
+      
+    
+      const worksheet = XLSX.utils.json_to_sheet(formattedData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Virement");
+     
+      XLSX.writeFile(workbook, "Virement-externe-nouadhibou.xlsx");
+      message.success("Fichier Excel exporté avec succès !");
+    } catch (error) {
+        console.error("Erreur lors de la récupération des virement :", error);
+        message.error("Erreur lors de l'exportation des données !");
+        return;
+      } finally{
+        setLoading(false)
+      }
+    };
+
+    const exportToCSV = async () => {
+      let allData: any[] = [];
+      let page = 1;
+      const totalPages = Math.ceil(data!.count / pageSize);
+      setLoading(true)
+      try {
+      for (let p = page; p <= totalPages; p++) {
+        
+          const responseData = await fetchExterne(
+            currentPage, "00002", dates[0]?dates[0]! : "", dates[1]?dates[1]!:"" );
+          if (responseData?.results) {
+            allData = [...allData, ...responseData.results];
+          }
+        } 
+      
+    
+      if (!allData.length) {
+        message.error("Aucune donnée à exporter !");
+        return;
+      }
+    
+      const headers = columns.map(col => col.title).join(",");
+      const rows = allData.map(row =>
+        columns.map(col => ('dataIndex' in col ? `"${row[col.dataIndex as keyof VirmentExterneResponse]}"` : "")).join(",")
+      );
+    
+      const csvContent = [headers, ...rows].join("\n");
+    
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute("download", "Virement-Externe-ndb.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    
+      message.success("Exportation CSV réussie !");
+    }catch (error) {
+      console.error("Erreur lors de la récupération des Virement :", error);
+      message.error("Erreur lors de l'exportation des données !");
+      return;
+    }finally{
+      setLoading(false)
+    }
+    };
+
+    const copyToClipboard = async () => {
+      let allData: any[] = [];
+      let page = 1;
+      const totalPages = Math.ceil(data!.count / pageSize);
+      setLoading(true)
+      try {
+      for (let p = page; p <= totalPages; p++) {
+       
+          const responseData = await fetchExterne(
+            p, "00002", dates[0]?dates[0]! : "", dates[1]?dates[1]!:"");;
+          if (responseData?.results) {
+            allData = [...allData, ...responseData.results];
+          }
+        } 
+      
+    
+      if (!allData.length) {
+        message.error("Aucune donnée à copier !");
+        return;
+      }
+    
+      const headers = columns.map(col => col.title).join("\t"); 
+      const rows = allData.map(row =>
+        columns.map(col => ("dataIndex" in col ? row[col.dataIndex as keyof VirmentExterneResponse] : "")).join("\t")
+      );
+      const textToCopy = [headers, ...rows].join("\n"); 
+      try {
+        await navigator.clipboard.writeText(textToCopy);
+        message.success("Données copiées dans le presse-papiers !");
+      } catch (error) {
+        console.error("Erreur lors de la copie :", error);
+        message.error("Impossible de copier les données !");
+      }
+   
+     } catch (error) {
+        console.error("Erreur lors de la récupération des virement :", error);
+        message.error("Erreur lors de la copie des données !");
+        return;
+      } finally{
+        setLoading(false)
+      }
+    };
+ 
+    const itemsExportVirement: MenuProps['items'] = [
+      {
+        label: 'Exporter PDF',
+        key: '1',
+        icon: <FilePdfFilled/>,
+        onClick : exportToPDF
   
+      },
+      {
+        label: 'Exporter EXCEL',
+        key: '2',
+        icon: <FileExcelFilled />,
+        onClick : exportToExcel
+      },
+      {
+        label: 'Exporter CSV',
+        key: '3',
+        icon: <FaFileCsv />,
+        onClick : exportToCSV
+      },
+      {
+        label: 'Copier',
+        key: '4',
+        icon: <CopyFilled />,
+        onClick : copyToClipboard
+      },
+    ]   
     return(
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
@@ -230,9 +480,28 @@ const NouadhibouExterne =() => {
         <span> {data?.count } virement Externe </span>
     </div>
               <div className="flex items-center gap-3">
+              <Dropdown menu={{items: itemsExportVirement,
+}}>
+      <Button className="export-button">
+        <Space>
+          Export
+          <DownOutlined />
+        </Space>
+      </Button>
+    </Dropdown>
               <RangePicker className="w-[] border border-[#e7e7e7] rounded-[10px] h-[42px] "
     onChange={handleDateChange} 
     />
+     {loading && (
+    <Modal open={loading} footer={null} closable={false}>
+        <div style={{ textAlign: "center", padding: "20px" }}>
+            <img src={logoBanque} alt="Logo Banque" width={100} />
+            <Spin size="large" style={{ marginTop: 20 }} />
+            <p style={{ marginTop: 10 }}>Exportation en cours...</p>
+        </div>
+    </Modal>
+)}
+
               <Input
                 value={searchValue ?? ""}
                 className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"

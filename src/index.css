@@ -144,6 +144,14 @@ body.dark {
   color: white;
   border: none;
 }
+.export-button {
+  background-color: #1C8244;
+  font-weight: bold;
+  border-radius: 12px;
+  height: 40px;
+  color: white;
+  border: none;
+}
 .secondary-button {
   background-color: gray;
   font-weight: bold;
@@ -171,7 +179,12 @@ body.dark {
   .primary-button {
     @apply bg-main-color  hover:!bg-main-color hover:!text-white text-white;
   }
+  .export-button {
+    @apply bg-main-color  hover:!bg-main-color hover:!text-white text-white;
+  }
   .secondary-button {
     @apply bg-gray-300  hover:!bg-gray-300 hover:!text-white text-black;
   }
 }
+
+

@@ -12,11 +12,6 @@ async function getComptes(
   type : string,
   dateouverture:string,
   datefermeture:string
-  
-  // size: number,
-  // search: string,
-  // type: string,
-  // status: string,
 ): Promise<CompteResponse> {
   const response = await axios.get(
     // `/api/compte_details/`,

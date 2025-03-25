@@ -1,16 +1,22 @@
-import { CheckboxProps, DatePicker, Dropdown, Input, MenuProps, Skeleton, Table, TableProps } from "antd";
-import { Compte } from "../../Services/types/Compte";
-import { useState } from "react";
+import { Button, CheckboxProps, DatePicker, Dropdown, Input, MenuProps, message, Skeleton, Space, Table, TableProps } from "antd";
+import { Compte, CompteResponse } from "../../Services/types/Compte";
+import {  useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useGetComptes } from "../../Services/comptes/useGetComptes";
 import CustomCheckbox from "../../ui/CustomCheckbox";
 import filterIcon from "../../assets/images/style-stroke.svg";
 import dayjs from "dayjs";
+import logo1 from "../../assets/images/AUB.png"
+import { FaFileCsv } from "react-icons/fa";
+import { CopyFilled, DownOutlined, FileExcelFilled, FilePdfFilled } from '@ant-design/icons'
+import axios from "axios";
+import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 type props = {
   typeC:string
 }
-
-const NouadhibouComptes =({typeC}:props) => {
+const NouadhibouCompte =({typeC}:props) => {
   dayjs.locale("fr")
   
   const [searchValue, setSearchValue] = useState("");
@@ -32,21 +38,21 @@ const NouadhibouComptes =({typeC}:props) => {
               <span>{record.CLIENT}</span>
             </div>
           ),
-          filteredValue:[searchValue],
-          onFilter:(_, record)=>{
-            return (
-              record?.CLIENT?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
-              record?.COMPTE?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
-              record?.NOM?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
-              record?.NCG?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
-              record?.TYP?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
-              record?.DATOUV?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
-              record?.DATFRM?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
-              record?.POSDEV?.toString().includes(searchValue.toLocaleLowerCase()) || 
-              record?.DATVAL?.toLowerCase().includes(searchValue.toLocaleLowerCase()) 
+          // filteredValue:[searchValue],
+          // onFilter:(_, record)=>{
+          //   return (
+          //     record?.CLIENT?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+          //     record?.COMPTE?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+          //     record?.NOM?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+          //     record?.NCG?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+          //     record?.TYP?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+          //     record?.DATOUV?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+          //     record?.DATFRM?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
+          //     record?.POSDEV?.toString().includes(searchValue.toLocaleLowerCase()) || 
+          //     record?.DATVAL?.toLowerCase().includes(searchValue.toLocaleLowerCase()) 
               
-            )
-          },
+          //   )
+          // },
           
         },
         {
@@ -64,9 +70,6 @@ const NouadhibouComptes =({typeC}:props) => {
           title: ("NOM"),
           dataIndex: "NOM",
           key: "NOM",
-        //   onFilter: (_, record) => {
-        //     return record?.agec?.toLowerCase().includes(searchValue.toLowerCase());
-        //   },
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
               <span>{record.NOM}</span>
@@ -90,9 +93,7 @@ const NouadhibouComptes =({typeC}:props) => {
           title: ("TYPE"),
           dataIndex: "TYP",
           key: "TYP",
-        //   onFilter: (_, record) => {
-        //     return record?.libelle?.toLowerCase().includes(searchValue.toLowerCase());
-        //   },
+        
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
               <span>{record.TYP}</span>
@@ -154,6 +155,8 @@ const NouadhibouComptes =({typeC}:props) => {
         
         
       ];
+      
+
   const [filterDate, setFilterDate] = useState("")
 
   const [selectedDate, setSelectedDate] = useState<Date | null>();
@@ -213,6 +216,245 @@ const onChange: CheckboxProps["onChange"] = (e) => {
         },
       ]
 
+      const fetchComptes = async (
+        page: number,
+        agence : string,
+        type : string,
+        dateouverture:string,
+        datefermeture:string
+      ) => {
+        
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/compte_filter/?&page=${page}&agence=${agence}&libelle=${type}&datouv=${dateouverture}&datfrm=${datefermeture}` 
+        );
+        return response.data;
+      };
+      
+      const exportToPDF = async () => {
+        let allData: any[] = [];
+        let page = 1;
+        const totalPages = Math.ceil(data!.count / pageSize);
+      
+        for (let p = page; p <= totalPages; p++) {
+          console.log("Fetching data for page: ", p);
+      
+          try {
+           
+            const responseData = await fetchComptes(
+              p,
+              "00002", typeC,(filterDate=== "Dateo" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "",  
+    (  filterDate=== "Datef" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : ""
+            
+            );
+            if (responseData?.results) {
+              allData = [...allData, ...responseData.results];
+            }
+      console.log("response : ", responseData)
+    
+          } catch (error) {
+            console.error("Erreur lors de la récupération des comptes :", error);
+            message.error("Erreur lors de l'exportation des données !");
+            return;
+          }
+        }
+        if (!allData.length) {
+          message.error("Aucune donnée à exporter !");
+          return;
+        }
+      
+        const doc = new jsPDF();
+        const logo = logo1; 
+      doc.addImage(logo, "PNG", 10, 5, 14.4, 12.4); 
+      doc.setFontSize(16);
+        doc.text("Banque Algerienne", 30, 15);
+        doc.text("List des Comptes", 10, 25);
+      
+        autoTable(doc, {
+          startY: 30,
+          head: [columns.map(col => col.title as string)],
+        
+          body: allData.map(row =>
+            columns.map(col => 
+              'dataIndex' in col ? row[col.dataIndex as keyof CompteResponse] : null
+            )
+          ),
+          theme: "grid", 
+     
+      headStyles: { fillColor: "#1C8244", textColor: [255, 255, 255] }, 
+     
+        });
+      
+        doc.save("comptes.pdf");
+        message.success("Fichier PDF exporté avec succès !");
+      };
+
+
+      const exportToExcel = async () => {
+        let allData: any[] = [];
+        let page = 1;
+        const totalPages = Math.ceil(data!.count / pageSize);
+      
+        for (let p = page; p <= totalPages; p++) {
+          try {
+            const responseData = await fetchComptes(
+              p,
+              "00002", typeC,(filterDate=== "Dateo" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "",  
+    (  filterDate=== "Datef" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : ""
+            
+            );
+            if (responseData?.results) {
+              allData = [...allData, ...responseData.results];
+            }
+          } catch (error) {
+            console.error("Erreur lors de la récupération des comptes :", error);
+            message.error("Erreur lors de l'exportation des données !");
+            return;
+          }
+        }
+      
+        if (!allData.length) {
+          message.error("Aucune donnée à exporter !");
+          return;
+        }
+        
+        
+        const formattedData = allData.map(row => {
+          const newRow: any = {};
+          columns.forEach(col => {
+            if ('dataIndex' in col) {
+              newRow[col.title as string] = row[col.dataIndex as keyof CompteResponse];
+            }
+          });
+          return newRow;
+        });
+        
+      
+        const worksheet = XLSX.utils.json_to_sheet(formattedData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Comptes");
+       
+        XLSX.writeFile(workbook, "comptes.xlsx");
+        message.success("Fichier Excel exporté avec succès !");
+      };
+
+      const exportToCSV = async () => {
+        let allData: any[] = [];
+        let page = 1;
+        const totalPages = Math.ceil(data!.count / pageSize);
+      
+        for (let p = page; p <= totalPages; p++) {
+          try {
+            const responseData = await fetchComptes(
+              p,
+              "00002", typeC,(filterDate=== "Dateo" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "",  
+    (  filterDate=== "Datef" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : ""
+            
+             );
+            if (responseData?.results) {
+              allData = [...allData, ...responseData.results];
+            }
+          } catch (error) {
+            console.error("Erreur lors de la récupération des comptes :", error);
+            message.error("Erreur lors de l'exportation des données !");
+            return;
+          }
+        }
+      
+        if (!allData.length) {
+          message.error("Aucune donnée à exporter !");
+          return;
+        }
+      
+        const headers = columns.map(col => col.title).join(",");
+        const rows = allData.map(row =>
+          columns.map(col => ('dataIndex' in col ? `"${row[col.dataIndex as keyof CompteResponse]}"` : "")).join(",")
+        );
+      
+        const csvContent = [headers, ...rows].join("\n");
+      
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.setAttribute("download", "comptes.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      
+        message.success("Exportation CSV réussie !");
+      };
+
+      const copyToClipboard = async () => {
+        let allData: any[] = [];
+        let page = 1;
+        const totalPages = Math.ceil(data!.count / pageSize);
+      
+        for (let p = page; p <= totalPages; p++) {
+          try {
+            const responseData = await fetchComptes(
+              p,
+              "00002", typeC,(filterDate=== "Dateo" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "",  
+    (  filterDate=== "Datef" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : ""
+            
+            
+            );
+            if (responseData?.results) {
+              allData = [...allData, ...responseData.results];
+            }
+          } catch (error) {
+            console.error("Erreur lors de la récupération des comptes :", error);
+            message.error("Erreur lors de la copie des données !");
+            return;
+          }
+        }
+      
+        if (!allData.length) {
+          message.error("Aucune donnée à copier !");
+          return;
+        }
+      
+        const headers = columns.map(col => col.title).join("\t"); 
+        const rows = allData.map(row =>
+          columns.map(col => ("dataIndex" in col ? row[col.dataIndex as keyof CompteResponse] : "")).join("\t")
+        );
+        const textToCopy = [headers, ...rows].join("\n"); 
+        try {
+          await navigator.clipboard.writeText(textToCopy);
+          message.success("Données copiées dans le presse-papiers !");
+        } catch (error) {
+          console.error("Erreur lors de la copie :", error);
+          message.error("Impossible de copier les données !");
+        }
+      };
+   
+      const itemsExportComptes: MenuProps['items'] = [
+        {
+          label: 'Exporter PDF',
+          key: '1',
+          icon: <FilePdfFilled/>,
+          onClick : exportToPDF
+    
+        },
+        {
+          label: 'Exporter EXCEL',
+          key: '2',
+          icon: <FileExcelFilled />,
+          onClick : exportToExcel
+        },
+        {
+          label: 'Exporter CSV',
+          key: '3',
+          icon: <FaFileCsv />,
+          onClick : exportToCSV
+        },
+        {
+          label: 'Copier',
+          key: '4',
+          icon: <CopyFilled />,
+          onClick : copyToClipboard
+        },
+      ]    
+
+
       if(isPending){
         <Skeleton active />;
       }
@@ -224,6 +466,15 @@ const onChange: CheckboxProps["onChange"] = (e) => {
         <span> {data?.count} </span>
     </div>
              <div className="flex items-center justify-center space-x-3">
+             <Dropdown menu={{items: itemsExportComptes,
+}}>
+      <Button className="export-button">
+        <Space>
+          Export
+          <DownOutlined />
+        </Space>
+      </Button>
+    </Dropdown>
              <Dropdown
   onOpenChange={(e) => setIsMenuOpen(e)}
   menu={{ items }}
@@ -254,6 +505,7 @@ const onChange: CheckboxProps["onChange"] = (e) => {
                 
               />
               
+              
                
              </div>
               
@@ -275,4 +527,4 @@ const onChange: CheckboxProps["onChange"] = (e) => {
     )
 }
 
-export default NouadhibouComptes
+export default NouadhibouCompte
