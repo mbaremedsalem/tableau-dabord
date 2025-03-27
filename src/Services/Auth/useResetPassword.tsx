@@ -34,8 +34,16 @@ export const useResetPassword = () => {
         message.success(" Password reset successful You can log in ");
         
       },
-      onError: () => {
+      onError: (err:any) => {
+        const errToken = err?.response?.data?.error
+        if(errToken){
+          message.error("Session Expired !")
+          message.error("Please Try again !")
+        } else {
         message.error("Incorrect !!");
+
+        }
+        console.log("err : ", errToken)
         
       },
     });

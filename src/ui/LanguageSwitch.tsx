@@ -7,13 +7,14 @@ function LanguageSwitch() {
   
   function onLanguageChange(lng: string) {
     i18n.changeLanguage(lng);
+    console.log("lang : ", )
     localStorage.setItem("languegChanger", lng); 
   }
   const items: MenuProps["items"] = [
     {
       key: "1",
-      label: (i18n.language === "ar" ? "العربية" : "العربية"),
-      onClick: () => onLanguageChange("ar"),
+      label: (i18n.language === "fr" ? "Français" : "Français"),
+      onClick: () => onLanguageChange("fr"),
     },
     {
       key: "2",
@@ -23,10 +24,10 @@ function LanguageSwitch() {
   ];
   return (
     <Dropdown menu={{ items }}>
-      <div className={`flex items-center cursor-pointer  gap-x-1 ${i18n.language === "ar" ? "md:border-l md:pl-[15px] " : " md:border-r md:pr-[15px]"} border-[#707070]`}>
+      <div className={`flex items-center cursor-pointer  gap-x-1 ${i18n.language === "fr" ? "md:border-l md:pl-[15px] " : " md:border-r md:pr-[15px]"} border-[#707070]`}>
         <img src={globe} alt="" />
         <span className="max-md:text-[12px] text-[13px]">
-        {i18n.language === "ar" ? "العربية"  : "English"}
+        {i18n.language === "fr" ? "Français"  : "English"}
           {/* {i18n.language === "ar" ? "ar" : "en"} */}
         </span>
         {/* <span className="w-[1px] h-4 bg-green-400 border"></span> */}

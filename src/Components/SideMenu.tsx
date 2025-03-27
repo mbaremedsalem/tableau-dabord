@@ -40,7 +40,6 @@ useEffect(() => {
   }, [location.pathname]);
 
   useEffect(() => {
-    console.log("is change : ", isNuit)
     if (isNuit) {
       document.body.classList.add("dark");
       document.body.classList.add("dark-mode");

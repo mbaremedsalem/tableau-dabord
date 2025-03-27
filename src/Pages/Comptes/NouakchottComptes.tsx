@@ -511,7 +511,9 @@ const onChange: CheckboxProps["onChange"] = (e) => {
               
             </div>
             <div className="!max-w-full mt-4 md:!max-w-full overflow-x-auto">
-            <Table
+              {isPending? (
+                <Skeleton active paragraph={{rows:10}}/>
+              ) : <Table
               loading={isPending}
               columns={columns}
               pagination={{
@@ -522,6 +524,8 @@ const onChange: CheckboxProps["onChange"] = (e) => {
               onChange={handleTableChange}
               dataSource={data?.results}
             />
+            }
+            
           </div>
         </div>
     )

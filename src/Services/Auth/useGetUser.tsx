@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../../Auth-services/axios";
-
+export const userKey = ["user-key"]
 export type ClientUser = {
     first_name:string,
     last_name:string,
@@ -18,7 +18,7 @@ async function getMe():Promise<ClientUser>{
 
 export function getUserInfo(){
     return useQuery({
-        queryKey:['clients-me'],
+        queryKey:userKey,
         queryFn:()=>getMe()
     })
 }

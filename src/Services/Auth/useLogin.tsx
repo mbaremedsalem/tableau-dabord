@@ -26,6 +26,10 @@ export type LoginParams = {
     localStorage.setItem("accessToken", res.data.access)
     localStorage.setItem("refrech_token", res.data.refresh)
     localStorage.setItem("Full_Name_user_Connect", res.data.full_name)
+
+    sessionStorage.setItem("accessToken", res.data.access)
+    sessionStorage.setItem("refrech_token", res.data.refresh)
+    sessionStorage.setItem("Full_Name_user_Connect", res.data.full_name)
     // localStorage.setItem("role_user_connect", res.data.data.user_type)
     // localStorage.setItem("id_user_Connect", res.data.data.id)
 

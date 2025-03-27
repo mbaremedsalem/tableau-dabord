@@ -35,7 +35,6 @@ const PrivateAdminLayout = ({ children }: LayoutProps) => {
   function handleHideSide(data: any) {
     setisHide(data);
   }
-  console.log("is hide now: ", isHide)
   return(
     <div className="" dir={i18n.language === "ar" ? "rtl" : "ltr" }>
      <Navbar isNuit={isNuit} setIsNuitFromSide={handleDataFromChild} />

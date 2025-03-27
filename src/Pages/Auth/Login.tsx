@@ -1,4 +1,4 @@
-import { Button, Checkbox, Input, message, Space } from "antd"
+import { Button, Input, message, Space, CheckboxProps } from "antd"
 import { InputField } from "../../ui/InputFiled"
 import { Controller, useForm } from "react-hook-form";
 import logo from '../../assets/images/AUB.png'
@@ -6,18 +6,35 @@ import Grandlogo from '../../assets/images/logo.svg'
 import { useTranslation } from "react-i18next";
 import { LoginParams, useLogin } from "../../Services/Auth/useLogin";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import CustomCheckbox from "../../ui/CustomCheckbox";
 
 
-
- 
 const Login = () => {
     const form = useForm<LoginParams>({
         defaultValues: {
             
         }
     });
-    const { handleSubmit,  control, formState  } = form;
+    
+    const { handleSubmit,  control, formState, setValue  } = form;
     const { errors } = formState;
+    const [rememberMe, setRememberMe] = useState(false)
+
+    const onChange: CheckboxProps["onChange"] = (e) => {
+      setRememberMe(e.target.checked);
+    };
+  useEffect(() => {
+    const savedUsername = localStorage.getItem("savedUsername");
+    const savedPassword = localStorage.getItem("savedPassword");
+    const savedRememberMe = localStorage.getItem("rememberMe");
+
+    if (savedRememberMe === "true") {
+      setValue("username", savedUsername || "");
+      setValue("password", savedPassword || "");
+      setRememberMe(true);
+    }
+  }, [setValue]);
 
     const {i18n, t} = useTranslation()
     const {mutate : login, isPending} = useLogin()
@@ -28,6 +45,15 @@ const Login = () => {
         username : data.username,
         password : data.password,
       }
+      if (rememberMe) {
+        localStorage.setItem("savedUsername", data.username);
+        localStorage.setItem("savedPassword", data.password);
+        localStorage.setItem("rememberMe", "true");
+      } else {
+        localStorage.removeItem("savedUsername");
+        localStorage.removeItem("savedPassword");
+        localStorage.setItem("rememberMe", "false");
+      }
       console.log("params : ", params)
       login(params, {
         onSuccess:()=>{
@@ -36,6 +62,8 @@ const Login = () => {
         }
       })
     }
+
+ 
     return (
         <form onSubmit={handleSubmit(onSubmit)} dir={i18n.language === "ar" ? "rtl" : "ltr"}>
             <div className="bg-[#FEFEFE] min-h-screen max-min-w:flex min-w:grid md:grid-cols-3  gap-7 p-10">
@@ -45,7 +73,7 @@ const Login = () => {
 
             <div className="bg-white shadow-2xl w-full  flex flex-col justify-center items-center  rounded-lg  p-14  space-y-4">
                 <img className="w-32 h-32 flex" src={logo}/>
-                <p className="text-main-color font-bold">Welcome Back ! </p>
+                <p className="text-main-color font-bold"> Bon Retour ! </p>
                 <p className="text-main-color">Veuillez vous connecter a votre compte </p>
                 <InputField 
                 control={control}
@@ -80,24 +108,19 @@ const Login = () => {
         </Space>
                  <div className="flex justify-between items-center w-full ">
             <div className="flex items-center justify-center cursor-pointer">
-              <Checkbox
-            //   isSelected={rememberMe}
-            //   onChange={(isChecked) => setRememberMe(isChecked)}
-              >
-                <div className="flex items-center justify-center  gap-x-3 cursor-pointer">
-                  
-                  <span className="text-[13px]  font-light ">
-                    {t("Remember me")}
-                  </span>
-                </div>
-              </Checkbox>
+            <CustomCheckbox
+              onChange={onChange}
+              label="Enregistrer les données"
+              checked={rememberMe}
+              value="Dateo"
+            />
             </div>
             <Link
               to="/forget-password"
               className="text-black text-[14px] font-medium"
             >
               <span className="text-[13px] font-light cursor-pointer " >
-              {t("Forgot Password")}
+              {t("Mot de Passe Oublié")}
               </span>
             </Link>
           </div>

@@ -145,65 +145,6 @@ const onChangeDate = (date:Date | null) => {
         );
         return response.data;
       };
-      
-      // const exportToPDF = async () => {
-      //   let allData: any[] = [];
-      //   let page = 1;
-      //   const totalPages = Math.ceil(data!.count / pageSize);
-      //   setLoading(true)
-      //   for (let p = page; p <= totalPages; p++) {
-      //     console.log("Fetching data for page: ", p);
-      
-      //     try {
-           
-      //       const responseData = await fetchInterne(
-      //         currentPage, "00001", selectedDate?String(dayjs(selectedDate).format("YYYY-MM-DD")) : "" );
-      //       if (responseData?.results) {
-      //         allData = [...allData, ...responseData.results];
-      //       }
-      // console.log("response : ", responseData)
-    
-      //     } catch (error) {
-      //       console.error("Erreur lors de la récupération des Virements :", error);
-      //       message.error("Erreur lors de l'exportation des données !");
-      //       return;
-      //     }
-      //   }
-      //   if (!allData.length) {
-      //     message.error("Aucune donnée à exporter !");
-      //     return;
-      //   }
-      
-      //   const doc = new jsPDF();
-      //   const logo = logoBanque; 
-      // doc.addImage(logo, "PNG", 10, 5, 70, 14); 
-      // doc.setFontSize(16);
-      //   // doc.text("Banque Algerienne", 30, 15);
-      //   // doc.text(`Liste des virements internes - Agence de Nouadhibou ${String(dayjs(selectedDate).format("YYYY-MM-DD")) ? " Pour le "+String(dayjs(selectedDate).format("YYYY-MM-DD")) : "" } `, 10, 25);
-      //   doc.text(`Liste des virements internes - Agence de Nouadhibou  `, 10, 25);
-      //   if(selectedDate){
-      //   doc.text("Pour le "+String(dayjs(selectedDate).format("YYYY-MM-DD")), 10, 32);
-
-      //   }
-      
-      //   autoTable(doc, {
-      //     startY: 35,
-      //     head: [columns.map(col => col.title as string)],
-        
-      //     body: allData.map(row =>
-      //       columns.map(col => 
-      //         'dataIndex' in col ? row[col.dataIndex as keyof VirmentResponse] : null
-      //       )
-      //     ),
-      //     theme: "grid", 
-     
-      // headStyles: { fillColor: "#1C8244", textColor: [255, 255, 255] }, 
-     
-      //   });
-      
-      //   doc.save("virement-interne-ndb.pdf");
-      //   message.success("Fichier PDF exporté avec succès !");
-      // };
      
     
       

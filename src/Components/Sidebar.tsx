@@ -136,13 +136,10 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
       const [openDropdown, setOpenDropdown] = useState<number | null>(null);
 
       const handleNavClick = (index: number) => {
-        console.log("index est : ", index)
         if (navsItems[index].isDropdown) {
           
-          console.log("in drop :", index)
             setOpenDropdown((prev) => (prev === index ? null : index)); 
         } else {
-          console.log("in drop :", index)
 
         localStorage.setItem("activeMenuIndex", index.toString());
         setOpenDropdown(null)

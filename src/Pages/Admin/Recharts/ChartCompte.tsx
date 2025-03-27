@@ -66,7 +66,6 @@ const navigate = useNavigate()
   if( isPendingDepot){
     return (<Spinner center={true}/>)
   }
-console.log("colors[2] : ", colors[0])
   return (
     <Card className="flex flex-col items- mt-5 ">
       <CardHeader>

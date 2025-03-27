@@ -1,4 +1,4 @@
-import { Button, CheckboxProps, DatePicker, Dropdown, Input, MenuProps, message, Modal, Space, Spin, Table, TableProps } from "antd";
+import { Button, CheckboxProps, DatePicker, Dropdown, Input, MenuProps, message, Modal, Skeleton, Space, Spin, Table, TableProps } from "antd";
 import { useEffect, useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import { useGetGuichet } from "../../Services/Guichet/useGetGuichet";
@@ -67,6 +67,11 @@ const NouadhibouGuichet =() => {
           title: ("Type Operation"),
           dataIndex: "type_operation",
           key: "type_operation",
+          render: (_, record) => (
+            <div className="flex items-center gap-x-2">
+              <span>{record.type_operation === "+" ? "" : record.type_operation}</span>
+            </div>
+          ),
           filteredValue:[searchValue],
           onFilter:(_, record)=>{
             return (
@@ -560,18 +565,20 @@ const NouadhibouGuichet =() => {
               
             </div>
             <div className="!max-w-full mt-4 md:!max-w-full overflow-x-auto">
-            <Table
+            {isPending? (
+                <Skeleton active paragraph={{rows:18}}/>
+              ) : <Table
               loading={isPending}
               columns={columns}
-            //   rowClassName={getRowClassName}
               pagination={{
                 current: currentPage,
                 pageSize,
-                total: data?.count
+                total: data?.count,
               }}
               onChange={handleTableChange}
               dataSource={data?.results}
             />
+            }
           </div>
         </div>
     )

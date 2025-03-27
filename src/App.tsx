@@ -18,10 +18,11 @@ function App() {
     <I18nextProvider i18n={i18n}>
 
     <QueryClientProvider client={queryClient}>
-    <ReactQueryDevtools
+   {import.meta.env.MODE === "development" && <ReactQueryDevtools
+      // initialIsOpen={false}
+      // buttonPosition="bottom-right"
       initialIsOpen={false}
-      buttonPosition="bottom-right"
-    />
+    />} 
     <Router />
     <ToastContainer />
   </QueryClientProvider>

@@ -4,14 +4,14 @@ import api from "../../Auth-services/axios";
 
 
 export type ModifierPassword = {
-    password?:string
-    nouveau_password?:string
-    confirm?:string
+    old_password:string
+    new_password:string
+    confirm_password:string
 }
 export const useUpdatePassword  = () => {
 
     async function updatepassword (updatePass:ModifierPassword){
-    const res = await api.put(`/me/`, updatePass)
+    const res = await api.put(`api/update-password/`, updatePass)
     // localStorage.setItem("/me/", user.full_name)
     return res.data
     
@@ -24,13 +24,12 @@ export const useUpdatePassword  = () => {
         message.success(" updated with successfuly");
         },
         onError:(err:any)=>{
-        if(err.response.data.gender){
-            return message.error(err.response.data.gender[0])
-        } else if(err.response.data.phone){
-           return message.error(err.response.data.phone[0])
-        } else if(err.response.data.email){
-            return message.error(err.response.data.email[0])
-         }
+            const messag1 = err?.response?.data?.error
+            // const message2 = err?.response?.data?.error
+        if(messag1){
+            return message.error(messag1)
+        } 
+    
         } 
     })
 }

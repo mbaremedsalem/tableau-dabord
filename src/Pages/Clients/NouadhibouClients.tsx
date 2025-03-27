@@ -126,8 +126,6 @@ useEffect(()=>{
       
       const [Filtertype, setFiltertype] = useState("")
       const [FilterPar, setFilterPar] = useState("")
-console.log("type est : ", type)
-console.log("Filtertype est : ", Filtertype)
       const onChange: CheckboxProps["onChange"] = (e) => {
               const { value } = e.target;
           
@@ -166,7 +164,6 @@ console.log("Filtertype est : ", Filtertype)
       
               }
             };
-            console.log("FilterPar : ", FilterPar)
       
       const {data, isPending} = useGetClients(currentPage, "00002", Filtertype?Filtertype:type,FilterPar, searchValue)
 
@@ -200,7 +197,6 @@ console.log("Filtertype est : ", Filtertype)
         
           try {
             for (let p = page; p <= totalPages; p++) {
-              console.log("Fetching data for page: ", p);
           
             const responseData = await fetchClients(
               p,

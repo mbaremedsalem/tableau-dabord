@@ -26,8 +26,6 @@ const ChartjsPolarAreaChart: FC<ChartjsPolarAreaChartProps> = ({ labelColor, age
   const navigate = useNavigate(); 
 
   const { data: ClientChart, isPending: isPendingClient } = useGetChartsClient(agence);
-  console.log('charts : ', ClientChart);
-  console.log(ClientChart);
 
   const options = {
     responsive: true,

@@ -3,8 +3,9 @@ import { useGetStatsGuichet } from "../../Services/Admin/useGetStatsGuichet";
 import { useGetStatsVirementExterne } from "../../Services/Admin/useGetStatsVirementExterne";
 import { useGetStatsVirementInterne } from "../../Services/Admin/useGetStatsVirementInterne";
 import { useGetComptesStats } from "../../Services/Admin/usetGetStatsComptes";
-import Spinner from "../../ui/Spinner";
+// import Spinner from "../../ui/Spinner";
 import StatBox from "../../ui/StatBox";
+import HomeSkeleton from "./HomeSkelleton";
 import ChartjsPolarAreaChart from "./Recharts/ChartClients";
 import ChartCompte from "./Recharts/ChartCompte";
 import ChartGuichet from "./Recharts/ChartGuichet";
@@ -54,16 +55,25 @@ const AdminNouakchott = () => {
       ];
       
 
-      if(isPendingClient || isPendingComptes || isPendingVirement || isPendingGuichet || isPendingExterne){
-        return (<Spinner center={true}/>)
-      } 
+      // if(isPendingClient || isPendingComptes || isPendingVirement || isPendingGuichet || isPendingExterne){
+      //   return (<Spinner center={true}/>)
+      // } 
     return (
     <div className="mt-4">
+       {(isPendingClient || isPendingComptes || isPendingVirement || isPendingGuichet || isPendingExterne)? 
+      <HomeSkeleton/>
+        : 
         <div className="mt-[29px] mb-[18px] flex items-center justify-between gap-x-[27px] pb-[21px] border-b border-[#eeeeee] max-min-w:flex max-min-w:flex-wrap gap-y-3">
         {stats?.map((el) => {
           return <StatBox key={el.label} label={el.label} value={el.value!} desc={el.desc} valueDepot={el.valueDepot} />;
         })}
-      </div>
+        
+      </div>}
+        {/* <div className="mt-[29px] mb-[18px] flex items-center justify-between gap-x-[27px] pb-[21px] border-b border-[#eeeeee] max-min-w:flex max-min-w:flex-wrap gap-y-3">
+        {stats?.map((el) => {
+          return <StatBox key={el.label} label={el.label} value={el.value!} desc={el.desc} valueDepot={el.valueDepot} />;
+        })}
+      </div> */}
       <div className="  max-min-w:grid-cols-1 grid grid-cols-2 gap-8">
   <div className="p-8 bg- rounded-xl shadow-2xl border-t-2 border-green-500">
 

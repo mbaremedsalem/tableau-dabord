@@ -22,18 +22,21 @@ export  function EditPassword({handleCancel} : Props) {
   const {mutate:editpassword, isPending:isPendigUpdate} = useUpdatePassword()
   const handleChanges = () => {
     if(!password){
-        message.error("Entrez le mot de passe !")
+       return message.error("Entrez le mot de passe !")
     } else if(!newPassword){
-        message.error("Entrez le nouveau mot de passe !")
+       return  message.error("Entrez le nouveau mot de passe !")
     } else if(!confirm){
-        message.error("confirmez le mot de passe !")
+      return  message.error("confirmez le mot de passe !")
     } else if(newPassword !== confirm){
-        message.error("Le nouveau mot de passe et sa confirmation doivent être identiques !")
+      return   message.error("Le nouveau mot de passe et sa confirmation doivent être identiques !")
+    } else if(confirm.length < 8 || newPassword.length < 8){
+      return message.error("Le mot de passe doit contenir au minimum 8 caractères.")
+
     } else {
         const params : ModifierPassword = {
-            password:password,
-            nouveau_password:newPassword, 
-            confirm:confirm
+          old_password:password,
+          new_password:newPassword, 
+          confirm_password:confirm
         }
         editpassword(params,{
             onSuccess:()=>{
@@ -43,7 +46,7 @@ export  function EditPassword({handleCancel} : Props) {
     }
   }
   return (
-    <div>
+    <form>
      
       <div className=" gap-y-1 gap-x-3 flex flex-col gap-6">
       <label className="text-blue-2a text-[13px]" htmlFor="">
@@ -67,6 +70,7 @@ export  function EditPassword({handleCancel} : Props) {
            value={newPassword}
             placeholder="Nouveau Password"
             type="password"
+            required
           />
           </label>
         
@@ -89,6 +93,6 @@ export  function EditPassword({handleCancel} : Props) {
             {/* <Button className="w-[153.8px] h-[50.6px] mt-2 primary-button" loading={isPending} onClick={handleChanges}>Confirm</Button> */}
             
       </div>
-    </div>
+    </form>
   );
 }

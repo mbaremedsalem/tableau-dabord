@@ -1,24 +1,27 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { message } from "antd";
 import { User } from "../types/User";
 import api from "../../Auth-services/axios";
+import { userKey } from "./useGetUser";
 
 // import { USERS_KEY } from "./useGetUser";
 
 
 export const useUpdateUser  = () => {
-
+  const querClient = useQueryClient()
     async function updateuser (user : User){
-    const res = await api.put(`/me/`, user)
+    const res = await api.put(`api/me/update/`, user)
     // localStorage.setItem("/me/", user.full_name)
     return res.data
     
     }
     return useMutation({
         mutationFn : updateuser,
-        // mutationKey : USERS_KEY,
+        mutationKey : userKey,
         onSuccess :()=>{
-            
+            querClient.invalidateQueries({
+                queryKey:userKey
+            })
         message.success(" updated with successfuly");
         },
         onError:(err:any)=>{

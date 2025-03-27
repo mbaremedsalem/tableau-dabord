@@ -12,7 +12,7 @@ type CustomCheckboxProps = CheckboxProps & {
 const CustomCheckbox = ({
   value,
   label,
-  colorPrimary = "#1f4432",
+  colorPrimary = "#1C8244",
   checked,
   onChange,
   ...props

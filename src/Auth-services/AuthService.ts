@@ -2,11 +2,13 @@
 const AuthService = {
     getAccessToken: () => {
     
-      return localStorage.getItem('accessToken')
+      // return localStorage.getItem('accessToken')
+      return sessionStorage.getItem('accessToken')
     },
     
     getRefreshToken: () => {
-      return localStorage.getItem('refrech_token')
+      // return localStorage.getItem('refrech_token')
+      return sessionStorage.getItem('refrech_token')
     },
     
     getRoleUserConnect: () => {
@@ -20,11 +22,15 @@ const AuthService = {
     },
 
     setAccessToken: (token:string) => {
-      localStorage.setItem('accessToken', token)
+      // localStorage.setItem('accessToken', token)
+      sessionStorage.setItem("accessToken", token)
+
     },
   
     setRefreshToken: (token:string) => {
-      localStorage.setItem('refrech_token', token)
+      // localStorage.setItem('refrech_token', token)
+      sessionStorage.setItem("refrech_token", token)
+
     },
   
   
@@ -35,6 +41,7 @@ const AuthService = {
       localStorage.removeItem('Full_Name_user_Connect')
       localStorage.removeItem('id_user_Connect')
       localStorage.removeItem('role_user_connect')
+      sessionStorage.clear()
       // localStorage.clear()
     },
   

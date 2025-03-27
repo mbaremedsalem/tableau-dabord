@@ -50,7 +50,6 @@ const ChartjsRadarChart: React.FC<ChartjsRadarChartProps> = ({
     },
     onClick: (event: any, elements: any) => {
       console.log("event : ", event)
-      console.log(elements[0])
       if(elements[0].index === 0){
         navigate(`/virement/interne/?agence=${nameAgence}`);
 
@@ -58,18 +57,11 @@ const ChartjsRadarChart: React.FC<ChartjsRadarChartProps> = ({
         navigate(`/virement/externe/?agence=${nameAgence}`);
 
       }
-      // if (elements.length > 0) {
-      //   if(elements.labell === "Interne"){
-
-      //   }
-      // }
     },
   };
 
 
     
-    console.log("VirementInterne : ", VirementInterne)
-    console.log("Virement externe : ", virementExterne)
   
   const data: ChartData<'doughnut'> = {
     labels: ["Interne", "Externe"],

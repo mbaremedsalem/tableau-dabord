@@ -37,7 +37,6 @@ const ResetPassword = () => {
     const {i18n, t} = useTranslation()
     const navigate = useNavigate()
     const onSubmit = (data:ResetPasswordParams) => {
-      console.log("reset password : ", data)
       if(data.password !== data.confrimPassword){
         message.error("Le mot de passe et la confirmation du mot de passe doivent être identiques.")
       }
