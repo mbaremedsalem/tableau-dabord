@@ -11,10 +11,10 @@ async function getVirement(
   agence: string,
   date_operation: string,
   // type: string,
-  // status: string,
+  searchValue: string,
 ): Promise<VirmentResponse> {
   const response = await axios.get(
-    `http://127.0.0.1:8000/api/virement_intern/?&page=${page}&agence=${agence}&date_operation=${date_operation}`,
+    `http://127.0.0.1:8000/api/virement_intern/?&page=${page}&agence=${agence}&date_operation=${date_operation}&client=${searchValue}`,
     // `/api/compte_details//?type=${type}&status=${status}&search=${search}&page=${page}&size=${size}`,
     {
     
@@ -25,18 +25,18 @@ async function getVirement(
 export const useGetVirementInterne = (
   page: number,
   agence: string,
-  date_operation:string
+  date_operation:string,
 
 //   size: number,
-  // search: string,
+searchValue: string,
   // type: string,
   // status: string,
   // target_audience: string
 ) => {
   return useQuery({
-    queryKey: ["virements", page, agence, date_operation],
+    queryKey: ["virements", page, agence, date_operation, searchValue],
     queryFn: () =>
-        getVirement(page, agence, date_operation),
+        getVirement(page, agence, date_operation, searchValue),
     // getEntities(page, size, search, type, status),
   });
 };

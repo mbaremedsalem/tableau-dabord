@@ -16,8 +16,9 @@ import autoTable from "jspdf-autotable";
 type props = {
   typeC:string
 }
-const NouadhibouCompte =({typeC}:props) => {
+const NouadhibouComptes =({typeC}:props) => {
   dayjs.locale("fr")
+  
   
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -35,7 +36,7 @@ const NouadhibouCompte =({typeC}:props) => {
           key: "CLIENT",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.CLIENT}</span>
+              <span>{record?.CLIENT}</span>
             </div>
           ),
           // filteredValue:[searchValue],
@@ -56,13 +57,13 @@ const NouadhibouCompte =({typeC}:props) => {
           
         },
         {
-          title: ("AGENCE"),
-          dataIndex: "AGENCE",
-          key: "AGENCE",
+          title: ("COMPTE"),
+          dataIndex: "COMPTE",
+          key: "COMPTE",
        
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.AGENCE}</span>
+              <span>{record?.COMPTE}</span>
             </div>
           ),
         },
@@ -72,7 +73,7 @@ const NouadhibouCompte =({typeC}:props) => {
           key: "NOM",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.NOM}</span>
+              <span>{record?.NOM}</span>
             </div>
           ),
         },
@@ -85,7 +86,7 @@ const NouadhibouCompte =({typeC}:props) => {
             // },
             render: (_, record) => (
               <div className="flex items-center gap-x-2">
-                <span>{record.NCG}</span>
+                <span>{record?.NCG}</span>
               </div>
             ),
           },
@@ -96,7 +97,7 @@ const NouadhibouCompte =({typeC}:props) => {
         
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.TYP}</span>
+              <span>{record?.TYP}</span>
             </div>
           ),
         },
@@ -158,30 +159,46 @@ const NouadhibouCompte =({typeC}:props) => {
       
 
   const [filterDate, setFilterDate] = useState("")
-
+  const [rechercherPar, setRechercherPar] = useState("")
+ console.log("filter date : ", filterDate)
+ console.log("rechercherPar : ", rechercherPar)
+ const ExistRechercher = rechercherPar ? rechercherPar : ""
   const [selectedDate, setSelectedDate] = useState<Date | null>();
       const {data, isPending} = useGetComptes(currentPage, "00002", typeC,(filterDate=== "Dateo" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "",  
-    (  filterDate=== "Datef" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "")
+    (  filterDate=== "Datef" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "", ExistRechercher, searchValue)
       console.log("data : ", data)
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 
   console.log("|selectedDate : ", String(dayjs(selectedDate).format("YYYY-MM-DD")))
+// Handle checkbox change for filterDate and rechercherPar
 const onChange: CheckboxProps["onChange"] = (e) => {
-        const { value } = e.target;
-    
-        if (e.target.checked) {
-          setFilterDate(value)
-          setCurrentPage(1)
-          setSelectedDate(null)
-        } else {
-          setFilterDate("")
-          setCurrentPage(1)
-          setSelectedDate(null)
+  const { value } = e.target;
 
 
-        }
-      };
+  // If the checkbox is checked
+  if (e.target.checked) {
+    if (value === "Dateo" || value === "Datef") {
+      setFilterDate(value);
+      // setRechercherPar(""); // Reset search filter when changing date filter
+    } else {
+      setRechercherPar(value);
+      // setFilterDate(""); // Reset date filter when changing search filter
+    }
+    setCurrentPage(1);
+    setSelectedDate(null); // Reset selected date when changing filter
+  } else {
+    // If the checkbox is unchecked
+    if (value === "Dateo" || value === "Datef") {
+      setFilterDate(""); // Reset date filter
+    } else {
+      setRechercherPar(""); // Reset search filter
+    }
+    setCurrentPage(1);
+    setSelectedDate(null); // Reset selected date when clearing filter
+  }
+};
+
       const onChangeDate = (date:Date | null) => {
         setSelectedDate(date)
       }
@@ -214,6 +231,46 @@ const onChange: CheckboxProps["onChange"] = (e) => {
           ),
           key: "2",
         },
+        {
+          label: <span>Rechercher Par</span>,
+          key: "-2",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Client"
+              checked={rechercherPar === "client"}
+
+              value="client"
+            />
+          ),
+          key: "3",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Compte"
+              checked={rechercherPar === "compte"}
+
+              value="compte"
+            />
+          ),
+          key: "4",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Type"
+              checked={rechercherPar === "libelle"}
+
+              value="libelle"
+            />
+          ),
+          key: "4",
+        },
       ]
 
       const fetchComptes = async (
@@ -225,7 +282,7 @@ const onChange: CheckboxProps["onChange"] = (e) => {
       ) => {
         
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/compte_filter/?&page=${page}&agence=${agence}&libelle=${type}&datouv=${dateouverture}&datfrm=${datefermeture}` 
+          `http://127.0.0.1:8000/api/compte_filter/?&page=${page}&agence=${agence}&libelle=${type}&datouv=${dateouverture}&datfrm=${datefermeture}&${ExistRechercher}=${searchValue}` 
         );
         return response.data;
       };
@@ -333,7 +390,7 @@ const onChange: CheckboxProps["onChange"] = (e) => {
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Comptes");
        
-        XLSX.writeFile(workbook, "comptes.xlsx");
+        XLSX.writeFile(workbook, "Comptes.xlsx");
         message.success("Fichier Excel exporté avec succès !");
       };
 
@@ -354,7 +411,7 @@ const onChange: CheckboxProps["onChange"] = (e) => {
               allData = [...allData, ...responseData.results];
             }
           } catch (error) {
-            console.error("Erreur lors de la récupération des comptes :", error);
+            console.error("Erreur lors de la récupération des Comptes :", error);
             message.error("Erreur lors de l'exportation des données !");
             return;
           }
@@ -375,7 +432,7 @@ const onChange: CheckboxProps["onChange"] = (e) => {
         const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.setAttribute("download", "comptes.csv");
+        link.setAttribute("download", "Comptes.csv");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -511,7 +568,9 @@ const onChange: CheckboxProps["onChange"] = (e) => {
               
             </div>
             <div className="!max-w-full mt-4 md:!max-w-full overflow-x-auto">
-            <Table
+              {isPending? (
+                <Skeleton active paragraph={{rows:10}}/>
+              ) : <Table
               loading={isPending}
               columns={columns}
               pagination={{
@@ -522,9 +581,11 @@ const onChange: CheckboxProps["onChange"] = (e) => {
               onChange={handleTableChange}
               dataSource={data?.results}
             />
+            }
+            
           </div>
         </div>
     )
 }
 
-export default NouadhibouCompte
+export default NouadhibouComptes

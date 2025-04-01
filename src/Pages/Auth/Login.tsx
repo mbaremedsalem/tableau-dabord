@@ -107,7 +107,7 @@ const Login = () => {
           
         </Space>
                  <div className="flex justify-between items-center w-full ">
-            <div className="flex items-center justify-center cursor-pointer">
+            <div className="flex items-center justify-center cursor-pointer font-bold hover:text-main-color hover:underline">
             <CustomCheckbox
               onChange={onChange}
               label="Enregistrer les données"
@@ -119,7 +119,7 @@ const Login = () => {
               to="/forget-password"
               className="text-black text-[14px] font-medium"
             >
-              <span className="text-[13px] font-light cursor-pointer " >
+              <span className="text-[13px] font- cursor-pointer hover:text-main-color font-bold hover:underline " >
               {t("Mot de Passe Oublié")}
               </span>
             </Link>

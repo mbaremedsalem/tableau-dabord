@@ -40,7 +40,7 @@ useEffect(()=>{
           key: "client",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.CLIENT}</span>
+              <span>{record?.CLIENT}</span>
             </div>
           ),
           
@@ -52,7 +52,7 @@ useEffect(()=>{
        
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.AGENCE}</span>
+              <span>{record?.AGENCE}</span>
             </div>
           ),
         },
@@ -75,7 +75,7 @@ useEffect(()=>{
           // },
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.NOM}</span>
+              <span>{record?.NOM}</span>
             </div>
           ),
         },
@@ -86,7 +86,7 @@ useEffect(()=>{
             
             render: (_, record) => (
               <div className="flex items-center gap-x-2">
-                <span>{record.DATOUV.slice(0,10)}</span>
+                <span>{record?.DATOUV?.slice(0,10)}</span>
               </div>
             ),
           },
@@ -97,7 +97,7 @@ useEffect(()=>{
        
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.DATFRM}</span>
+              <span>{record?.DATFRM}</span>
             </div>
           ),
         },
@@ -237,7 +237,7 @@ useEffect(()=>{
      
         });
       
-        doc.save("clients.pdf");
+        doc.save("clients-nktt.pdf");
         message.success("Fichier PDF exporté avec succès !");
       }catch (error) {
         console.error("Erreur lors de la récupération des clients :", error);
@@ -478,6 +478,72 @@ useEffect(()=>{
           key: "4",
         },
         {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="ENTREPRISES INDIVIDUELLES"
+              checked={Filtertype === "ENTREPRISES INDIVIDUELLES"}
+              value="ENTREPRISES INDIVIDUELLES"
+            />
+          ),
+          key: "5",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Autres sociétés commercial"
+              checked={Filtertype === "Autres sociétés commercial"}
+              value="Autres sociétés commercial"
+            />
+          ),
+          key: "6",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="ADMINISTRATIONS PUBL. ET CENT."
+              checked={Filtertype === "ADMINISTRATIONS PUBL. ET CENT."}
+              value="ADMINISTRATIONS PUBL. ET CENT."
+            />
+          ),
+          key: "7",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="ORGANISATION NON GOUVERNEMENTALE"
+              checked={Filtertype === "ORGANISATION NON GOUVERNEMENTALE"}
+              value="ORGANISATION NON GOUVERNEMENTALE"
+            />
+          ),
+          key: "8",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Sociétés de commerce générale"
+              checked={Filtertype === "Sociétés de commerce générale"}
+              value="Sociétés de commerce générale"
+            />
+          ),
+          key: "9",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Sociétés commerciales de services"
+              checked={Filtertype === "Sociétés commerciales de services"}
+              value="Sociétés commerciales de services"
+            />
+          ),
+          key: "10",
+        },
+        {
           label: <span>Filter Par</span>,
           key: "-2",
         },
@@ -490,7 +556,7 @@ useEffect(()=>{
               value="nom"
             />
           ),
-          key: "5",
+          key: "11",
         },
         {
           label: (
@@ -501,7 +567,7 @@ useEffect(()=>{
               value="client"
             />
           ),
-          key: "6",
+          key: "12",
         },
       ]
 
@@ -525,6 +591,7 @@ useEffect(()=>{
         </Space>
       </Button>
     </Dropdown>
+    {(FilterPar=== "client" || FilterPar === "nom") && 
              <Input
                 value={searchValue ?? ""}
                 className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"
@@ -534,6 +601,8 @@ useEffect(()=>{
                 placeholder="Search..."
               
               />
+    }
+      
                
                {loading && (
     <Modal open={loading} footer={null} closable={false}>

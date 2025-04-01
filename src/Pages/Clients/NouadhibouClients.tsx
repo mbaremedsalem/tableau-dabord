@@ -40,7 +40,7 @@ useEffect(()=>{
           key: "client",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.CLIENT}</span>
+              <span>{record?.CLIENT}</span>
             </div>
           ),
           
@@ -52,7 +52,7 @@ useEffect(()=>{
        
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.AGENCE}</span>
+              <span>{record?.AGENCE}</span>
             </div>
           ),
         },
@@ -75,7 +75,7 @@ useEffect(()=>{
           // },
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.NOM}</span>
+              <span>{record?.NOM}</span>
             </div>
           ),
         },
@@ -86,7 +86,7 @@ useEffect(()=>{
             
             render: (_, record) => (
               <div className="flex items-center gap-x-2">
-                <span>{record.DATOUV.slice(0,10)}</span>
+                <span>{record?.DATOUV?.slice(0,10)}</span>
               </div>
             ),
           },
@@ -97,7 +97,7 @@ useEffect(()=>{
        
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.DATFRM}</span>
+              <span>{record?.DATFRM}</span>
             </div>
           ),
         },
@@ -448,9 +448,9 @@ useEffect(()=>{
           label: (
             <CustomCheckbox
               onChange={onChange}
-              label="PERSONNEL BANQUE"
-              checked={Filtertype === "PERSONNEL BANQUE"}
-              value="PERSONNEL BANQUE"
+              label="SOCIETES PRIVEES"
+              checked={Filtertype === "SOCIETES PRIVEES"}
+              value="SOCIETES PRIVEES"
             />
           ),
           key: "2",
@@ -459,9 +459,9 @@ useEffect(()=>{
           label: (
             <CustomCheckbox
               onChange={onChange}
-              label="SOCIETES PRIVEES"
-              checked={Filtertype === "SOCIETES PRIVEES"}
-              value="SOCIETES PRIVEES"
+              label="Institutions Etatiques "
+              checked={Filtertype === "Institutions Etatiques "}
+              value="Institutions Etatiques "
             />
           ),
           key: "3",
@@ -470,12 +470,23 @@ useEffect(()=>{
           label: (
             <CustomCheckbox
               onChange={onChange}
-              label="SOCIETES ASSURANCES"
-              checked={Filtertype === "SOCIETES ASSURANCES"}
-              value="SOCIETES ASSURANCES"
+              label="ENTREPRISES INDIVIDUELLES"
+              checked={Filtertype === "ENTREPRISES INDIVIDUELLES"}
+              value="ENTREPRISES INDIVIDUELLES"
             />
           ),
           key: "4",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="ADMINISTRATIONS PUBL. ET CENT."
+              checked={Filtertype === "ADMINISTRATIONS PUBL. ET CENT."}
+              value="ADMINISTRATIONS PUBL. ET CENT."
+            />
+          ),
+          key: "5",
         },
         {
           label: <span>Filter Par</span>,
@@ -490,7 +501,7 @@ useEffect(()=>{
               value="nom"
             />
           ),
-          key: "5",
+          key: "11",
         },
         {
           label: (
@@ -501,7 +512,7 @@ useEffect(()=>{
               value="client"
             />
           ),
-          key: "6",
+          key: "12",
         },
       ]
 
@@ -525,6 +536,7 @@ useEffect(()=>{
         </Space>
       </Button>
     </Dropdown>
+    {(FilterPar=== "client" || FilterPar === "nom") && 
              <Input
                 value={searchValue ?? ""}
                 className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"
@@ -534,6 +546,8 @@ useEffect(()=>{
                 placeholder="Search..."
               
               />
+    }
+      
                
                {loading && (
     <Modal open={loading} footer={null} closable={false}>

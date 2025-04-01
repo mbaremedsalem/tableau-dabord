@@ -42,6 +42,7 @@ const NouadhibouGuichet =() => {
   const [dates, setDates] = useState<[string | null, string | null]>([null, null]);
   console.log("dates : ", selectedDate)
   const [filterDate, setFilterDate] = useState("Date")
+  const [rechercherPar, setRechercherPar] = useState("")
 
   const handleDateChange = (values: any, dateStrings: [string, string]) => {
     console.log(values)
@@ -55,7 +56,8 @@ const NouadhibouGuichet =() => {
         filterDate === "Date" ?  (selectedDate ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "") : (dates[0]! ? dates[0]! : ""), 
         filterDate === "Date" ?  (selectedDate ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "") : (dates[1]! ? dates[1]! : ""), 
         
-        "00002", type)
+        "00002", type,
+        rechercherPar?rechercherPar:"", searchValue)
       const onChangeDate = (date:Date | null) => {
         setSelectedDate(date)
       }
@@ -69,22 +71,22 @@ const NouadhibouGuichet =() => {
           key: "type_operation",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.type_operation === "+" ? "" : record.type_operation}</span>
+              <span>{record?.type_operation === "+" ? "" : record?.type_operation}</span>
             </div>
           ),
           filteredValue:[searchValue],
-          onFilter:(_, record)=>{
-            return (
-              record?.type_operation?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
-              record?.date_transaction?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
-              record?.Compte_Don?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
-              record?.Compte_benef?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
-              record?.montant_credit?.toString().includes(searchValue.toLocaleLowerCase()) ||
-              record?.montant_debeit?.toString().includes(searchValue.toLocaleLowerCase()) 
+          // onFilter:(_, record)=>{
+          //   return (
+          //     record?.type_operation?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+          //     record?.date_transaction?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+          //     record?.Compte_Don?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+          //     record?.Compte_benef?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
+          //     record?.montant_credit?.toString().includes(searchValue.toLocaleLowerCase()) ||
+          //     record?.montant_debeit?.toString().includes(searchValue.toLocaleLowerCase()) 
 
               
-            )
-          },
+          //   )
+          // },
     
         
         },
@@ -95,7 +97,7 @@ const NouadhibouGuichet =() => {
         
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.date_transaction.slice(0,10)}</span>
+              <span>{record?.date_transaction?.slice(0,10)}</span>
             </div>
           ),
         },
@@ -106,7 +108,7 @@ const NouadhibouGuichet =() => {
        
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.Compte_Don}</span>
+              <span>{record?.Compte_Don}</span>
             </div>
           ),
         },
@@ -117,7 +119,7 @@ const NouadhibouGuichet =() => {
            
             render: (_, record) => (
               <div className="flex items-center gap-x-2">
-                <span>{record.Compte_benef}</span>
+                <span>{record?.Compte_benef}</span>
               </div>
             ),
           },
@@ -128,7 +130,7 @@ const NouadhibouGuichet =() => {
        
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.devise_debit}</span>
+              <span>{record?.devise_debit}</span>
             </div>
           ),
         },
@@ -174,24 +176,33 @@ const NouadhibouGuichet =() => {
         
        
       ];
-      console.log("data : ", data)
-      const onChange: CheckboxProps["onChange"] = (e) => {
-        const { value } = e.target;
-    
-        if (e.target.checked) {
-          setFilterDate(value)
-          setCurrentPage(1)
-          setSelectedDate(null)
-        } else {
-          setFilterDate("")
-          setCurrentPage(1)
-          setSelectedDate(null)
+      console.log("rechercherPar : ", rechercherPar)
 
-
-        }
-      };
-      console.log("filterDate : ", filterDate)
-
+  const onChange: CheckboxProps["onChange"] = (e) => {
+    const { value } = e.target;
+  
+  
+    if (e.target.checked) {
+      if (value === "Date" || value === "deuxdate") {
+        setFilterDate(value);
+        // setRechercherPar(""); 
+      } else {
+        setRechercherPar(value);
+        // setFilterDate(""); 
+      }
+      setCurrentPage(1);
+      setSelectedDate(null);
+    } else {
+      // If the checkbox is unchecked
+      if (value === "Date" || value === "deuxdate") {
+        setFilterDate(""); 
+      } else {
+        setRechercherPar(""); 
+      }
+      setCurrentPage(1);
+      setSelectedDate(null); 
+    }
+  };
       const items: MenuProps["items"] =  [
         {
           label: <span>Filter</span>,
@@ -220,6 +231,46 @@ const NouadhibouGuichet =() => {
           ),
           key: "2",
         },
+        {
+          label: <span>Rechercher Par</span>,
+          key: "-2",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Type Operation"
+              checked={rechercherPar === "type_operation"}
+
+              value="type_operation"
+            />
+          ),
+          key: "3",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Nom Lib"
+              checked={rechercherPar === "nomlib"}
+
+              value="nomlib"
+            />
+          ),
+          key: "4",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Compte beneficaire"
+              checked={rechercherPar === "Compte_benef"}
+
+              value="Compte_benef"
+            />
+          ),
+          key: "5",
+        },
       ]
       console.log(" selectedDate : ", dayjs(selectedDate).format("YYYY-MM-DD"))
       const fetchGuichet = async (
@@ -247,6 +298,7 @@ const NouadhibouGuichet =() => {
         setLoading(true)
       
           try {
+            
             for (let p = page; p <= totalPages; p++) {
               console.log("Fetching data for page: ", p);
            
@@ -565,6 +617,18 @@ const NouadhibouGuichet =() => {
               
             </div>
             <div className="!max-w-full mt-4 md:!max-w-full overflow-x-auto">
+            {/* <Table
+              loading={isPending}
+              columns={columns}
+            //   rowClassName={getRowClassName}
+              pagination={{
+                current: currentPage,
+                pageSize,
+                total: data?.count
+              }}
+              onChange={handleTableChange}
+              dataSource={data?.results}
+            /> */}
             {isPending? (
                 <Skeleton active paragraph={{rows:18}}/>
               ) : <Table

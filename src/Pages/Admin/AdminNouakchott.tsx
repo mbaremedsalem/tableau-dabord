@@ -6,9 +6,9 @@ import { useGetComptesStats } from "../../Services/Admin/usetGetStatsComptes";
 // import Spinner from "../../ui/Spinner";
 import StatBox from "../../ui/StatBox";
 import HomeSkeleton from "./HomeSkelleton";
-import ChartjsPolarAreaChart from "./Recharts/ChartClients";
 import ChartCompte from "./Recharts/ChartCompte";
 import ChartGuichet from "./Recharts/ChartGuichet";
+import ChartClientNew from "./Recharts/RechartClientNew";
 import ChartDepot from "./Recharts/RechartDepot";
 import ChartjsRadarChart from "./Recharts/RechartVirements";
 
@@ -77,13 +77,9 @@ const AdminNouakchott = () => {
       <div className="  max-min-w:grid-cols-1 grid grid-cols-2 gap-8">
   <div className="p-8 bg- rounded-xl shadow-2xl border-t-2 border-green-500">
 
-  <ChartjsPolarAreaChart
-        labelColor="#6E6B7B"
-        agence="00001"
-        nameAgence="nktt"
-        
-       
-      />
+  <ChartClientNew  
+        agence = "00001"
+        nameAgence="nktt"/>
   
   </div>
 

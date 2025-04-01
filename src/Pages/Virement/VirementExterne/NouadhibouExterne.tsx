@@ -40,7 +40,7 @@ const NouadhibouExterne =() => {
           key: "compte_benef",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.compte_benef}</span>
+              <span>{record?.compte_benef}</span>
             </div>
           ),
         },
@@ -50,7 +50,7 @@ const NouadhibouExterne =() => {
             key: "beneficiaire",
             render: (_, record) => (
               <div className="flex items-center gap-x-2">
-                <span>{record.beneficiaire}</span>
+                <span>{record?.beneficiaire}</span>
               </div>
             ),
           },
@@ -61,7 +61,7 @@ const NouadhibouExterne =() => {
        
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.date_transaction.slice(0,10)}</span>
+              <span>{record?.date_transaction.slice(0,10)}</span>
             </div>
           ),
         },
@@ -72,7 +72,7 @@ const NouadhibouExterne =() => {
            
             render: (_, record) => (
               <div className="flex items-center gap-x-2">
-                <span>{record.devise}</span>
+                <span>{record?.devise}</span>
               </div>
             ),
           },

@@ -20,10 +20,8 @@ type props = {
 
 }
 const Navbar =({isNuit, setIsNuitFromSide}:props) => {
-    console.log("isNuit : ", isNuit)
     const {data:clients}= getUserInfo()
 
-    // const fullName = AuthService.getFullNameUserConnect()
   const [isModalOpenProfile, setIsModalOpenProfile] = useState(false);
   const [isModalOpenPassword, setIsModalOpenPassword] = useState(false);
   const handlecancelProfile = () => {

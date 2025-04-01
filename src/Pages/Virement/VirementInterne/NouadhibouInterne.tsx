@@ -25,7 +25,7 @@ const [selectedDate, setSelectedDate] = useState<Date | null>();
 const onChangeDate = (date:Date | null) => {
   setSelectedDate(date)
 }
-    const {data, isPending} = useGetVirementInterne(currentPage, "00002", selectedDate?String(dayjs(selectedDate).format("YYYY-MM-DD")) : "")
+    const {data, isPending} = useGetVirementInterne(currentPage, "00002", selectedDate?String(dayjs(selectedDate).format("YYYY-MM-DD")) : "", searchValue)
    console.log("selectedDate : ", selectedDate)
     const columns: TableProps<Virement>["columns"] = [
         {
@@ -71,7 +71,7 @@ const onChangeDate = (date:Date | null) => {
           key: "montant_debit",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.montant_debit}</span>
+              <span>{record?.montant_debit}</span>
             </div>
           ),
         },
@@ -81,7 +81,7 @@ const onChangeDate = (date:Date | null) => {
             key: "montant_credit",
             render: (_, record) => (
               <div className="flex items-center gap-x-2">
-                <span>{record.montant_credit}</span>
+                <span>{record?.montant_credit}</span>
               </div>
             ),
           },
@@ -92,7 +92,7 @@ const onChangeDate = (date:Date | null) => {
        
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.client}</span>
+              <span>{record?.client}</span>
             </div>
           ),
         },
@@ -103,7 +103,7 @@ const onChangeDate = (date:Date | null) => {
            
             render: (_, record) => (
               <div className="flex items-center gap-x-2">
-                <span>{record.compte_debit}</span>
+                <span>{record?.compte_debit}</span>
               </div>
             ),
           },
@@ -114,7 +114,7 @@ const onChangeDate = (date:Date | null) => {
         
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.compte_credit}</span>
+              <span>{record?.compte_credit}</span>
             </div>
           ),
         },
@@ -141,69 +141,10 @@ const onChangeDate = (date:Date | null) => {
       ) => {
         
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/virement_intern/?&page=${page}&agence=${agence}&date_operation=${date_operation}`
+          `http://127.0.0.1:8000/api/virement_intern/?&page=${page}&agence=${agence}&date_operation=${date_operation}&client=${searchValue}`
         );
         return response.data;
       };
-      
-      // const exportToPDF = async () => {
-      //   let allData: any[] = [];
-      //   let page = 1;
-      //   const totalPages = Math.ceil(data!.count / pageSize);
-      //   setLoading(true)
-      //   for (let p = page; p <= totalPages; p++) {
-      //     console.log("Fetching data for page: ", p);
-      
-      //     try {
-           
-      //       const responseData = await fetchInterne(
-      //         currentPage, "00002", selectedDate?String(dayjs(selectedDate).format("YYYY-MM-DD")) : "" );
-      //       if (responseData?.results) {
-      //         allData = [...allData, ...responseData.results];
-      //       }
-      // console.log("response : ", responseData)
-    
-      //     } catch (error) {
-      //       console.error("Erreur lors de la récupération des Virements :", error);
-      //       message.error("Erreur lors de l'exportation des données !");
-      //       return;
-      //     }
-      //   }
-      //   if (!allData.length) {
-      //     message.error("Aucune donnée à exporter !");
-      //     return;
-      //   }
-      
-      //   const doc = new jsPDF();
-      //   const logo = logoBanque; 
-      // doc.addImage(logo, "PNG", 10, 5, 70, 14); 
-      // doc.setFontSize(16);
-      //   // doc.text("Banque Algerienne", 30, 15);
-      //   // doc.text(`Liste des virements internes - Agence de Nouadhibou ${String(dayjs(selectedDate).format("YYYY-MM-DD")) ? " Pour le "+String(dayjs(selectedDate).format("YYYY-MM-DD")) : "" } `, 10, 25);
-      //   doc.text(`Liste des virements internes - Agence de Nouadhibou  `, 10, 25);
-      //   if(selectedDate){
-      //   doc.text("Pour le "+String(dayjs(selectedDate).format("YYYY-MM-DD")), 10, 32);
-
-      //   }
-      
-      //   autoTable(doc, {
-      //     startY: 35,
-      //     head: [columns.map(col => col.title as string)],
-        
-      //     body: allData.map(row =>
-      //       columns.map(col => 
-      //         'dataIndex' in col ? row[col.dataIndex as keyof VirmentResponse] : null
-      //       )
-      //     ),
-      //     theme: "grid", 
-     
-      // headStyles: { fillColor: "#1C8244", textColor: [255, 255, 255] }, 
-     
-      //   });
-      
-      //   doc.save("virement-interne-ndb.pdf");
-      //   message.success("Fichier PDF exporté avec succès !");
-      // };
      
     
       
@@ -238,7 +179,7 @@ const onChangeDate = (date:Date | null) => {
               const logo = logoBanque;
               doc.addImage(logo, "PNG", 10, 5, 70, 14);
               doc.setFontSize(16);
-              doc.text(`Liste des virements internes - Agence de Nouadhibou`, 10, 25);
+              doc.text(`Liste des virements internes - Agence de Nouakchott`, 10, 25);
               if (selectedDate) {
                   doc.text("Pour le " + String(dayjs(selectedDate).format("YYYY-MM-DD")), 10, 32);
               }
@@ -304,7 +245,7 @@ const onChangeDate = (date:Date | null) => {
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Virement");
        
-        XLSX.writeFile(workbook, "Virement-interne-nouadibou.xlsx");
+        XLSX.writeFile(workbook, "Virement-interne-nouakchott.xlsx");
         message.success("Fichier Excel exporté avec succès !");
       } catch (error) {
           console.error("Erreur lors de la récupération des virement :", error);
@@ -346,7 +287,7 @@ const onChangeDate = (date:Date | null) => {
         const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
-        link.setAttribute("download", "Virement-Interne-nouadhibou.csv");
+        link.setAttribute("download", "Virement-Interne-ndb.csv");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);

@@ -19,6 +19,7 @@ type props = {
 const NouakchottComptes =({typeC}:props) => {
   dayjs.locale("fr")
   
+  
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(9);
@@ -35,7 +36,7 @@ const NouakchottComptes =({typeC}:props) => {
           key: "CLIENT",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.CLIENT}</span>
+              <span>{record?.CLIENT}</span>
             </div>
           ),
           // filteredValue:[searchValue],
@@ -56,13 +57,13 @@ const NouakchottComptes =({typeC}:props) => {
           
         },
         {
-          title: ("AGENCE"),
-          dataIndex: "AGENCE",
-          key: "AGENCE",
+          title: ("COMPTE"),
+          dataIndex: "COMPTE",
+          key: "COMPTE",
        
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.AGENCE}</span>
+              <span>{record?.COMPTE}</span>
             </div>
           ),
         },
@@ -72,7 +73,7 @@ const NouakchottComptes =({typeC}:props) => {
           key: "NOM",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.NOM}</span>
+              <span>{record?.NOM}</span>
             </div>
           ),
         },
@@ -85,7 +86,7 @@ const NouakchottComptes =({typeC}:props) => {
             // },
             render: (_, record) => (
               <div className="flex items-center gap-x-2">
-                <span>{record.NCG}</span>
+                <span>{record?.NCG}</span>
               </div>
             ),
           },
@@ -96,7 +97,7 @@ const NouakchottComptes =({typeC}:props) => {
         
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.TYP}</span>
+              <span>{record?.TYP}</span>
             </div>
           ),
         },
@@ -158,30 +159,44 @@ const NouakchottComptes =({typeC}:props) => {
       
 
   const [filterDate, setFilterDate] = useState("")
-
+  const [rechercherPar, setRechercherPar] = useState("")
+ console.log("filter date : ", filterDate)
+ console.log("rechercherPar : ", rechercherPar)
+ const ExistRechercher = rechercherPar ? rechercherPar : ""
   const [selectedDate, setSelectedDate] = useState<Date | null>();
       const {data, isPending} = useGetComptes(currentPage, "00001", typeC,(filterDate=== "Dateo" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "",  
-    (  filterDate=== "Datef" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "")
+    (  filterDate=== "Datef" && selectedDate) ? String(dayjs(selectedDate).format("YYYY-MM-DD")) : "", ExistRechercher, searchValue)
       console.log("data : ", data)
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 
   console.log("|selectedDate : ", String(dayjs(selectedDate).format("YYYY-MM-DD")))
 const onChange: CheckboxProps["onChange"] = (e) => {
-        const { value } = e.target;
-    
-        if (e.target.checked) {
-          setFilterDate(value)
-          setCurrentPage(1)
-          setSelectedDate(null)
-        } else {
-          setFilterDate("")
-          setCurrentPage(1)
-          setSelectedDate(null)
+  const { value } = e.target;
 
 
-        }
-      };
+  if (e.target.checked) {
+    if (value === "Dateo" || value === "Datef") {
+      setFilterDate(value);
+      // setRechercherPar(""); 
+    } else {
+      setRechercherPar(value);
+      // setFilterDate(""); 
+    }
+    setCurrentPage(1);
+    setSelectedDate(null);
+  } else {
+    // If the checkbox is unchecked
+    if (value === "Dateo" || value === "Datef") {
+      setFilterDate(""); 
+    } else {
+      setRechercherPar(""); 
+    }
+    setCurrentPage(1);
+    setSelectedDate(null); 
+  }
+};
+
       const onChangeDate = (date:Date | null) => {
         setSelectedDate(date)
       }
@@ -214,6 +229,46 @@ const onChange: CheckboxProps["onChange"] = (e) => {
           ),
           key: "2",
         },
+        {
+          label: <span>Rechercher Par</span>,
+          key: "-2",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Client"
+              checked={rechercherPar === "client"}
+
+              value="client"
+            />
+          ),
+          key: "3",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Compte"
+              checked={rechercherPar === "compte"}
+
+              value="compte"
+            />
+          ),
+          key: "4",
+        },
+        {
+          label: (
+            <CustomCheckbox
+              onChange={onChange}
+              label="Type"
+              checked={rechercherPar === "libelle"}
+
+              value="libelle"
+            />
+          ),
+          key: "5",
+        },
       ]
 
       const fetchComptes = async (
@@ -225,7 +280,7 @@ const onChange: CheckboxProps["onChange"] = (e) => {
       ) => {
         
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/compte_filter/?&page=${page}&agence=${agence}&libelle=${type}&datouv=${dateouverture}&datfrm=${datefermeture}` 
+          `http://127.0.0.1:8000/api/compte_filter/?&page=${page}&agence=${agence}&libelle=${type}&datouv=${dateouverture}&datfrm=${datefermeture}&${ExistRechercher}=${searchValue}` 
         );
         return response.data;
       };

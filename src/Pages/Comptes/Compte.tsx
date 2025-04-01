@@ -23,13 +23,17 @@ const Compte =() => {
       setActive(agence === "nktt" ? 0 : 1);
     }
   }, [agence]); 
+
+  
   console.log("agence : ", agence)
-  const [active, setActive] = useState<number>(agence==="nktt" ? 0 : 1);
+  const [active, setActive] = useState<number>(0);
+
 
   const handleToggleChange = (index: number) => {
     setActive(index);
   };
- 
+   
+
     return (
         
         <div >

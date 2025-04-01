@@ -94,8 +94,8 @@ placeholder={t("Email")}
         
       </div>
       <div className="grid grid-cols-2 items-center gap-x-4 mt-4 md:mt-5">
-          <Button className=" h-[50.6px]   mt-2 secondary-button" onClick={handleCancel}>Cancel</Button>
-            <Button className=" h-[50.6px] mt-2 primary-button" onClick={onSubmit} loading={isPendingProfile}>Confirm</Button>
+          <Button className=" h-[50.6px]   mt-2 secondary-button" onClick={handleCancel}>Annuler </Button>
+            <Button className=" h-[50.6px] mt-2 primary-button" onClick={onSubmit} loading={isPendingProfile}>Confirmer</Button>
             
       </div>
     </div>

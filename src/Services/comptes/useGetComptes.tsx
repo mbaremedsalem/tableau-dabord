@@ -11,12 +11,14 @@ async function getComptes(
   agence : string,
   type : string,
   dateouverture:string,
-  datefermeture:string
+  datefermeture:string,
+  rechercherPar : string,
+  searchValue:string
 ): Promise<CompteResponse> {
   const response = await axios.get(
     // `/api/compte_details/`,
     // `http://127.0.0.1:8000/api/compte_filter/?page=${page}&AGENCE=${agence}`,
-    `http://127.0.0.1:8000/api/compte_filter/?&page=${page}&agence=${agence}&libelle=${type}&datouv=${dateouverture}&datfrm=${datefermeture}`,
+    `http://127.0.0.1:8000/api/compte_filter/?&page=${page}&agence=${agence}&libelle=${type}&datouv=${dateouverture}&datfrm=${datefermeture}&${rechercherPar}=${searchValue}`,
 
 
     // `/api/compte_details//?type=${type}&status=${status}&search=${search}&page=${page}&size=${size}`,
@@ -33,15 +35,17 @@ export const useGetComptes = (
   agence: string,
   type:string,
   dateouverture:string,
-  datefermeture:string
+  datefermeture:string,
+  rechercherPar:string, 
+  searchValue : string
   // type: string,
   // status: string,
   // target_audience: string
 ) => {
   return useQuery({
-    queryKey: ["comptes", page,agence, type, dateouverture, datefermeture],
+    queryKey: ["comptes", page,agence, type, dateouverture, datefermeture, rechercherPar, searchValue],
     queryFn: () =>
-      getComptes(page, agence, type,  dateouverture, datefermeture),
+      getComptes(page, agence, type,  dateouverture, datefermeture, rechercherPar, searchValue),
     // getEntities(page, size, search, type, status),
   });
 };

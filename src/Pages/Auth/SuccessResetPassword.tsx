@@ -26,8 +26,8 @@ const SuccessResetPassword = () => {
             text-center
             p-14  space-y-4">
                 <img className="w-32 h-32 flex" src={check}/>
-               <h1 className="text-main-color font-bold text-2xl">  Password reset successful  </h1>
-               <h1 className="text-main-color font-bold text-xl"> You can log in </h1>
+               <h1 className="text-main-color font-bold text-2xl">  Réinitialisation du mot de passe réussie  </h1>
+               <h1 className="text-main-color font-bold text-xl"> Vous pouvez vous connecter.  </h1>
                <p></p>
                 
               

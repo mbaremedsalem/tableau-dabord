@@ -25,7 +25,7 @@ const [selectedDate, setSelectedDate] = useState<Date | null>();
 const onChangeDate = (date:Date | null) => {
   setSelectedDate(date)
 }
-    const {data, isPending} = useGetVirementInterne(currentPage, "00001", selectedDate?String(dayjs(selectedDate).format("YYYY-MM-DD")) : "")
+    const {data, isPending} = useGetVirementInterne(currentPage, "00001", selectedDate?String(dayjs(selectedDate).format("YYYY-MM-DD")) : "", searchValue)
    console.log("selectedDate : ", selectedDate)
     const columns: TableProps<Virement>["columns"] = [
         {
@@ -71,7 +71,7 @@ const onChangeDate = (date:Date | null) => {
           key: "montant_debit",
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.montant_debit}</span>
+              <span>{record?.montant_debit}</span>
             </div>
           ),
         },
@@ -81,7 +81,7 @@ const onChangeDate = (date:Date | null) => {
             key: "montant_credit",
             render: (_, record) => (
               <div className="flex items-center gap-x-2">
-                <span>{record.montant_credit}</span>
+                <span>{record?.montant_credit}</span>
               </div>
             ),
           },
@@ -92,7 +92,7 @@ const onChangeDate = (date:Date | null) => {
        
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.client}</span>
+              <span>{record?.client}</span>
             </div>
           ),
         },
@@ -103,7 +103,7 @@ const onChangeDate = (date:Date | null) => {
            
             render: (_, record) => (
               <div className="flex items-center gap-x-2">
-                <span>{record.compte_debit}</span>
+                <span>{record?.compte_debit}</span>
               </div>
             ),
           },
@@ -114,7 +114,7 @@ const onChangeDate = (date:Date | null) => {
         
           render: (_, record) => (
             <div className="flex items-center gap-x-2">
-              <span>{record.compte_credit}</span>
+              <span>{record?.compte_credit}</span>
             </div>
           ),
         },
@@ -141,7 +141,7 @@ const onChangeDate = (date:Date | null) => {
       ) => {
         
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/virement_intern/?&page=${page}&agence=${agence}&date_operation=${date_operation}`
+          `http://127.0.0.1:8000/api/virement_intern/?&page=${page}&agence=${agence}&date_operation=${date_operation}&client=${searchValue}`
         );
         return response.data;
       };

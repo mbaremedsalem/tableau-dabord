@@ -36,7 +36,7 @@ const SendLink = () => {
                 {/* <img className="w-32 h-32 flex" src={logo}/> */}
                 <img className="w-32 h-32 flex" src={check}/>
                <h1 className="text-main-color font-bold text-2xl">Link sent successfully </h1>
-               <h1 className="text-main-color font-bold text-xl">Verify your email to reset your password.</h1>
+               <h1 className="text-main-color font-bold text-xl">Vérifiez votre email pour réinitialiser votre mot de passe.</h1>
                <p></p>
                 
               
