@@ -1,13 +1,9 @@
 
 import { Dropdown, MenuProps, Modal } from 'antd'
 import logo from '../assets/images/image.svg'
-// import logoMin from '../assets/images/AUB.png'
-// import AuthService from '../Auth-services/AuthService'
-// import globe from '../assets/new_images/globe.svg'
 import { motion} from 'framer-motion'
 import menu from '../assets/new_images/menu.png'
 import { useState } from 'react'
-// import Sidebar from './Sidebar'
 import SideMenu from './SideMenu'
 import LanguageSwitch from '../ui/LanguageSwitch'
 import { UpdateProfileAdmin } from '../Pages/Users/UpdateProfileAdmin'
@@ -58,12 +54,9 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
     return(
         <header className={` b flex items-center border-b-2 border-main-color 
           fixed z-20 h-[65px]  justify-between w-full px-[27px] shadow-md ${isNuit? 'bg-gray-800' : 'bg-[#efeeea]'}`}>
-            {/* // <header className="flex items-center border-b-2 border-main-color
-            //  fixed top-0 left-0 z-20 h-[97px] w-full px-[27px] pt-[29px] bg-white shadow-md"> */}
 
       <div className=' flex items-center justify-center  ' >
         <img src={logo}  alt="logo" className='max-min-w:hidden w-40 h-40 ' />
-        {/* <img src={logoMin} alt="logo" className='w-12 h-12 min-w:hidden' /> */}
         <img src={menu} className="h-10 w-10 min-w:hidden cursor-pointer " onClick={()=>setisModalOpen(true)}/>
 
       </div>
@@ -72,13 +65,11 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
      animate={{x:0, scale:1}}
      transition={{duration:0.5}}
         className=" cursor-pointer min-w:hidden"
-        //  onClick={()=>handleHideSide(!isHide)}
          >
         
         </motion.div>
       <div className="flex items-center ">
         <div className="pe-[28px] border-e border-[#707070] me-[28px]">
-          {/* <img src={notification} alt="notification" /> */}
         </div>
        
         <div className="flex items-center gap-x-2 me-[30px]">
@@ -110,7 +101,6 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
                 footer={null}
                 width={412}
                 closable={false}
-                // className={isNuit ? "dark-mode" : ""}
                 className='min-w:hidden'
                 
     
@@ -124,10 +114,7 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
                 footer={null}
                 width={412}
                 closable={false}
-                // className={isNuit ? "dark-mode" : ""}
                 className=''
-                
-    
               >
               <UpdateProfileAdmin handleCancel={handlecancelProfile}/>
               </Modal>

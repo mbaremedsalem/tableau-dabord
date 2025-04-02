@@ -1,7 +1,6 @@
 
 
 import { useQuery } from "@tanstack/react-query";
-// import { CompteResponse } from "../types/Compte";
 import {  VirmentExterneResponse } from "../../types/Virement";
 import axios from "axios";
 
@@ -12,14 +11,12 @@ async function getVirement(
   page: number,
   agence:string,
   date_debut:string,
-  date_fin:string
-//   size: number,
-  // search: string,
-  // type: string,
-  // status: string,
+  date_fin:string,
+  chercherpar : string,
+  searchValue : string
 ): Promise<VirmentExterneResponse> {
   const response = await axios.get(
-    `http://127.0.0.1:8000/api/virement/?&page=${page}&agence=${agence}&date_debut=${date_debut}&date_fin=${date_fin}`,
+    `http://127.0.0.1:8000/api/virement/?&page=${page}&agence=${agence}&date_debut=${date_debut}&date_fin=${date_fin}&${chercherpar}=${searchValue}`,
     // `/api/compte_details//?type=${type}&status=${status}&search=${search}&page=${page}&size=${size}`,
     {
     
@@ -31,7 +28,9 @@ export const useGetVirementExterne = (
   page: number,
   agence:string,
   date_debut:string,
-  date_fin:string
+  date_fin:string,
+  chercherpar : string,
+  searchValue : string,
   
 
 //   size: number,
@@ -41,9 +40,9 @@ export const useGetVirementExterne = (
   // target_audience: string
 ) => {
   return useQuery({
-    queryKey: ["virements", page, agence, date_debut, date_fin],
+    queryKey: ["virements", page, agence, date_debut, date_fin, chercherpar, searchValue],
     queryFn: () =>
-        getVirement(page, agence, date_debut, date_fin),
+        getVirement(page, agence, date_debut, date_fin,chercherpar, searchValue),
     // getEntities(page, size, search, type, status),
   });
 };

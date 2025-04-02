@@ -1,4 +1,4 @@
-import { Button, DatePicker, Dropdown, Input, MenuProps, message, Modal, Space, Spin, Table, TableProps } from "antd";
+import { Button, CheckboxProps, DatePicker, Dropdown, Input, MenuProps, message, Modal, Space, Spin, Table, TableProps } from "antd";
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import {  VirementExterne, VirmentExterneResponse } from "../../../Services/types/Virement";
@@ -11,6 +11,8 @@ import autoTable from "jspdf-autotable";
 import axios from "axios";
 import logoBanque from "../../../assets/images/image.png"
 import { FaFileCsv } from "react-icons/fa";
+import filterIcon from "../../../assets/images/style-stroke.svg";
+import CustomCheckbox from "../../../ui/CustomCheckbox";
 
 const NouakchottExterne =() => {
   const [searchValue, setSearchValue] = useState("");
@@ -21,6 +23,8 @@ const NouakchottExterne =() => {
     setPageSize(pagination.pageSize);
   };
   const [dates, setDates] = useState<[string | null, string | null]>([null, null]);
+  const [chercherPar, setChercherPar] = useState("")
+  console.log("chercherPar : ", chercherPar)
 
       const handleDateChange = (values: any, dateStrings: [string, string]) => {
         console.log(values)
@@ -30,8 +34,20 @@ const NouakchottExterne =() => {
       };
   console.log("date 1 : ", dates[0])
   console.log("date 2 : ", dates[1])
-    const {data, isPending} = useGetVirementExterne(currentPage, "00001", dates[0]?dates[0]! : "", dates[1]?dates[1]!:"")
+  const onChange: CheckboxProps["onChange"] = (e) => {
+      const { value } = e.target;
+    
+    
+      if (e.target.checked) {
+        setChercherPar(value)
+      }else {
+        setChercherPar("")
+      }
+    };
+    const {data, isPending} = useGetVirementExterne(currentPage, "00001", dates[0]?dates[0]! : "", dates[1]?dates[1]!:"", chercherPar, searchValue)
   console.log("searchValue : ", searchValue)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     const columns: TableProps<VirementExterne>["columns"] = [
         
         {
@@ -225,7 +241,7 @@ const NouakchottExterne =() => {
       ) => {
         
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/virement/?&page=${page}&agence=${agence}&date_debut=${date_debut}&date_fin=${date_fin}`
+          `http://127.0.0.1:8000/api/virement/?&page=${page}&agence=${agence}&date_debut=${date_debut}&date_fin=${date_fin}&${chercherPar}=${searchValue}`
         );
         return response.data;
       };
@@ -444,6 +460,36 @@ const NouakchottExterne =() => {
         setLoading(false)
       }
     };
+    const items: MenuProps["items"] =  [
+      {
+        label: <span>Filter</span>,
+        key: "-1",
+      },
+      {
+        label: (
+          <CustomCheckbox
+            onChange={onChange}
+            label="Compte Beneficiaire"
+            checked={chercherPar === "compte_benef"}
+            value="compte_benef"
+          />
+        ),
+        key: "1",
+      },
+      {
+        label: (
+          <CustomCheckbox
+            onChange={onChange}
+            label="Beneficiaire"
+            checked={chercherPar === "beneficiaire"}
+
+            value="beneficiaire"
+          />
+        ),
+        key: "2",
+      },
+      
+    ]
  
     const itemsExportVirement: MenuProps['items'] = [
       {
@@ -489,6 +535,30 @@ const NouakchottExterne =() => {
         </Space>
       </Button>
     </Dropdown>
+    <Dropdown
+  onOpenChange={(e) => setIsMenuOpen(e)}
+  menu={{ items }}
+  trigger={["click"]}
+  >
+ <button
+   className={` w-[42px] h-[42px] px-[13px] py-[14px] rounded-full flex items-center justify-center border 
+    
+    ${isMenuOpen &&"bg-[#fbce39]/[0.19] border-none duration-75 transition-all"}
+     `}
+ >
+   <img src={filterIcon} alt="filter icon" />
+ </button>
+</Dropdown>
+{chercherPar && <Input
+                value={searchValue ?? ""}
+                className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"
+                prefix={<CiSearch className="" />}
+                onChange={(e) => setSearchValue(e.target.value)}
+                aria-label="search input"
+                placeholder="Search..."
+                
+              />
+              }
               <RangePicker className="w-[] border border-[#e7e7e7] rounded-[10px] h-[42px] "
     onChange={handleDateChange} 
     />
@@ -501,16 +571,7 @@ const NouakchottExterne =() => {
         </div>
     </Modal>
 )}
-
-              <Input
-                value={searchValue ?? ""}
-                className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"
-                prefix={<CiSearch className="" />}
-                onChange={(e) => setSearchValue(e.target.value)}
-                aria-label="search input"
-                placeholder="Search..."
-                
-              />
+            
               
               </div>
 

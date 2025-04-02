@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../../Auth-services/axios";
+import { message } from "antd";
 export const userKey = ["user-key"]
 export type ClientUser = {
     first_name:string,
@@ -11,9 +12,24 @@ export type ClientUser = {
 }
 
 async function getMe():Promise<ClientUser>{
-    const res = await api.get("api/me/")
+    try{
+        const res = await api.get("api/me/")
+    console.log("res : ", res)
     return res.data
+    }catch(error:any){
+        if(error.response){
+            console.log("error : ",error.response?.data?.detail)
+            console.log("response :", error?.response?.status)
+            if(error.response?.data?.detail){
+                message.error(error.response?.data?.detail)
+            } if (error?.response?.status === 401){
+                
+            }
+        }
+        throw error
+    }
 }
+
 
 
 export function getUserInfo(){

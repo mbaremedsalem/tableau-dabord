@@ -414,7 +414,7 @@ const onChangeDate = (date:Date | null) => {
                 prefix={<CiSearch className="" />}
                 onChange={(e) => setSearchValue(e.target.value)}
                 aria-label="search input"
-                placeholder="Search..."
+                placeholder="Client..."
                 
               />
               

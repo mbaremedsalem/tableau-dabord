@@ -16,18 +16,18 @@ export  function UpdateProfileAdmin({handleCancel} : Props) {
 
 
   const {t} = useTranslation()
-  if(isPendingClient){
-    return <Spinner center={true}/>
-  }
+  
   const [first_name, setFirstName] = useState("")
   const [last_name, setLastName] = useState("")
   const [email, setEmail] = useState("")
   const {mutate:UpdateProfile, isPending:isPendingProfile} = useUpdateUser()
 
   useEffect(()=>{
-    setFirstName(clients?.first_name || "")
-    setLastName(clients?.last_name || "")
-    setEmail(clients?.email || "")
+    if (clients) {
+      setFirstName(clients.first_name || "");
+      setLastName(clients.last_name || "");
+      setEmail(clients.email || "");
+    }
   }, [clients])
 
   const onSubmit = () => {
@@ -49,6 +49,9 @@ export  function UpdateProfileAdmin({handleCancel} : Props) {
           }
         })
       }
+  }
+  if(isPendingClient){
+    return <Spinner center={true}/>
   }
   return (
     <div>

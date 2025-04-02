@@ -27,6 +27,44 @@ type props ={
     handleHideSide : (value:boolean) =>void
     isHide:boolean
 }
+export    const navsItems = [
+  {
+      id:1,
+      name:"Dashboard",
+      logo:home,
+      link:"/"
+
+  },
+  {
+      id:2,
+      name:"Comptes",
+      logo:compte,
+      link:"/comptes"
+  },
+ 
+  {
+      id: 3,
+      name: "Virement",
+      logo: virement,
+      isDropdown: true, 
+      subItems: [
+          { id: 31, name: "Interne", link: "/virement/interne",  logo: virementInterne, },
+          { id: 32, name: "Externe", link: "/virement/externe",  logo: virementExterne, }
+      ]
+  },
+  {
+      id:4,
+      name:"Guichet",
+      logo:guichet,
+      link : "/guichet"
+  },
+  {
+    id:5,
+    name:"Clients",
+    logo:client,
+    link : "/clients"
+}
+]
 
 const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
   const { mutate: logoutFunction } = useLogout();
@@ -44,44 +82,7 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
   }
   
 
-    const navsItems = [
-        {
-            id:1,
-            name:"Dashboard",
-            logo:home,
-            link:"/"
-
-        },
-        {
-            id:2,
-            name:"Comptes",
-            logo:compte,
-            link:"/comptes"
-        },
-       
-        {
-            id: 3,
-            name: "Virement",
-            logo: virement,
-            isDropdown: true, 
-            subItems: [
-                { id: 31, name: "Interne", link: "/virement/interne",  logo: virementInterne, },
-                { id: 32, name: "Externe", link: "/virement/externe",  logo: virementExterne, }
-            ]
-        },
-        {
-            id:4,
-            name:"Guichet",
-            logo:guichet,
-            link : "/guichet"
-        },
-        {
-          id:5,
-          name:"Clients",
-          logo:client,
-          link : "/clients"
-      }
-    ]
+ 
    
     const isActive = ( link: string ) => {
       if (link === "/" && location.pathname === "/") {
@@ -176,8 +177,6 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
       <Link to={item.link!}>
       <div
         className={`${
-          // active === index
-          // location.pathname.startsWith(item.link!)
           isActive(item.link!)
             ? isNuit
               ? "bg-white border-r-4 border-main-color text-black"

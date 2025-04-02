@@ -5,16 +5,16 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { useLogout } from '../Services/Auth/useLogout';
 
-import home from "../assets/new_images/home.png"
-import guichet from "../assets/new_images/guichet.png"
-import virement from "../assets/new_images/virement.png"
-import compte from "../assets/new_images/compte.png"
+import right from "../assets/new_images/CaretRight.png"
+import right1 from "../assets/new_images/Vector.png"
 import logout from "../assets/new_images/logout.png"
 
 import nuit from "../assets/new_images/mode-nuit.png"
 import jour from "../assets/new_images/mode-jour.png"
 import cacher from "../assets/new_images/cacher.png"
 import { Switch } from 'antd';
+import { navsItems } from "./Sidebar";
+import { useTranslation } from "react-i18next";
 type props = {
     handlecancel: ()=>void,
     isNuit?:boolean
@@ -27,15 +27,21 @@ function SideMenu ({handlecancel}:props){
     const [isNuit, setIsNuit] = useState(() => {
         return localStorage.getItem("darkMode") === "true";
       });
-const [active, setActive] = useState<number>(() => {
-    const savedIndex = localStorage.getItem("activeMenuIndex");
-    return savedIndex ? parseInt(savedIndex, 10) : 0;
-  });
+
+
+  const {i18n} = useTranslation()
+   
+  const isActive = ( link: string ) => {
+    if (link === "/" && location.pathname === "/") {
+      return true;
+    }
+    return link !== "/" && location.pathname.startsWith(link);
+  };
 
 useEffect(() => {
     const activeIndex = navsItems.findIndex((nav) => nav.link === location.pathname);
     if (activeIndex !== -1) {
-      setActive(activeIndex);
+      // setActive(activeIndex);
     }
   }, [location.pathname]);
 
@@ -57,75 +63,86 @@ useEffect(() => {
     localStorage.setItem("darkMode", isNuit.toString());
     // setIsNuitFromSide(isNuit);
   }, [isNuit]);
+  const [openDropdown, setOpenDropdown] = useState<number | null>(null);
+  const handleSubItemClick = (subItemId: number) => {
+    handlecancel()
+    localStorage.setItem("activeMenuIndex", subItemId.toString());
+
+};
 
   const handleNavClick = (index: number) => {
-    setActive(index);
-    localStorage.setItem("activeMenuIndex", index.toString());
-    handlecancel()
-  };
 
+    if (navsItems[index].isDropdown) {
+      
+        setOpenDropdown((prev) => (prev === index ? null : index)); 
+    } else {
+
+    localStorage.setItem("activeMenuIndex", index.toString());
+    setOpenDropdown(null)
+    handlecancel()
+        
+    }
+};
   const handleLogout = () => {
     logoutFunction();
     localStorage.removeItem("activeMenuIndex");
     localStorage.removeItem("darkMode");
     window.location.href = "/login";
   };
-    const navsItems = [
-        {
-            id:1,
-            name:"Dashboard",
-            logo:home,
-            link:"/"
-
-        },
-        {
-            id:2,
-            name:"Comptes",
-            logo:compte,
-            link:"/comptes"
-        },
-        {
-            id:3,
-            name:"Virement",
-            logo:virement,
-            link:"/virement"
-        }, 
-        {
-            id:4,
-            name:"Guichet",
-            logo:guichet,
-            link : "/guichet"
-        }
-        
-    ]
+    
     return (
         <AnimatePresence mode='popLayout'  >
             <motion.div
-        //  initial={isHide?{x:0, scale:0}:""}
-        //  animate={isHide?{x:"-100vw", scale:1} : {x:0, scale:1}}
-        //  transition={{duration:2}}
-      
+     
         
      
         className={` ${isNuit ? "dark-mode" : ""} `}>
       <ul className="flex flex-col  gap-y-4">
-        {navsItems.map((item, index) => (
-          <li key={index}>
-           <Link to={item.link} onClick={() => handleNavClick(index)}>
-              <div
-                className={`${
-                    active === index
-                      ? isNuit? "bg-gray-700 border-r-4 border-main-color" : 
-                      "bg-white border-r-4 border-main-color"
-                      : " "
-                  } flex  items-center gap-x-[10.5px] w-[190] px-[19px] py-[8px] rounded-[11px] text-[13px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black`}
-              >
-                <img className="w-7 h-7" src={item.logo} alt={`${item.name} icon`} />
-                <span className='text-[13px]'>{item.name}</span>
+      {navsItems.map((item, index) => (
+  <li key={index}>
+    <div className='' onClick={() => handleNavClick(index)}>
+      
+      <Link to={item.link!}>
+      <div
+        className={`${
+          isActive(item.link!)
+            ? isNuit
+              ? "bg-white border-r-4 border-main-color text-black"
+              : "border-r-4 bg-white border-main-color"
+            : ""
+        } flex items-center gap-x-[16.5px] w-[200px] px-[19px] py-[8px] rounded-[11px] text-[13px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black cursor-pointer`}
+      >
+        
+        <img className="w-7 h-7" src={item.logo} alt={`${item.name} icon`} />
+        <span className="text-lg">{item.name}</span>
+        {item.name === "Virement" &&  <img className={`${isNuit?'' : ''}`} src={isNuit?right:right1} alt={`${item.name} icon`} />}
+      </div>
+      </Link>
+    </div>
+    {(item.isDropdown && openDropdown === index)  &&   (
+      <ul className={`${i18n.language === "ar" ? "mr-8 "  : "ml-8 "}mt-2  space-y-2 `}>
+        {item.subItems?.map((subItem) => (
+          <li key={subItem.id}>
+            <Link to={subItem.link}>
+              <div onClick={() => handleSubItemClick(subItem.id)}  
+               className={`flex items-center  
+               ${
+                // activeSubItem === subItem.id  
+                isActive(subItem.link)
+                ? 
+                "bg-white text-black" : ""
+                } 
+                gap-x-4 px-4 py-2 text-sm rounded-md hover:text-black  hover:bg-gray-200 transition-all`}>
+                <img className='w-7 h-7' src={subItem.logo}/>
+                <span>{subItem.name}</span>
               </div>
             </Link>
           </li>
         ))}
+      </ul>
+    )}
+  </li>
+))}
         <div className={`space-x-3 curs flex items-center gap-x-[15px]   py-[8px] pl-5 `}>
             <img src={jour} className='h-7'/>
 
@@ -141,10 +158,9 @@ useEffect(() => {
 
 
         </div>
-        <div className='pl-[17px]    flex items-center   p-5 border-r-4 border-main-color' 
+        <div className='pl-[17px]  flex items-center   p-5 border-r-4 border-main-color' 
         onClick={handlecancel}>
             <div className='flex  gap-x-[10.5px] space-x-2 justify-center cursor-pointer'
-            // onClick={onclickHideSide}
             >
             <img src={cacher} className='h-5'/>
                 <span className="text-[13px]">Hide Sidebar</span>
@@ -152,15 +168,7 @@ useEffect(() => {
             </div>
        
         </div>
-        {/* <li className="mt-auto">
-          <button
-            className={`absolute bottom-0 left-[17px] flex items-center text-[#707070] text-[13px] gap-x-[16.5px] px-[19px] py-[7px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black rounded-[11px]`}
-            onClick={handleLogout}
-          >
-            <img src={logout} alt="Logout icon" />
-            <span>{t("sidebar.logout")}</span>
-          </button>
-        </li> */}
+        
         <li className={`mt-auto ${navsItems.length > 5 ? "" : "-mt-5"}`}>
   <button
     className="flex items-center text-[#707070] text-[13px] gap-x-[16.5px] px-[19px] py-[7px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black rounded-[11px]"

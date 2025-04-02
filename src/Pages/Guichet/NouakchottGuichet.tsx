@@ -247,18 +247,18 @@ const NouakchottGuichet =() => {
           ),
           key: "3",
         },
-        {
-          label: (
-            <CustomCheckbox
-              onChange={onChange}
-              label="Nom Lib"
-              checked={rechercherPar === "nomlib"}
+        // {
+        //   label: (
+        //     <CustomCheckbox
+        //       onChange={onChange}
+        //       label="Nom Lib"
+        //       checked={rechercherPar === "nomlib"}
 
-              value="nomlib"
-            />
-          ),
-          key: "4",
-        },
+        //       value="nomlib"
+        //     />
+        //   ),
+        //   key: "4",
+        // },
         {
           label: (
             <CustomCheckbox
@@ -283,7 +283,7 @@ const NouakchottGuichet =() => {
       ) => {
         
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/guichet/?agence=${agence}&page=${page}&start_date=${start_date}&end_date=${end_date}&type_operation=${type_operation}`,
+          `http://127.0.0.1:8000/api/guichet/?agence=${agence}&page=${page}&start_date=${start_date}&end_date=${end_date}&type_operation=${type_operation}&&${rechercherPar}=${searchValue}`,
 
         );
         return response.data;
@@ -596,7 +596,7 @@ const NouakchottGuichet =() => {
  />
   )}
      
-<Input
+{rechercherPar && <Input
    value={searchValue ?? ""}
    className="custom-input !w-[189px] !h-[41px] gap-2 rounded-xl"
    prefix={<CiSearch className="" />}
@@ -604,7 +604,7 @@ const NouakchottGuichet =() => {
    aria-label="search input"
    placeholder="Search..."
    
- />
+ />}
   
 </div>
               {/* <FilterDropdown
