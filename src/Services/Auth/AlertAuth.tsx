@@ -9,13 +9,13 @@ export const ALert_Retourne_Login = (): Promise<SweetAlertResult> => {
       const timeoutDuration = 500;
   
       const swalPromise = Swal.fire({
-        title: 'You have been logged out for inactivity',
-        color: "#1f4432",
+        title: "Vous avez été déconnecté pour cause d'inactivité",
+        color: "#1C8244",
         customClass: {
           loader: "Is Loading",
           confirmButton: 'custom-button'
         },
-        confirmButtonColor: "#1f4432",
+        confirmButtonColor: "#1C8244",
       });
   
       swalPromise.then((result) => {
@@ -39,13 +39,13 @@ export const ALert_Retourne_Login = (): Promise<SweetAlertResult> => {
       // const timeoutDuration = 500;
   
       const swalPromise = Swal.fire({
-        title: 'Check your Internet connection !',
-        color: "#1f4432",
+        title: 'Vérifiez votre connexion Internet !',
+        color: "#1C8244",
         customClass: {
           loader: "Is Loading",
           confirmButton: 'custom-button'
         },
-        confirmButtonColor: "#1f4432",
+        confirmButtonColor: "#1C8244",
       });
   
       swalPromise.then((result) => {

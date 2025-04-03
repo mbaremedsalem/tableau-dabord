@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { BaseUrl } from '../api/BaseUrl'
 import AuthService from './AuthService'
+import { ALert_Retourne_check_cnx, ALert_Retourne_Login } from '../Services/Auth/AlertAuth'
 // import { ALert_Retourne_check_cnx, ALert_Retourne_Login } from './AlertLogin'
 
 
@@ -26,7 +27,7 @@ api.interceptors.response.use(
     async (error) => {
       const originalRequest = error.config
       if (!error.response) {
-        // await ALert_Retourne_check_cnx()
+        await ALert_Retourne_check_cnx()
         return Promise.reject(error);
       }
 
@@ -46,11 +47,11 @@ api.interceptors.response.use(
           return axios(originalRequest)
         } catch (error:any) {
           if(error.response.data) {
-            // const result = await ALert_Retourne_Login()
-                // if (result.isConfirmed) {
-                // AuthService.clearTokens()
-                // window.location.href = '/login'
-                // }
+            const result = await ALert_Retourne_Login()
+                if (result.isConfirmed) {
+                AuthService.clearTokens()
+                window.location.href = '/login'
+                }
           }
             
         

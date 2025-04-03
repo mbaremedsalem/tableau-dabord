@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../../Auth-services/axios";
 import { message } from "antd";
+import { ALert_Retourne_Login } from "./AlertAuth";
 export const userKey = ["user-key"]
 export type ClientUser = {
     first_name:string,
@@ -23,7 +24,7 @@ async function getMe():Promise<ClientUser>{
             if(error.response?.data?.detail){
                 message.error(error.response?.data?.detail)
             } if (error?.response?.status === 401){
-                
+                await ALert_Retourne_Login()
             }
         }
         throw error
