@@ -35,12 +35,12 @@ const AuthService = {
   
   
     clearTokens: () => {
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('refrech_token')
-      localStorage.removeItem('otpTimer')
-      localStorage.removeItem('Full_Name_user_Connect')
-      localStorage.removeItem('id_user_Connect')
-      localStorage.removeItem('role_user_connect')
+      // localStorage.removeItem('accessToken')
+      // localStorage.removeItem('refrech_token')
+      // localStorage.removeItem('otpTimer')
+      // localStorage.removeItem('Full_Name_user_Connect')
+      // localStorage.removeItem('id_user_Connect')
+      // localStorage.removeItem('role_user_connect')
       sessionStorage.clear()
       // localStorage.clear()
     },
