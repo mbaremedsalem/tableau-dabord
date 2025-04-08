@@ -3,23 +3,21 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { useLogout } from '../Services/Auth/useLogout';
 import {AnimatePresence, motion} from 'framer-motion'
-import home from "../assets/new_images/home.png"
-import guichet from "../assets/new_images/guichet.png"
-import virement from "../assets/new_images/virement.png"
-import virementInterne from "../assets/new_images/internal-link.png"
-import virementExterne from "../assets/new_images/external-link (1).png"
+import { FaEyeSlash } from "react-icons/fa";
 
-
+import { CiLogout } from "react-icons/ci";
+import { MdLightMode } from "react-icons/md";
+import { MdOutlineModeNight } from "react-icons/md";
+import { PiUsersThree } from "react-icons/pi";
+import { MdOutlineLocalAtm } from "react-icons/md";
+import { CgInternal } from "react-icons/cg";
+import { CgExternal } from "react-icons/cg";
+import { MdAccountBalance } from "react-icons/md";
+import { GrTransaction } from "react-icons/gr";
 import right from "../assets/new_images/CaretRight.png"
 import right1 from "../assets/new_images/Vector.png"
-import compte from "../assets/new_images/compte.png"
-import logout from "../assets/new_images/logout.png"
 
-import nuit from "../assets/new_images/mode-nuit.png"
-import jour from "../assets/new_images/mode-jour.png"
-import cacher from "../assets/new_images/cacher.png"
-
-import client from "../assets/new_images/user.png"
+import { MdSpaceDashboard } from "react-icons/md";
 import { Switch } from 'antd';
 import { useTranslation } from 'react-i18next';
 type props ={
@@ -27,41 +25,41 @@ type props ={
     handleHideSide : (value:boolean) =>void
     isHide:boolean
 }
-export    const navsItems = [
+export  const navsItems = [
   {
       id:1,
       name:"Dashboard",
-      logo:home,
+      logo:<MdSpaceDashboard  size={22}/>,
       link:"/"
 
   },
   {
       id:2,
       name:"Comptes",
-      logo:compte,
+      logo:<MdAccountBalance  size={22} />,
       link:"/comptes"
   },
  
   {
       id: 3,
       name: "Virement",
-      logo: virement,
+      logo: <GrTransaction  size={22} />,
       isDropdown: true, 
       subItems: [
-          { id: 31, name: "Interne", link: "/virement/interne",  logo: virementInterne, },
-          { id: 32, name: "Externe", link: "/virement/externe",  logo: virementExterne, }
+          { id: 31, name: "Interne", link: "/virement/interne",  logo: <CgInternal  size={22} />, },
+          { id: 32, name: "Externe", link: "/virement/externe",  logo: <CgExternal  size={22} />, }
       ]
   },
   {
       id:4,
       name:"Guichet",
-      logo:guichet,
+      logo:<MdOutlineLocalAtm  size={22}/>,
       link : "/guichet"
   },
   {
     id:5,
     name:"Clients",
-    logo:client,
+    logo:<PiUsersThree  size={22} />,
     link : "/clients"
 }
 ]
@@ -168,8 +166,8 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
       
         
      
-        className={`custom-scrollbar  fixed top-[80px] bottom-4 w-[215px]  overflow-y-auto  `}>
-      <ul className="flex flex-col items-center gap-y-4">
+        className={`custom-scrollbar  fixed top-[80px] bottom-4 w-[205px]  p-4 rounded-r-xl  overflow-y-auto ${isNuit? "bg-gray-800" : "bg-white"} `}>
+      <ul className="flex flex-col items- gap-y-1">
       {navsItems.map((item, index) => (
   <li key={index}>
     <div className='' onClick={() => handleNavClick(index)}>
@@ -178,15 +176,14 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
       <div
         className={`${
           isActive(item.link!)
-            ? isNuit
-              ? "bg-white border-r-4 border-main-color text-black"
-              : "border-r-4 bg-white border-main-color"
+            ? "text-white bg-main-color"
             : ""
-        } flex items-center gap-x-[16.5px] w-[200px] px-[19px] py-[8px] rounded-[11px] text-[13px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black cursor-pointer`}
+        } flex items-center gap-x-[16.5px]  px-[19px] py-[8px] rounded-[11px] text-[13px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black cursor-pointer`}
       >
         
-        <img className="w-7 h-7" src={item.logo} alt={`${item.name} icon`} />
-        <span className="text-lg">{item.name}</span>
+        {/* <img className="w-7 h-7" src={item.logo} alt={`${item.name} icon`} /> */}
+        {item.logo}
+        <span className="text-[14px]">{item.name}</span>
         {item.name === "Virement" &&  <img className={`${isNuit?'' : ''}`} src={isNuit?right:right1} alt={`${item.name} icon`} />}
       </div>
       </Link>
@@ -202,10 +199,11 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
                 // activeSubItem === subItem.id  
                 isActive(subItem.link)
                 ? 
-                "bg-white text-black" : ""
+                "text-white bg-main-color" : ""
                 } 
                 gap-x-4 px-4 py-2 text-sm rounded-md hover:text-black  hover:bg-gray-200 transition-all`}>
-                <img className='w-7 h-7' src={subItem.logo}/>
+                {/* <img className='w-7 h-7' src={subItem.logo}/> */}
+                {subItem.logo}
                 <span>{subItem.name}</span>
               </div>
             </Link>
@@ -217,8 +215,9 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
 ))}
 
         
-        <div className='space-x-3 curs flex items-center gap-x-[15px]  py-[8px] w-[200px] justify-center'>
-            <img src={jour} className='h-7'/>
+        <div className='space-x-3 curs flex items-center gap-x-[15px]  py-[8px]  justify-center'>
+            {/* <img src={jour} className='h-7'/> */}
+            <MdLightMode />
 
             <Switch
             checked={isNuit}
@@ -228,15 +227,19 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
                 backgroundColor: isNuit ? '#1C8244' : 'gray' 
             }}
             />
-            <img src={nuit} className='h-7'/>
+            {/* <img src={nuit} className='h-7'/> */}
+            <MdOutlineModeNight />
+
+
 
 
         </div>
         <div className='pl-[17px] w-[200px]   flex items-center justify-center  p-5 border-r-4 border-main-color'>
             <div className='flex  gap-x-[16.5px] space-x-2 justify-center cursor-pointer'
             onClick={onclickHideSide}>
-            <img src={cacher} className='h-7'/>
-                <span>Hide Sidebar</span>
+            {/* <img src={cacher} className='h-7'/> */}
+            <FaEyeSlash size={20}/>
+                <span className='text-[13px]'>Masquer la barre</span>
 
             </div>
        
@@ -255,8 +258,8 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
     className="flex items-center text-[#707070] text-[13px] gap-x-[16.5px] px-[19px] py-[7px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black rounded-[11px]"
     onClick={handleLogout}
   >
-    <img src={logout} className='w-7 h-7' alt="Logout icon" />
-    <span className='text-lg'>{"Logout"}</span>
+    <CiLogout size={23}/>
+    <span className='text-[13px]'>{"Logout"}</span>
   </button>
 </li>
       </ul>
