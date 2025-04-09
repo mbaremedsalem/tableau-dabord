@@ -181,7 +181,6 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
         } flex items-center gap-x-[16.5px]  px-[19px] py-[8px] rounded-[11px] text-[13px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black cursor-pointer`}
       >
         
-        {/* <img className="w-7 h-7" src={item.logo} alt={`${item.name} icon`} /> */}
         {item.logo}
         <span className="text-[14px]">{item.name}</span>
         {item.name === "Virement" &&  <img className={`${isNuit?'' : ''}`} src={isNuit?right:right1} alt={`${item.name} icon`} />}
@@ -259,7 +258,7 @@ const Sidebar = ({setIsNuitFromSide, handleHideSide}:props) => {
     onClick={handleLogout}
   >
     <CiLogout size={23}/>
-    <span className='text-[13px]'>{"Logout"}</span>
+    <span className='text-[13px]'>{"Déconnecter"}</span>
   </button>
 </li>
       </ul>

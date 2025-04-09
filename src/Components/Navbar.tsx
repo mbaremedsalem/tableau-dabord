@@ -85,7 +85,7 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
               alt="pr"
             />
             <div className="flex flex-col gap-y-[2px]">
-              <span className="text-[13px] font-medium text-black">
+              <span className="text-[13px] font-medium ">
                 {clients?.first_name}
               </span>
               <span className="text-[11px] font-light">

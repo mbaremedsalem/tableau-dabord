@@ -39,21 +39,7 @@ const NouakchottComptes =({typeC}:props) => {
               <span>{record?.CLIENT}</span>
             </div>
           ),
-          // filteredValue:[searchValue],
-          // onFilter:(_, record)=>{
-          //   return (
-          //     record?.CLIENT?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
-          //     record?.COMPTE?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
-          //     record?.NOM?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
-          //     record?.NCG?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
-          //     record?.TYP?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
-          //     record?.DATOUV?.toLowerCase().includes(searchValue.toLocaleLowerCase()) ||
-          //     record?.DATFRM?.toLowerCase().includes(searchValue.toLocaleLowerCase()) || 
-          //     record?.POSDEV?.toString().includes(searchValue.toLocaleLowerCase()) || 
-          //     record?.DATVAL?.toLowerCase().includes(searchValue.toLocaleLowerCase()) 
-              
-          //   )
-          // },
+     
           
         },
         {
@@ -106,9 +92,11 @@ const NouakchottComptes =({typeC}:props) => {
           dataIndex: "DATOUV",
           key: "DATOUV",
           render: (_, record) => {
+            const date = new Date(record?.DATOUV);
+            const formattedDate = date.toLocaleDateString('fr-FR').replace(/\//g, '-');
             return (
               <div className="flex flex-col gap-y-1">
-                <span>{record?.DATOUV}</span>
+                <span>{formattedDate}</span>
               </div>
             );
           },
@@ -119,9 +107,13 @@ const NouakchottComptes =({typeC}:props) => {
           key: "DATFRM",
     
           render: (_, record) => {
+            const date = new Date(record?.DATFRM);
+            console.log("date : ", date)
+            const formattedDate = date.toLocaleDateString('fr-FR').replace(/\//g, '-');
+            console.log("formattedDate : ", formattedDate)
             return (
               <div className="flex flex-col gap-y-1">
-                <span>{record?.DATFRM}</span>
+                <span>{record?.DATFRM ? formattedDate : ""}</span>
               </div>
             );
           },
@@ -146,9 +138,13 @@ const NouakchottComptes =({typeC}:props) => {
           key: "DATVAL",
     
           render: (_, record) => {
+            const date = new Date(record?.DATVAL);
+            console.log("date : ", date)
+            const formattedDate = date.toLocaleDateString('fr-FR').replace(/\//g, '-');
+            console.log("formattedDate : ", formattedDate)
             return (
               <div className="flex flex-col gap-y-1">
-                <span>{record?.DATVAL}</span>
+                <span>{record?.DATVAL ? formattedDate : ""}</span>
               </div>
             );
           },

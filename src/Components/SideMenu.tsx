@@ -1,17 +1,13 @@
 import { AnimatePresence, motion } from "framer-motion"
-
-
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { useLogout } from '../Services/Auth/useLogout';
-
+import { MdOutlineModeNight } from "react-icons/md";
+import { MdLightMode } from "react-icons/md";
+import { FaEyeSlash } from "react-icons/fa";
+import { CiLogout } from "react-icons/ci";
 import right from "../assets/new_images/CaretRight.png"
 import right1 from "../assets/new_images/Vector.png"
-import logout from "../assets/new_images/logout.png"
-
-import nuit from "../assets/new_images/mode-nuit.png"
-import jour from "../assets/new_images/mode-jour.png"
-import cacher from "../assets/new_images/cacher.png"
 import { Switch } from 'antd';
 import { navsItems } from "./Sidebar";
 import { useTranslation } from "react-i18next";
@@ -19,8 +15,8 @@ type props = {
     handlecancel: ()=>void,
     isNuit?:boolean
     setIsNuitFromSide :(value:boolean)=>void
-
 }
+
 function SideMenu ({handlecancel}:props){
   const { mutate: logoutFunction } = useLogout();
 
@@ -61,7 +57,6 @@ useEffect(() => {
 
     }
     localStorage.setItem("darkMode", isNuit.toString());
-    // setIsNuitFromSide(isNuit);
   }, [isNuit]);
   const [openDropdown, setOpenDropdown] = useState<number | null>(null);
   const handleSubItemClick = (subItemId: number) => {
@@ -106,15 +101,13 @@ useEffect(() => {
       <div
         className={`${
           isActive(item.link!)
-            ? isNuit
-              ? "bg-white border-r-4 border-main-color text-black"
-              : "border-r-4 bg-white border-main-color"
+            ? "text-white bg-main-color"
             : ""
-        } flex items-center gap-x-[16.5px] w-[200px] px-[19px] py-[8px] rounded-[11px] text-[13px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black cursor-pointer`}
+        } flex items-center gap-x-[16.5px]  px-[19px] py-[8px] rounded-[11px] text-[13px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black cursor-pointer`}
       >
         
-        <img className="w-7 h-7" src={item.logo} alt={`${item.name} icon`} />
-        <span className="text-lg">{item.name}</span>
+        {item.logo}
+        <span className="text-[14px]">{item.name}</span>
         {item.name === "Virement" &&  <img className={`${isNuit?'' : ''}`} src={isNuit?right:right1} alt={`${item.name} icon`} />}
       </div>
       </Link>
@@ -127,13 +120,12 @@ useEffect(() => {
               <div onClick={() => handleSubItemClick(subItem.id)}  
                className={`flex items-center  
                ${
-                // activeSubItem === subItem.id  
                 isActive(subItem.link)
                 ? 
-                "bg-white text-black" : ""
+                "text-white bg-main-color" : ""
                 } 
                 gap-x-4 px-4 py-2 text-sm rounded-md hover:text-black  hover:bg-gray-200 transition-all`}>
-                <img className='w-7 h-7' src={subItem.logo}/>
+                {subItem.logo}
                 <span>{subItem.name}</span>
               </div>
             </Link>
@@ -143,8 +135,8 @@ useEffect(() => {
     )}
   </li>
 ))}
-        <div className={`space-x-3 curs flex items-center gap-x-[15px]   py-[8px] pl-5 `}>
-            <img src={jour} className='h-7'/>
+  <div className={`space-x-3 curs flex items-center gap-x-[15px]   py-[8px] pl-5 `}>
+            <MdLightMode />
 
             <Switch
             checked={isNuit}
@@ -154,16 +146,16 @@ useEffect(() => {
                 backgroundColor: isNuit ? '#1C8244' : 'gray' 
             }}
             />
-            <img src={nuit} className='h-7'/>
-
-
+    <MdOutlineModeNight />
         </div>
         <div className='pl-[17px]  flex items-center   p-5 border-r-4 border-main-color' 
         onClick={handlecancel}>
             <div className='flex  gap-x-[10.5px] space-x-2 justify-center cursor-pointer'
             >
-            <img src={cacher} className='h-5'/>
-                <span className="text-[13px]">Hide Sidebar</span>
+                            <FaEyeSlash size={20}/>
+                
+                <span className='text-[13px]'>Masquer la barre</span>
+
 
             </div>
        
@@ -174,8 +166,8 @@ useEffect(() => {
     className="flex items-center text-[#707070] text-[13px] gap-x-[16.5px] px-[19px] py-[7px] transition-all duration-300 hover:bg-[#f3f2ed] hover:text-black rounded-[11px]"
     onClick={handleLogout}
   >
-    <img src={logout} className='w-7 h-7' alt="Logout icon" />
-    <span className='text-[13px]'>{"Logout"}</span>
+      <CiLogout size={23}/>
+        <span className='text-[13px]'>{"Déconnecter"}</span>
   </button>
 </li>
       </ul>

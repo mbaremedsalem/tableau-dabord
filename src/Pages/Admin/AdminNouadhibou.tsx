@@ -21,13 +21,7 @@ const AdminNouadhibou = () => {
           
     
     const stats = [
-        {
-          label: "Parc Comptes",
-          value: Comptes?.count,
-          valueDepot: Comptes?.total_posdev,
-          desc : "Total Depot",
         
-        },
         {
           label: 'Clients',
           value: Clients?.count,
@@ -45,6 +39,13 @@ const AdminNouadhibou = () => {
           value: VirementExterne?.count,
           desc : ""
 
+        },
+        {
+          label: "Parc Comptes",
+          value: Comptes?.count,
+          valueDepot: Comptes?.total_posdev,
+          desc : "Total Depot",
+        
         },
         {
             label: ("Guichet"),
