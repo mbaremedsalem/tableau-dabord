@@ -9,6 +9,7 @@ import LanguageSwitch from '../ui/LanguageSwitch'
 import { UpdateProfileAdmin } from '../Pages/Users/UpdateProfileAdmin'
 import { getUserInfo } from '../Services/Auth/useGetUser'
 import { EditPassword } from '../Pages/Users/EditPassword'
+import { BaseUrl } from '../api/BaseUrl'
 
 type props = {
     isNuit:boolean
@@ -81,7 +82,7 @@ const Navbar =({isNuit, setIsNuitFromSide}:props) => {
           <div className="flex items-center gap-x-[9px] cursor-pointer">
             <img
               className="w-[38px] h-[38px] rounded-full"
-              src={`http://127.0.0.1:8000/${clients?.image}`}
+              src={`${BaseUrl}${clients?.image}`}
               alt="pr"
             />
             <div className="flex flex-col gap-y-[2px]">

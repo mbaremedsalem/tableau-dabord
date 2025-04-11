@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { ClientResponse } from "../types/Client";
+import { BaseUrl } from "../../api/BaseUrl";
 
 
 export const VIREMENT_INTERNE = ["virements"];
@@ -9,7 +10,7 @@ async function getVirementInterne(
   agence : string
 ): Promise<ClientResponse> {
   const response = await axios.get(
-    `http://127.0.0.1:8000/api/virement_intern/?agence=${agence}`,
+    `${BaseUrl}api/virement_intern/?agence=${agence}`,
 
     {
     

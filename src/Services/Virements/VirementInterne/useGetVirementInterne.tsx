@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 // import { CompteResponse } from "../types/Compte";
 import {  VirmentResponse } from "../../types/Virement";
 import axios from "axios";
+import { BaseUrl } from "../../../api/BaseUrl";
 
 
 export const VIREMENT_KEY = ["virements"];
@@ -14,7 +15,7 @@ async function getVirement(
   searchValue: string,
 ): Promise<VirmentResponse> {
   const response = await axios.get(
-    `http://127.0.0.1:8000/api/virement_intern/?&page=${page}&agence=${agence}&date_operation=${date_operation}&client=${searchValue}`,
+    `${BaseUrl}api/virement_intern/?&page=${page}&agence=${agence}&date_operation=${date_operation}&client=${searchValue}`,
     // `/api/compte_details//?type=${type}&status=${status}&search=${search}&page=${page}&size=${size}`,
     {
     

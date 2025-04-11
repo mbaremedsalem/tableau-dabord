@@ -13,6 +13,8 @@ import logoBanque from "../../../assets/images/image.png"
 import { FaFileCsv } from "react-icons/fa";
 import filterIcon from "../../../assets/images/style-stroke.svg";
 import CustomCheckbox from "../../../ui/CustomCheckbox";
+import { BaseUrl } from "../../../api/BaseUrl";
+// import { getRowClassName } from "../../../lib/helpers";
 
 const NouakchottExterne =() => {
   const [searchValue, setSearchValue] = useState("");
@@ -59,6 +61,7 @@ const NouakchottExterne =() => {
               <span>{record?.compte_benef}</span>
             </div>
           ),
+          
         },
         {
             title: ("Beneficiaire"),
@@ -241,7 +244,7 @@ const NouakchottExterne =() => {
       ) => {
         
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/virement/?&page=${page}&agence=${agence}&date_debut=${date_debut}&date_fin=${date_fin}&${chercherPar}=${searchValue}`
+          `${BaseUrl}api/virement/?&page=${page}&agence=${agence}&date_debut=${date_debut}&date_fin=${date_fin}&${chercherPar}=${searchValue}`
         );
         return response.data;
       };
@@ -522,8 +525,9 @@ const NouakchottExterne =() => {
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
     <div className="flex flex-col">
-        <span>Registred Virement</span>
-        <span> {data?.count } virement Externe </span>
+        <span>Virement enregistrés </span>
+
+        <span> {data?.count } Virement externe </span>
     </div>
               <div className="flex items-center gap-3">
               <Dropdown menu={{items: itemsExportVirement,
@@ -582,7 +586,9 @@ const NouakchottExterne =() => {
             <Table
               loading={isPending}
               columns={columns}
-              // rowClassName={getRowClassName}
+              // rowClassName={(record,index)=>{
+              //   return index %2 === 0 ?"custom-small-row" : ""
+              // }}
               pagination={{
                 current: currentPage,
                 pageSize : pageSize,

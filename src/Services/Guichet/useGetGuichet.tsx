@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 // import api from "../../Auth-services/axios";
 import axios from "axios";
 import { GuichetResponse } from "../types/Guiche";
+import { BaseUrl } from "../../api/BaseUrl";
 
 
 export const GUICHET_KEY = ["guichet"];
@@ -18,7 +19,7 @@ async function getGuichet(
 ): Promise<GuichetResponse> {
   const response = await axios.get(
     // `/api/compte_details/`,
-    `http://127.0.0.1:8000/api/guichet/?agence=${agence}&page=${page}&start_date=${start_date}&end_date=${end_date}&type_operation=${type_operation}&${rechercherPar}=${searchValue}`,
+    `${BaseUrl}api/guichet/?agence=${agence}&page=${page}&start_date=${start_date}&end_date=${end_date}&type_operation=${type_operation}&${rechercherPar}=${searchValue}`,
 
     // `/api/compte_details//?type=${type}&status=${status}&search=${search}&page=${page}&size=${size}`,
     {

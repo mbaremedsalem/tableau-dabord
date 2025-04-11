@@ -12,6 +12,7 @@ import axios from "axios";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { BaseUrl } from "../../../api/BaseUrl";
 const NouakchottInterne =() => {
   const [searchValue, setSearchValue] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -141,7 +142,7 @@ const onChangeDate = (date:Date | null) => {
       ) => {
         
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/virement_intern/?&page=${page}&agence=${agence}&date_operation=${date_operation}&client=${searchValue}`
+          `${BaseUrl}api/virement_intern/?&page=${page}&agence=${agence}&date_operation=${date_operation}&client=${searchValue}`
         );
         return response.data;
       };
@@ -377,7 +378,9 @@ const onChangeDate = (date:Date | null) => {
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
     <div className="flex flex-col">
-        <span>Registred Virement</span>
+        <span>Virement enregistrés </span>
+
+        
         <span> {data?.count} virement interne </span>
     </div>
   <div className="flex items-center space-x-4">

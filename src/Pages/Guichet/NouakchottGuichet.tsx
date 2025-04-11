@@ -15,6 +15,7 @@ import filterIcon from "../../assets/images/style-stroke.svg";
 import axios from "axios";
 const { RangePicker } = DatePicker;
 import { FaFileCsv } from "react-icons/fa";
+import { BaseUrl } from "../../api/BaseUrl";
 
 dayjs.locale("fr")
 const NouakchottGuichet =() => {
@@ -283,7 +284,7 @@ const NouakchottGuichet =() => {
       ) => {
         
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/guichet/?agence=${agence}&page=${page}&start_date=${start_date}&end_date=${end_date}&type_operation=${type_operation}&&${rechercherPar}=${searchValue}`,
+          `${BaseUrl}api/guichet/?agence=${agence}&page=${page}&start_date=${start_date}&end_date=${end_date}&type_operation=${type_operation}&&${rechercherPar}=${searchValue}`,
 
         );
         return response.data;
@@ -543,7 +544,8 @@ const NouakchottGuichet =() => {
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
     <div className="flex flex-col">
-        <span>Registred Guichet</span>
+        <span>Guichet enregistrés </span>
+
         <span> {data?.count} </span>
     </div>
     

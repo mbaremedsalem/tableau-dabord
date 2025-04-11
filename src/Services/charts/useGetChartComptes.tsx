@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { BaseUrl } from "../../api/BaseUrl";
 
 type ChartDepot = {
     libelle:string,
@@ -12,7 +13,7 @@ async function getChartComptes(
   agence : string
 ): Promise<ChartDepot[]> {
   const response = await axios.get(
-    `http://127.0.0.1:8000/api/parque_count/?agence=${agence}`,
+    `${BaseUrl}api/parque_count/?agence=${agence}`,
 
     {
     

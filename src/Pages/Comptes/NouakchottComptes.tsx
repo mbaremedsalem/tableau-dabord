@@ -13,6 +13,7 @@ import axios from "axios";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { BaseUrl } from "../../api/BaseUrl";
 type props = {
   typeC:string
 }
@@ -276,7 +277,7 @@ const onChange: CheckboxProps["onChange"] = (e) => {
       ) => {
         
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/compte_filter/?&page=${page}&agence=${agence}&libelle=${type}&datouv=${dateouverture}&datfrm=${datefermeture}&${ExistRechercher}=${searchValue}` 
+          `${BaseUrl}api/compte_filter/?&page=${page}&agence=${agence}&libelle=${type}&datouv=${dateouverture}&datfrm=${datefermeture}&${ExistRechercher}=${searchValue}` 
         );
         return response.data;
       };
@@ -513,7 +514,8 @@ const onChange: CheckboxProps["onChange"] = (e) => {
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
     <div className="flex flex-col">
-        <span>Registred Comptes</span>
+        <span>Comptes enregistrés </span>
+
         <span> {data?.count} </span>
     </div>
              <div className="flex items-center justify-center space-x-3">

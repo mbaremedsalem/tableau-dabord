@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { BaseUrl } from "../../../api/BaseUrl";
 
 type ChartClient = {
     ageclib:string,
@@ -12,7 +13,7 @@ async function getChartClient(
   agence : string
 ): Promise<ChartClient[]> {
   const response = await axios.get(
-    `http://127.0.0.1:8000/api/parque_client/?agence=${agence}`,
+    `${BaseUrl}api/parque_client/?agence=${agence}`,
 
     {
     

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { BaseUrl } from "../../api/BaseUrl";
 
 type ChartOperation = {
     type_operation:string,
@@ -12,7 +13,7 @@ async function getChartGuichet(
   agence : string
 ): Promise<ChartOperation[]> {
   const response = await axios.get(
-    `http://127.0.0.1:8000/api/parque_guichet/?agence=${agence}`,
+    `${BaseUrl}api/parque_guichet/?agence=${agence}`,
 
     {
     

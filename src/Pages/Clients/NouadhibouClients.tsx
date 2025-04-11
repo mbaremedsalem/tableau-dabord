@@ -13,6 +13,7 @@ import logo1 from "../../assets/images/AUB.png"
 import { FaFileCsv } from "react-icons/fa";
 import { CopyFilled, DownOutlined, FileExcelFilled, FilePdfFilled } from '@ant-design/icons'
 import logoBanque from "../../assets/images/image.png"
+import { BaseUrl } from "../../api/BaseUrl";
 
 const NouadhibouClients =() => {
   const [searchValue, setSearchValue] = useState("");
@@ -180,7 +181,7 @@ useEffect(()=>{
         if(type) params.append("type", type)
         params.append("page", page.toString())
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/client/?page=${page}&agence=${agence}&type=${type}` +
+          `${BaseUrl}api/client/?page=${page}&agence=${agence}&type=${type}` +
             `${FilterPar === "client" ? `&client=${search}` : ""}` +
             `${FilterPar === "nom" ? `&nom=${search}` : ""}`
         );
@@ -523,7 +524,7 @@ useEffect(()=>{
         <div className="mt-5">
   <div className="flex items-center gap-x-[13px] justify-between">
     <div className="flex flex-col">
-        <span>Registred Clients</span>
+        <span> Clients enregistrés</span>
         <span> {data?.count} </span>
     </div>
              <div className="flex items-center space-x-2">
